@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { generalSans, sourceSerif } from "./fonts";
 import "./globals.css";
+import "./typography.css";
 
 export const metadata: Metadata = {
   title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
@@ -18,12 +19,7 @@ export default function RootLayout({
       lang="en"
       className={`${generalSans.variable} ${sourceSerif.variable} h-full antialiased`}
     >
-      <body
-        className="min-h-full flex flex-col"
-        style={{ fontFamily: "var(--font-sans)" }}
-      >
-        {children}
-      </body>
+      <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );
 }

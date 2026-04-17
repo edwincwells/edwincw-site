@@ -1,43 +1,15 @@
 export default function Home() {
   return (
-    <main className="flex flex-col flex-1 min-h-screen items-center justify-center px-6">
-      <p
-        style={{
-          fontFamily: "system-ui, sans-serif",
-          fontSize: "12px",
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "#8A8A8A",
-          marginBottom: "24px",
-        }}
-      >
-        Under construction
-      </p>
-      <h1
-        style={{
-          fontFamily: "var(--font-serif)",
-          fontStyle: "italic",
-          fontWeight: 400,
-          fontSize: "48px",
-          lineHeight: 1.1,
-          color: "#111214",
-          margin: 0,
-        }}
-      >
-        Edwin Collings-Wells
-      </h1>
-      <p
-        style={{
-          fontFamily: "var(--font-sans)",
-          fontWeight: 500,
-          fontSize: "24px",
-          lineHeight: 1.3,
-          color: "#111214",
-          marginTop: "16px",
-        }}
-      >
-        Experience Strategy & Product Leadership
-      </p>
+    <main className="min-h-screen flex items-center justify-center px-6">
+      <div className="flex flex-col items-center gap-4 text-center">
+        <p className="text-eyebrow text-muted">Under construction</p>
+        <h1 className="text-h1 font-serif-italic text-foreground">
+          Edwin Collings-Wells
+        </h1>
+        <p className="text-h2 text-foreground">
+          Experience Strategy & Product Leadership
+        </p>
+      </div>
     </main>
   );
 }

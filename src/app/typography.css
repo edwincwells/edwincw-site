@@ -1,0 +1,74 @@
+.text-display {
+  font-size: 52px;
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.text-h1 {
+  font-size: 32px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.text-h2 {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.text-subtitle {
+  font-size: 17px;
+  font-weight: 400;
+  line-height: 1.4;
+}
+
+.text-body {
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.65;
+}
+
+.text-small {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.text-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (min-width: 768px) {
+  .text-display {
+    font-size: 88px;
+  }
+  .text-h1 {
+    font-size: 48px;
+  }
+  .text-h2 {
+    font-size: 28px;
+  }
+  .text-subtitle {
+    font-size: 20px;
+  }
+  .text-body {
+    font-size: 17px;
+  }
+}
+
+.text-foreground { color: var(--color-foreground); }
+.text-body-color { color: var(--color-body); }
+.text-muted { color: var(--color-muted); }
+.text-primary { color: var(--color-primary); }
+
+.font-serif-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+}
