@@ -147,6 +147,8 @@ Content TBD. Not part of current build sequence.
 | **General Sans** (free, Fontshare) | 400 Regular, 500 Medium, 600 SemiBold (hero only) | All functional type |
 | **Source Serif 4 Italic** (free, Google Fonts — self-hosted) | 400 | Name/signature only |
 
+Loaded via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. Files live in `public/fonts/`.
+
 **Scale (desktop, mobile ~60%):**
 
 | Role | Size | Weight | Line-height |
@@ -313,26 +315,32 @@ Total composition: ~2.4s.
 
 ## 7. Technical Stack
 
-- **Framework:** Next.js 15 (App Router, Server Components by default, `"use client"` for interactive components)
-- **Styling:** Tailwind CSS + CSS custom properties
+- **Framework:** Next.js 16.2.4 (App Router, Server Components by default, `"use client"` for interactive components)
+- **Styling:** Tailwind CSS v4 (using `@import "tailwindcss"` in globals.css) + CSS custom properties
 - **Language:** TypeScript
-- **Fonts:** Self-hosted via `next/font/local` (General Sans from Fontshare, Source Serif 4 Italic from Google Fonts download)
-- **Icons:** Lucide React
+- **Fonts:** Self-hosted via `next/font/local`:
+  - General Sans (Regular 400, Medium 500, SemiBold 600) → `--font-sans`
+  - Source Serif 4 Italic (static .ttf, 400) → `--font-serif`
+  - Files in `public/fonts/`
+- **Icons:** Lucide React (to be installed in later prompt when needed)
 - **Deployment:** Netlify, free tier, deploying from `develop` branch
 - **Repo:** github.com/edwincwells/edwincw-site (public)
-- **Preview URL:** edwincw-site.netlify.app (verify exact)
-- **Local dev:** macOS, Node v24, npm 11, Claude Code in desktop Claude app
+- **Preview URL:** edwincw-site.netlify.app
+- **Local dev:** macOS, Node v24, npm 11, Claude Code in desktop Claude app, project at `~/Development/edwincw-site`
 - **Budget:** £0 running cost (all free tier)
+
+**Important project-specific config:**
+- `next.config.ts` has explicit `turbopack.root: path.resolve(__dirname)` to prevent workspace root misinference (a stray lockfile in home dir caused issues during Prompt 1)
 
 ---
 
-## 8. Prompt Sequence Plan (8 prompts + Prompt 0 setup)
+## 8. Prompt Sequence Plan
 
 | # | Prompt | Status |
 |---|---|---|
 | 0 | Repo + Netlify setup (manual, not Claude Code) | ✅ Complete |
-| 1 | Scaffold — fonts, file structure, base config | ⏳ Next |
-| 2 | Design tokens — CSS variables, Tailwind config, globals | Pending |
+| 1 | Scaffold — fonts, file structure, base config | ✅ Complete |
+| 2 | Design tokens — CSS variables, Tailwind config, globals | ⏳ Next |
 | 3 | Layout shell — nav, footer, container, typography primitives | Pending |
 | 4 | Hero section — asymmetric layout with diagram placeholder | Pending |
 | 5 | Thesis + Credentials + Contact sections | Pending |
@@ -355,9 +363,9 @@ Total composition: ~2.4s.
 
 *Update this section after each completed prompt. In a new chat, this tells the next assistant exactly what's done and what's next.*
 
-- [x] **Prompt 0** — Repo created on GitHub (edwincwells/edwincw-site, public), local Next.js 15 scaffold with TypeScript + Tailwind + App Router + AGENTS.md, Netlify connected deploying from `develop`, preview URL live with default Next.js page. SSH auth configured.
-- [ ] **Prompt 1** — Scaffold (next)
-- [ ] **Prompt 2** — Design tokens
+- [x] **Prompt 0** — Repo created on GitHub (edwincwells/edwincw-site, public), local Next.js 16 scaffold with TypeScript + Tailwind v4 + App Router + AGENTS.md, Netlify connected deploying from `develop`, preview URL live with default Next.js page. SSH auth configured.
+- [x] **Prompt 1** — Fonts self-hosted (General Sans + Source Serif 4 Italic) via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. `src/app/fonts.ts` created. Minimal placeholder page renders eyebrow + serif italic name + sans tagline on paper-warm bg (#F7F5F1). `next.config.ts` includes explicit `turbopack.root` to prevent workspace misinference. Git user.name/email configured globally (was defaulting to local hostname). Local + Netlify both verified working.
+- [ ] **Prompt 2** — Design tokens (next)
 - [ ] **Prompt 3** — Layout shell
 - [ ] **Prompt 4** — Hero section
 - [ ] **Prompt 5** — Thesis + Credentials + Contact
