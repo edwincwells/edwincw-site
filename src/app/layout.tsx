@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { generalSans, sourceSerif } from "./fonts";
+import { Nav } from "@/components/Nav";
+import { Footer } from "@/components/Footer";
 import "./globals.css";
 import "./typography.css";
 
@@ -19,7 +21,11 @@ export default function RootLayout({
       lang="en"
       className={`${generalSans.variable} ${sourceSerif.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Nav />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }
