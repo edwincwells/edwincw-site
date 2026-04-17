@@ -1,8 +1,8 @@
 # edwincw.com — Design Brief & Build Plan
 
-> Self-contained design brief and build plan for a full rebuild of edwincw.com. If this conversation hits context limits, paste this document into a new Claude chat with: *"I'm rebuilding my personal site with Claude Code. Here's the full design brief. We're about to run Prompt N. Please pick up where the previous chat left off."*
+> Self-contained design brief and build plan for a full rebuild of edwincw.com. If this conversation is hitting context limits, paste this document into a new Claude chat with: *"I'm rebuilding my personal site with Claude Code. Here's the full design brief. We're about to run Prompt N. Please pick up where the previous chat left off."*
 >
-> All decisions below are locked. Do not re-open unless the person explicitly asks.
+> All decisions below are locked. Do not re-open unless Edwin explicitly asks.
 
 ---
 
@@ -16,7 +16,9 @@
 - FluxUX: AI app built in v0, currently hosted separately
 - Case studies: Rewards & Recognition, Salli (agentic AI companion)
 
-**Working preferences:** Concise, direct, evaluative. Pushes back on drafts rather than accepting wholesale. Prefers brevity over comprehensiveness. Responds well to candid critique without diplomatic hedging.
+**Working preferences:** Concise, direct, evaluative. Pushes back on drafts rather than accepting wholesale — takes the push-back seriously when it happens, Edwin's editorial judgment has consistently improved drafts during strategy work. Prefers brevity over comprehensiveness. Responds well to candid critique without diplomatic hedging.
+
+**Terminal/infrastructure patterns:** Comfortable with npm and git basics but wants exact commands for anything non-routine. Asks good infrastructure questions (DevTools, git auth, config options) — treat as real questions, not hand-waves. Prefers explicit steps over "figure it out."
 
 ---
 
@@ -111,9 +113,10 @@ No tag chips. Clean grid. Each cell: small label + value.
 ### Navigation
 
 - Home · About · Case Studies · Contact
-- "Case Studies" links out to portfolio.edwincw.com
+- "Case Studies" links out to portfolio.edwincw.com (new tab)
 - No CV link (deliberate — signals selectivity)
 - No FluxUX link (folded into Selected Work)
+- Mark on the left: "EC-W" text mark, links to `/`
 
 ### About page (separate, handled after homepage)
 
@@ -123,17 +126,17 @@ Content TBD. Not part of current build sequence.
 
 ## 5. Visual System
 
-### 5.1 Colour
+### 5.1 Colour (implemented as CSS custom properties in globals.css @theme block)
 
 | Token | Hex | Role |
 |---|---|---|
-| `--background` | `#F7F5F1` | Paper-warm surface |
-| `--foreground` | `#111214` | Headings, emphasis |
-| `--body` | `#2E3338` | Body text |
-| `--muted` | `#6B7075` | Captions, meta, supporting |
-| `--primary` | `#124E66` | Teal — accent, links, focus, diagram structure |
-| `--secondary` | `#B8804A` | Ochre — sparingly, diagram signal, specific moments |
-| `--border` | `#E5E7EB` | Dividers |
+| `--color-background` | `#F7F5F1` | Paper-warm surface |
+| `--color-foreground` | `#111214` | Headings, emphasis |
+| `--color-body` | `#2E3338` | Body text |
+| `--color-muted` | `#6B7075` | Captions, meta, supporting |
+| `--color-primary` | `#124E66` | Teal — accent, links, focus, diagram structure |
+| `--color-secondary` | `#B8804A` | Ochre — sparingly, diagram signal, specific moments |
+| `--color-border` | `#E5E7EB` | Dividers |
 
 **Rules:**
 - Three-tier text hierarchy (foreground / body / muted) — inspired by Linear's "multiple whites" trick, adapted for light mode
@@ -149,29 +152,31 @@ Content TBD. Not part of current build sequence.
 
 Loaded via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. Files live in `public/fonts/`.
 
-**Scale (desktop, mobile ~60%):**
+**Scale (implemented as utility classes in src/app/typography.css):**
 
-| Role | Size | Weight | Line-height |
-|---|---|---|---|
-| Display (hero positioning) | 88px | 500 Medium (test 600 — may need for presence) | 1.05 |
-| H1 (section anchors / thesis title) | 48px | 500 | 1.15 |
-| H2 (teaser titles) | 28px | 500 | 1.15 |
-| Subtitle (hero support) | 20px | 400 | 1.4 |
-| Body | 17px | 400 | 1.65 |
-| Small (meta, captions) | 14px | 400 | 1.5 |
-| Eyebrow | 12px | 500, uppercase, tracking 0.08em | 1 |
+| Class | Desktop | Mobile | Weight | Line-height |
+|---|---|---|---|---|
+| `.text-display` | 88px | 52px | 500 | 1.05 |
+| `.text-h1` | 48px | 32px | 500 | 1.15 |
+| `.text-h2` | 28px | 24px | 500 | 1.15 |
+| `.text-subtitle` | 20px | 17px | 400 | 1.4 |
+| `.text-body` | 17px | 16px | 400 | 1.65 |
+| `.text-small` | 14px | 14px | 400 | 1.5 |
+| `.text-eyebrow` | 12px | 12px | 500 | 1 (uppercase, tracking 0.08em) |
+
+**Plus:** `.font-serif-italic` for name/signature
 
 **Notes:**
 - Body at 17px (not 16px) — slightly more considered, magazine-like
 - Hero subtitle deliberately quieter (20px not 24px) — display type carries the weight
-- 500 Medium preferred over 600 SemiBold for editorial register (portfolio uses 600 — deliberate divergence)
+- 500 Medium preferred over 600 SemiBold for editorial register
 
-### 5.3 Layout
+### 5.3 Layout (implemented via Container and Section components in src/components/)
 
-- **Max content width:** 1280px
-- **Narrow reading width:** 680px (thesis body)
-- **Page gutter:** 24px mobile → 48px desktop
-- **Vertical rhythm:** 96px unit between major sections on desktop, 64px mobile. 48–64px between sub-elements. 24px within prose.
+- **Max content width:** 1280px (`Container` default)
+- **Narrow reading width:** 680px (`Container width="narrow"` — thesis body)
+- **Page gutter:** 24px mobile → 48px desktop (`px-6 md:px-12`)
+- **Vertical rhythm:** 96px unit between major sections on desktop, 64px mobile (`Section` component: `py-16 md:py-24`)
 
 **Section-level grids (each section uses a different composition deliberately):**
 - Hero: asymmetric 55/45 split, offset baseline (diagram does NOT centre-align with type)
@@ -186,40 +191,39 @@ Loaded via `next/font/local` with CSS variables `--font-sans` and `--font-serif`
 
 **Tier 2 — Entrance motion (scroll-reveal).**
 - Duration: 0.6s
-- Easing: `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo — slow settle at end)
+- Easing: `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo — slow settle at end) — available as `--ease-out-expo` CSS var
 - Transform: 16px Y-translate → 0, opacity 0 → 1
 - Stagger: 80ms between elements within a section
 
 **Tier 3 — Micro-interactions.**
 - Everything interactive has a response
-- Small and linear, not bouncy — 180ms linear or ease-out
+- Small and linear, not bouncy — 180ms linear or ease-out (available as `--duration-micro` CSS var)
 - One property at a time (colour OR subtle translate, not both at once)
 - Links: animated underline-offset (2–3px below baseline at rest → 1px on hover)
-- Nav items: colour shift foreground → primary (teal) on hover, 180ms
+- Nav items: colour shift foreground → primary (teal) on hover, 180ms (already implemented in Nav)
 - Contact links: border colour shifts to teal on hover
 - Section eyebrows: static (not every element needs to respond)
 
 **Work teasers — editorial flourish:**
 - Image shifts 8px horizontally on hover while title stays still (small parallax between image and text)
 - Plus standard: image lifts 4px, title colour shifts to teal, arrow icon translates 4px right
-- 240ms ease-out
+- 240ms ease-out (`--duration-hover`)
 
 **Reduced motion:**
-- All Tier 2 and Tier 3 motion respects `prefers-reduced-motion`
-- Reduced state: entrance becomes instant opacity fade (no translate), micro-interactions reduce to colour-only
+- Global `prefers-reduced-motion` reset already implemented in globals.css (animation/transition durations reduced to 0.01ms)
 - Hero diagram gets a static composed state (see §6)
 
-### 5.5 Border radius
+### 5.5 Border radius (CSS custom properties)
 
-Inherit from portfolio where sensible:
-- Base: `0.5rem` (8px) — `rounded-lg`
-- Diagram nodes: 6–8px (rx 6–8 in SVG)
-- Pills/chips: full rounded (9999px)
+- `--radius-sm`: 6px (diagram nodes)
+- `--radius-md`: 8px (base — cards, buttons)
+- `--radius-lg`: 12px (larger surfaces)
+- `--radius-full`: 9999px (pills)
 
 ### 5.6 Icon system
 
-- **Lucide React** (latest) — for all icons (arrow, external-link, mail, linkedin, etc.)
-- Size: 16px inline, 20–24px for navigation
+- **Lucide React** (installed in Prompt 3)
+- Size: 16px inline (`w-4 h-4`), 20–24px for navigation
 - Colour inherits from parent
 
 ---
@@ -316,33 +320,69 @@ Total composition: ~2.4s.
 ## 7. Technical Stack
 
 - **Framework:** Next.js 16.2.4 (App Router, Server Components by default, `"use client"` for interactive components)
-- **Styling:** Tailwind CSS v4 (using `@import "tailwindcss"` in globals.css) + CSS custom properties
+- **Styling:** Tailwind CSS v4 (CSS-based `@theme` configuration in `globals.css` — NO `tailwind.config.ts`) + CSS custom properties
 - **Language:** TypeScript
 - **Fonts:** Self-hosted via `next/font/local`:
   - General Sans (Regular 400, Medium 500, SemiBold 600) → `--font-sans`
   - Source Serif 4 Italic (static .ttf, 400) → `--font-serif`
   - Files in `public/fonts/`
-- **Icons:** Lucide React (to be installed in later prompt when needed)
+- **Icons:** Lucide React (installed)
 - **Deployment:** Netlify, free tier, deploying from `develop` branch
 - **Repo:** github.com/edwincwells/edwincw-site (public)
 - **Preview URL:** edwincw-site.netlify.app
-- **Local dev:** macOS, Node v24, npm 11, Claude Code in desktop Claude app, project at `~/Development/edwincw-site`
+- **Local dev:** macOS, Node v24, npm 11, Claude Code in desktop Claude app
+- **Project path:** `~/Development/edwincw-site`
 - **Budget:** £0 running cost (all free tier)
 
 **Important project-specific config:**
 - `next.config.ts` has explicit `turbopack.root: path.resolve(__dirname)` to prevent workspace root misinference (a stray lockfile in home dir caused issues during Prompt 1)
+- React Compiler: NOT enabled (stability/compatibility choice for Claude Code)
+- AGENTS.md: present at repo root, included by create-next-app
 
 ---
 
-## 8. Prompt Sequence Plan
+## 8. Current File Structure
+
+```
+edwincw-site/
+├── AGENTS.md
+├── docs/
+│   └── design-brief.md  (this file)
+├── public/
+│   ├── fonts/
+│   │   ├── GeneralSans-Regular.woff2
+│   │   ├── GeneralSans-Medium.woff2
+│   │   ├── GeneralSans-Semibold.woff2
+│   │   └── SourceSerif4-Italic.ttf
+│   └── favicon.ico
+├── src/
+│   ├── app/
+│   │   ├── fonts.ts          (next/font/local setup)
+│   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles)
+│   │   ├── typography.css    (type scale utility classes)
+│   │   ├── layout.tsx        (root layout with Nav + Footer)
+│   │   └── page.tsx          (placeholder home)
+│   └── components/
+│       ├── Container.tsx     (default 1280px / narrow 680px)
+│       ├── Section.tsx       (py-16 md:py-24 wrapper)
+│       ├── Nav.tsx           (sticky top, 4 links, EC-W mark)
+│       └── Footer.tsx        (copyright + LinkedIn/Mail icons)
+├── next.config.ts            (turbopack.root set explicitly)
+├── package.json
+└── tsconfig.json
+```
+
+---
+
+## 9. Prompt Sequence Plan
 
 | # | Prompt | Status |
 |---|---|---|
 | 0 | Repo + Netlify setup (manual, not Claude Code) | ✅ Complete |
 | 1 | Scaffold — fonts, file structure, base config | ✅ Complete |
-| 2 | Design tokens — CSS variables, Tailwind config, globals | ⏳ Next |
-| 3 | Layout shell — nav, footer, container, typography primitives | Pending |
-| 4 | Hero section — asymmetric layout with diagram placeholder | Pending |
+| 2 | Design tokens — CSS variables, Tailwind config, globals | ✅ Complete |
+| 3 | Layout shell — nav, footer, container, typography primitives | ✅ Complete |
+| 4 | Hero section — asymmetric layout with diagram placeholder | ⏳ Next |
 | 5 | Thesis + Credentials + Contact sections | Pending |
 | 6 | Selected work — staggered editorial layout with flourish | Pending |
 | 7 | Hero diagram — kinetic loop (expect iteration) | Pending |
@@ -356,18 +396,17 @@ Total composition: ~2.4s.
 - Each prompt includes: what it builds, exact paste-ready instruction, what to check after, exact git commit commands, what to verify on Netlify preview
 - Prompts run sequentially on the `develop` branch; each commits before the next runs
 - Only Prompt 7 (hero diagram) expects iteration in dialogue within Claude Code; everything else is one-shot
+- Continue using the same Claude Code session across prompts unless something goes seriously wrong (cheap context-wise; preserves conventions)
 
 ---
 
-## 9. Progress Log
-
-*Update this section after each completed prompt. In a new chat, this tells the next assistant exactly what's done and what's next.*
+## 10. Progress Log
 
 - [x] **Prompt 0** — Repo created on GitHub (edwincwells/edwincw-site, public), local Next.js 16 scaffold with TypeScript + Tailwind v4 + App Router + AGENTS.md, Netlify connected deploying from `develop`, preview URL live with default Next.js page. SSH auth configured.
-- [x] **Prompt 1** — Fonts self-hosted (General Sans + Source Serif 4 Italic) via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. `src/app/fonts.ts` created. Minimal placeholder page renders eyebrow + serif italic name + sans tagline on paper-warm bg (#F7F5F1). `next.config.ts` includes explicit `turbopack.root` to prevent workspace misinference. Git user.name/email configured globally (was defaulting to local hostname). Local + Netlify both verified working.
-- [ ] **Prompt 2** — Design tokens (next)
-- [ ] **Prompt 3** — Layout shell
-- [ ] **Prompt 4** — Hero section
+- [x] **Prompt 1** — Fonts self-hosted (General Sans + Source Serif 4 Italic) via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. `src/app/fonts.ts` created. Minimal placeholder page renders eyebrow + serif italic name + sans tagline on paper-warm bg (#F7F5F1). `next.config.ts` includes explicit `turbopack.root` to prevent workspace misinference. Git user.name/email configured globally (was defaulting to local hostname). Local + Netlify verified.
+- [x] **Prompt 2** — Design tokens implemented in globals.css (Tailwind v4 `@theme` block for colours + fonts, `:root` for layout/motion/radius constants). Typography utility classes in `src/app/typography.css` (`.text-display`, `.text-h1`, etc., responsive at 768px breakpoint). Base styles: body bg/colour/font, antialiasing, reduced-motion reset, selection styling, focus-visible baseline. Placeholder page refactored to use utility classes instead of inline styles. Verified via DevTools Console: `getComputedStyle(document.documentElement).getPropertyValue('--color-primary')` returns `#124E66`.
+- [x] **Prompt 3** — Layout shell complete. `src/components/Container.tsx` (default 1280px / narrow 680px variant), `src/components/Section.tsx` (py-16 md:py-24 vertical rhythm), `src/components/Nav.tsx` (sticky top with backdrop blur, EC-W mark + 4 nav links with teal hover, ArrowUpRight icon on external Case Studies link), `src/components/Footer.tsx` (copyright + LinkedIn/Mail icons). Root layout wraps content with Nav/main/Footer. Lucide-react installed. Local + Netlify verified.
+- [ ] **Prompt 4** — Hero section (next)
 - [ ] **Prompt 5** — Thesis + Credentials + Contact
 - [ ] **Prompt 6** — Selected work
 - [ ] **Prompt 7** — Hero diagram
@@ -376,7 +415,7 @@ Total composition: ~2.4s.
 
 ---
 
-## 10. Critical Do-Nots
+## 11. Critical Do-Nots
 
 - Do not reopen locked design decisions unless Edwin explicitly asks
 - Do not suggest adding more sections to the homepage (keep to the 5)
@@ -389,3 +428,23 @@ Total composition: ~2.4s.
 - Do not use SemiBold (600) for headings except the hero display if Medium doesn't hold — use Medium (500)
 - Do not introduce additional accent colours beyond teal + ochre
 - Do not add a cursor follower, magnetic button, parallax, or page-transition animation
+- Do not create `tailwind.config.ts` — Tailwind v4 is CSS-based
+- Do not add `@apply` directives — use utility classes or plain CSS custom properties
+
+---
+
+## 12. Prompt 4 — Ready to Draft
+
+The next prompt is **Prompt 4: Hero section.** Scope:
+
+- Replace the current placeholder page content with the real Hero section
+- Asymmetric 55/45 desktop layout (type left, diagram placeholder right), stacked on mobile
+- Left side: the name in serif italic (small, above display), the display tagline "Experience Strategy & Product Leadership" at 88px desktop / 52px mobile using `.text-display`, subtitle "Designing intelligent product experiences that drive growth, adoption and trust." at 20px desktop using `.text-subtitle text-[var(--color-body)]`
+- Right side: a placeholder element for the hero diagram — simple outlined box with dashed border and text "[ Hero diagram — Prompt 7 ]" centred inside. Matches the 45% width. Roughly square aspect ratio.
+- Name placement: small serif italic, ~20px, sits above the display as a light personal anchor (NOT the primary focus — the display is). Positioned tightly above the display.
+- Offset baseline: the diagram's visual centre should sit slightly below the display tagline's baseline, not centred vertically against the whole type block — creates the "composed, not aligned" feeling
+- Padding: significant top padding so the hero breathes below the nav (`pt-24 md:pt-40` or similar within the Section)
+- Use `Section` and `Container` (default width) primitives from `src/components/`
+- No scroll animations yet — Prompt 8 handles entrance motion
+
+Ready to draft this prompt in the new chat when Edwin confirms.
