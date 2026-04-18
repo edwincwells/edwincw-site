@@ -67,3 +67,14 @@ body {
   outline-offset: 3px;
   border-radius: var(--radius-sm);
 }
+
+.link {
+  color: var(--color-foreground);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: text-underline-offset 180ms linear, color 180ms linear;
+}
+.link:hover {
+  color: var(--color-primary);
+  text-underline-offset: 1px;
+}
