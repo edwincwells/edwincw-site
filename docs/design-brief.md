@@ -361,12 +361,13 @@ edwincw-site/
 │   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles)
 │   │   ├── typography.css    (type scale utility classes)
 │   │   ├── layout.tsx        (root layout with Nav + Footer)
-│   │   └── page.tsx          (placeholder home)
+│   │   └── page.tsx          (renders <Hero />)
 │   └── components/
 │       ├── Container.tsx     (default 1280px / narrow 680px)
 │       ├── Section.tsx       (py-16 md:py-24 wrapper)
 │       ├── Nav.tsx           (sticky top, 4 links, EC-W mark)
-│       └── Footer.tsx        (copyright + LinkedIn/Mail icons)
+│       ├── Footer.tsx        (copyright + LinkedIn/Mail icons)
+│       └── Hero.tsx          (asymmetric 55/45 hero + diagram placeholder)
 ├── next.config.ts            (turbopack.root set explicitly)
 ├── package.json
 └── tsconfig.json
@@ -382,8 +383,8 @@ edwincw-site/
 | 1 | Scaffold — fonts, file structure, base config | ✅ Complete |
 | 2 | Design tokens — CSS variables, Tailwind config, globals | ✅ Complete |
 | 3 | Layout shell — nav, footer, container, typography primitives | ✅ Complete |
-| 4 | Hero section — asymmetric layout with diagram placeholder | ⏳ Next |
-| 5 | Thesis + Credentials + Contact sections | Pending |
+| 4 | Hero section — asymmetric layout with diagram placeholder | ✅ Complete |
+| 5 | Thesis + Credentials + Contact sections | ⏳ Next |
 | 6 | Selected work — staggered editorial layout with flourish | Pending |
 | 7 | Hero diagram — kinetic loop (expect iteration) | Pending |
 | 8 | Polish pass — scroll motion, reduced-motion, a11y, Lighthouse | Pending |
@@ -406,8 +407,8 @@ edwincw-site/
 - [x] **Prompt 1** — Fonts self-hosted (General Sans + Source Serif 4 Italic) via `next/font/local` with CSS variables `--font-sans` and `--font-serif`. `src/app/fonts.ts` created. Minimal placeholder page renders eyebrow + serif italic name + sans tagline on paper-warm bg (#F7F5F1). `next.config.ts` includes explicit `turbopack.root` to prevent workspace misinference. Git user.name/email configured globally (was defaulting to local hostname). Local + Netlify verified.
 - [x] **Prompt 2** — Design tokens implemented in globals.css (Tailwind v4 `@theme` block for colours + fonts, `:root` for layout/motion/radius constants). Typography utility classes in `src/app/typography.css` (`.text-display`, `.text-h1`, etc., responsive at 768px breakpoint). Base styles: body bg/colour/font, antialiasing, reduced-motion reset, selection styling, focus-visible baseline. Placeholder page refactored to use utility classes instead of inline styles. Verified via DevTools Console: `getComputedStyle(document.documentElement).getPropertyValue('--color-primary')` returns `#124E66`.
 - [x] **Prompt 3** — Layout shell complete. `src/components/Container.tsx` (default 1280px / narrow 680px variant), `src/components/Section.tsx` (py-16 md:py-24 vertical rhythm), `src/components/Nav.tsx` (sticky top with backdrop blur, EC-W mark + 4 nav links with teal hover, ArrowUpRight icon on external Case Studies link), `src/components/Footer.tsx` (copyright + LinkedIn/Mail icons). Root layout wraps content with Nav/main/Footer. Lucide-react installed. Local + Netlify verified.
-- [ ] **Prompt 4** — Hero section (next)
-- [ ] **Prompt 5** — Thesis + Credentials + Contact
+- [x] **Prompt 4** — Hero section complete. `src/components/Hero.tsx` created and rendered from `src/app/page.tsx`. Asymmetric 55/45 grid on desktop (`grid-cols-[55fr_45fr]`), single-column stack on mobile. Left column: name in Source Serif 4 Italic, 20px, `--color-muted`, as `<p class="font-serif-italic text-[20px] text-[var(--color-muted)] mb-4">` sitting tightly above the display; display tagline as `<h1 class="text-display text-[var(--color-foreground)]">` (semantic H1 confirmed in DevTools); subtitle as `<p class="text-subtitle text-[var(--color-body)] mt-6 md:mt-8 max-w-[540px]">`. Right column: dashed-border square placeholder (`aspect-square`, `border-dashed`, `--color-border`, `--radius-lg`) with "[ Hero diagram — Prompt 7 ]" centred in `.text-small` muted. Section padding overridden with `!pt-24 md:!pt-40 !pb-16 md:!pb-24` on the existing `Section` to give the hero room below the sticky nav. Offset baseline: right column set to `mt-0 md:mt-20` so diagram visual centre sits below the display's baseline — "composed, not aligned." Verified in DevTools: display computes `generalSans` family at 88px weight 500, name computes `sourceSerif` family italic at 20px weight 400, both loading from network (not fallback). Local + Netlify verified.
+- [ ] **Prompt 5** — Thesis + Credentials + Contact sections (next)
 - [ ] **Prompt 6** — Selected work
 - [ ] **Prompt 7** — Hero diagram
 - [ ] **Prompt 8** — Polish pass
@@ -433,18 +434,53 @@ edwincw-site/
 
 ---
 
-## 12. Prompt 4 — Ready to Draft
+## 12. Prompt 5 — Ready to Draft
 
-The next prompt is **Prompt 4: Hero section.** Scope:
+The next prompt is **Prompt 5: Thesis + Credentials + Contact sections.** These are the three remaining "quiet" sections of the homepage — Selected Work (Prompt 6) is the editorial showpiece and gets its own prompt, and the Hero diagram (Prompt 7) replaces the placeholder. Prompt 5 ships three sections in one pass because they share a register: narrow, composed, type-led, no imagery.
 
-- Replace the current placeholder page content with the real Hero section
-- Asymmetric 55/45 desktop layout (type left, diagram placeholder right), stacked on mobile
-- Left side: the name in serif italic (small, above display), the display tagline "Experience Strategy & Product Leadership" at 88px desktop / 52px mobile using `.text-display`, subtitle "Designing intelligent product experiences that drive growth, adoption and trust." at 20px desktop using `.text-subtitle text-[var(--color-body)]`
-- Right side: a placeholder element for the hero diagram — simple outlined box with dashed border and text "[ Hero diagram — Prompt 7 ]" centred inside. Matches the 45% width. Roughly square aspect ratio.
-- Name placement: small serif italic, ~20px, sits above the display as a light personal anchor (NOT the primary focus — the display is). Positioned tightly above the display.
-- Offset baseline: the diagram's visual centre should sit slightly below the display tagline's baseline, not centred vertically against the whole type block — creates the "composed, not aligned" feeling
-- Padding: significant top padding so the hero breathes below the nav (`pt-24 md:pt-40` or similar within the Section)
-- Use `Section` and `Container` (default width) primitives from `src/components/`
-- No scroll animations yet — Prompt 8 handles entrance motion
+**Scope and locked decisions:**
 
-Ready to draft this prompt in the new chat when Edwin confirms.
+- Create `src/components/Thesis.tsx`, `src/components/Credentials.tsx`, `src/components/Contact.tsx`
+- Render all three from `src/app/page.tsx` below `<Hero />`. Order for Prompt 5: Thesis → Credentials → Contact. Selected Work will be inserted between Thesis and Credentials in Prompt 6.
+- Use `Section` + `Container` primitives. Default `Section` padding (`py-16 md:py-24`) is correct for all three.
+- All three are Server Components. Only hover state is used, and it's pure CSS.
+- No icons in these three sections (icon use is reserved for Selected Work arrows in Prompt 6).
+- No scroll animations — Prompt 8 handles entrance motion.
+
+**Thesis section**
+- `Container width="narrow"` (680px reading width), centred
+- Eyebrow: "On designing trust" — `.text-eyebrow`, `text-[var(--color-primary)]` (teal), `mb-4`, as `<p>`
+- Title: "What experience strategy means when the product can think back" — `.text-h1`, `text-[var(--color-foreground)]`, `mb-8 md:mb-10`, as `<h2>`
+- Body: placeholder `<p>` with explicit text "[Thesis body — 150–250 words — Edwin to write]" using `.text-body` with `text-[var(--color-body)]`. Edwin will supply the real copy in a later pass.
+
+**Credentials section**
+- `Container` default (1280px)
+- No eyebrow, no section title — the grid speaks for itself. Sits as a quiet strip.
+- 2×2 grid on desktop (`grid-cols-2`), 1×4 stack on mobile (`grid-cols-1`), `gap-8 md:gap-12`
+- Four cells, in order:
+  1. Label: "Current role" → Value: "Director of UX, Harri"
+  2. Label: "Cross-functional influence" → Value: "50+"
+  3. Label: "Sectors" → Value: "Enterprise HCM & Workforce Platforms"
+  4. Label: "Team" → Value: "Globally distributed team of 6"
+- Each cell: label as `.text-eyebrow` `text-[var(--color-muted)]` `mb-2`; value as `.text-h2` `text-[var(--color-foreground)]`
+- Top and bottom thin divider: `border-t border-b border-[var(--color-border)]` on the inner grid wrapper with `py-12 md:py-16` so the dividers frame the strip
+- No icons, no chips, no coloured backgrounds
+
+**Contact section**
+- `Container width="narrow"` (680px), centred, centre-aligned text
+- Eyebrow: "Get in touch" — `.text-eyebrow` `text-[var(--color-primary)]` `mb-4`
+- Title: "Let's talk" — `.text-h1` `text-[var(--color-foreground)]` `mb-8`, as `<h2>`
+- Three rows stacked vertically, each with a small `.text-eyebrow` muted label on one line and the value underneath at `.text-body`:
+  1. Label "Email" → value `ed.collings.wells@gmail.com` as `<a href="mailto:...">`
+  2. Label "LinkedIn" → value `linkedin.com/in/edwincw/` as `<a href="https://linkedin.com/in/edwincw/" target="_blank" rel="noopener noreferrer">`
+  3. Label "Location" → value "Bournemouth & London" as plain text, `text-[var(--color-muted)]`
+- Link styling per §5.4: `text-[var(--color-foreground)]` at rest, `text-[var(--color-primary)]` on hover; underline with `text-underline-offset: 3px` at rest → `1px` on hover; `transition: text-underline-offset 180ms linear, color 180ms linear`. Implement via a small `.link` helper in `globals.css` if utilities alone aren't clean.
+
+**Semantics**
+- Only the Hero has `<h1>`. All three new section titles are `<h2>`.
+- Credentials cell values render as `<p>` (not `<h2>`) — they're data, not section headings. The `.text-h2` utility controls size/weight only.
+
+**Out of scope for Prompt 5**
+- Real thesis copy (placeholder ships as-is)
+- Entrance motion (Prompt 8)
+- Contact form or any JS interactivity
