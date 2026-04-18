@@ -160,7 +160,7 @@ Loaded via `next/font/local` with CSS variables `--font-sans` and `--font-serif`
 | `.text-h1` | 48px | 32px | 500 | 1.15 |
 | `.text-h2` | 28px | 24px | 500 | 1.15 |
 | `.text-subtitle` | 20px | 17px | 400 | 1.4 |
-| `.text-body` | 17px | 16px | 400 | 1.65 |
+| `.text-prose` | 17px | 16px | 400 | 1.65 |
 | `.text-small` | 14px | 14px | 400 | 1.5 |
 | `.text-eyebrow` | 12px | 12px | 500 | 1 (uppercase, tracking 0.08em) |
 
@@ -170,6 +170,7 @@ Loaded via `next/font/local` with CSS variables `--font-sans` and `--font-serif`
 - Body at 17px (not 16px) — slightly more considered, magazine-like
 - Hero subtitle deliberately quieter (20px not 24px) — display type carries the weight
 - 500 Medium preferred over 600 SemiBold for editorial register
+- Running text utility is named `.text-prose`, not `.text-body`, because Tailwind v4 auto-generates a `.text-body` utility from the `--color-body` token in `@theme` — using both causes a cascade collision. Do not rename back to `.text-body`.
 
 ### 5.3 Layout (implemented via Container and Section components in src/components/)
 
@@ -358,16 +359,19 @@ edwincw-site/
 ├── src/
 │   ├── app/
 │   │   ├── fonts.ts          (next/font/local setup)
-│   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles)
+│   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles + .link helper)
 │   │   ├── typography.css    (type scale utility classes)
 │   │   ├── layout.tsx        (root layout with Nav + Footer)
-│   │   └── page.tsx          (renders <Hero />)
+│   │   └── page.tsx          (renders Hero, Thesis, Credentials, Contact)
 │   └── components/
 │       ├── Container.tsx     (default 1280px / narrow 680px)
 │       ├── Section.tsx       (py-16 md:py-24 wrapper)
 │       ├── Nav.tsx           (sticky top, 4 links, EC-W mark)
 │       ├── Footer.tsx        (copyright + LinkedIn/Mail icons)
-│       └── Hero.tsx          (asymmetric 55/45 hero + diagram placeholder)
+│       ├── Hero.tsx          (asymmetric 55/45 hero + diagram placeholder)
+│       ├── Thesis.tsx        (narrow, eyebrow + h2 + body placeholder)
+│       ├── Credentials.tsx   (2×2 grid, framed by thin top/bottom dividers)
+│       └── Contact.tsx       (narrow centred, eyebrow + h2 + prose block with inline links)
 ├── next.config.ts            (turbopack.root set explicitly)
 ├── package.json
 └── tsconfig.json
@@ -384,8 +388,8 @@ edwincw-site/
 | 2 | Design tokens — CSS variables, Tailwind config, globals | ✅ Complete |
 | 3 | Layout shell — nav, footer, container, typography primitives | ✅ Complete |
 | 4 | Hero section — asymmetric layout with diagram placeholder | ✅ Complete |
-| 5 | Thesis + Credentials + Contact sections | ⏳ Next |
-| 6 | Selected work — staggered editorial layout with flourish | Pending |
+| 5 | Thesis + Credentials + Contact sections | ✅ Complete |
+| 6 | Selected work — staggered editorial layout with flourish | ⏳ Next |
 | 7 | Hero diagram — kinetic loop (expect iteration) | Pending |
 | 8 | Polish pass — scroll motion, reduced-motion, a11y, Lighthouse | Pending |
 
@@ -408,8 +412,8 @@ edwincw-site/
 - [x] **Prompt 2** — Design tokens implemented in globals.css (Tailwind v4 `@theme` block for colours + fonts, `:root` for layout/motion/radius constants). Typography utility classes in `src/app/typography.css` (`.text-display`, `.text-h1`, etc., responsive at 768px breakpoint). Base styles: body bg/colour/font, antialiasing, reduced-motion reset, selection styling, focus-visible baseline. Placeholder page refactored to use utility classes instead of inline styles. Verified via DevTools Console: `getComputedStyle(document.documentElement).getPropertyValue('--color-primary')` returns `#124E66`.
 - [x] **Prompt 3** — Layout shell complete. `src/components/Container.tsx` (default 1280px / narrow 680px variant), `src/components/Section.tsx` (py-16 md:py-24 vertical rhythm), `src/components/Nav.tsx` (sticky top with backdrop blur, EC-W mark + 4 nav links with teal hover, ArrowUpRight icon on external Case Studies link), `src/components/Footer.tsx` (copyright + LinkedIn/Mail icons). Root layout wraps content with Nav/main/Footer. Lucide-react installed. Local + Netlify verified.
 - [x] **Prompt 4** — Hero section complete. `src/components/Hero.tsx` created and rendered from `src/app/page.tsx`. Asymmetric 55/45 grid on desktop (`grid-cols-[55fr_45fr]`), single-column stack on mobile. Left column: name in Source Serif 4 Italic, 20px, `--color-muted`, as `<p class="font-serif-italic text-[20px] text-[var(--color-muted)] mb-4">` sitting tightly above the display; display tagline as `<h1 class="text-display text-[var(--color-foreground)]">` (semantic H1 confirmed in DevTools); subtitle as `<p class="text-subtitle text-[var(--color-body)] mt-6 md:mt-8 max-w-[540px]">`. Right column: dashed-border square placeholder (`aspect-square`, `border-dashed`, `--color-border`, `--radius-lg`) with "[ Hero diagram — Prompt 7 ]" centred in `.text-small` muted. Section padding overridden with `!pt-24 md:!pt-40 !pb-16 md:!pb-24` on the existing `Section` to give the hero room below the sticky nav. Offset baseline: right column set to `mt-0 md:mt-20` so diagram visual centre sits below the display's baseline — "composed, not aligned." Verified in DevTools: display computes `generalSans` family at 88px weight 500, name computes `sourceSerif` family italic at 20px weight 400, both loading from network (not fallback). Local + Netlify verified.
-- [ ] **Prompt 5** — Thesis + Credentials + Contact sections (next)
-- [ ] **Prompt 6** — Selected work
+- [x] **Prompt 5** — Thesis, Credentials, Contact sections shipped in one pass. `Thesis.tsx` uses narrow Container with teal eyebrow ("On designing trust"), `<h2>` title ("What experience strategy means when the product can think back"), and a `[TBD]` body placeholder at `.text-prose`. `Credentials.tsx` uses default Container with a 2×2 grid on desktop / 1×4 stack on mobile, framed by thin top and bottom borders, cell values rendered as `<p>` (not `<h2>`) at `.text-h2` size for data-not-headings semantics. `Contact.tsx` initially shipped as a label/value row stack but was revised mid-prompt to a prose block — two centred sentences, sentence 1 "Reach me by [email], or connect on [LinkedIn]." (with `email` and `LinkedIn` as inline `.link` class anchors in foreground colour, teal on hover, 3px → 1px underline offset transition, 180ms), sentence 2 "Based in the UK, working globally." in muted grey. No exposed URLs. `.link` helper class added to `globals.css`. During verification, Contact sentence 2 was rendering in body colour instead of muted — DevTools traced this to a name collision: Tailwind v4 auto-generates a `.text-body` utility from the `--color-body` token in `@theme`, which collided with the hand-written `.text-body` type utility in `typography.css`. Resolved by renaming the type utility `.text-body` → `.text-prose` in `typography.css` and updating consumers (`Thesis.tsx`). Documented in §5.2 Notes so the collision doesn't get reintroduced. Also noted: a hydration warning in local dev traced to the ColorZilla browser extension injecting `cz-shortcut-listen` on `<body>`; not a code issue, ignored. Local + Netlify verified.
+- [ ] **Prompt 6** — Selected work (next)
 - [ ] **Prompt 7** — Hero diagram
 - [ ] **Prompt 8** — Polish pass
 - [ ] **About page** — Separate build after homepage
@@ -434,53 +438,72 @@ edwincw-site/
 
 ---
 
-## 12. Prompt 5 — Ready to Draft
+## 12. Prompt 6 — Scope
 
-The next prompt is **Prompt 5: Thesis + Credentials + Contact sections.** These are the three remaining "quiet" sections of the homepage — Selected Work (Prompt 6) is the editorial showpiece and gets its own prompt, and the Hero diagram (Prompt 7) replaces the placeholder. Prompt 5 ships three sections in one pass because they share a register: narrow, composed, type-led, no imagery.
+The next prompt is **Prompt 6: Selected Work.** This is the editorial showpiece of the homepage — the one place imagery carries weight and where the site most visibly argues for Edwin as a design leader. Three case study teasers rendered as **staggered full-width rows** with alternating image-left / image-right / image-left composition. Explicitly NOT a three-up card grid.
 
-**Scope and locked decisions:**
+Build order in `src/app/page.tsx`: Selected Work gets inserted between `<Thesis />` and `<Credentials />` — so the final homepage order becomes Hero → Thesis → Selected Work → Credentials → Contact.
 
-- Create `src/components/Thesis.tsx`, `src/components/Credentials.tsx`, `src/components/Contact.tsx`
-- Render all three from `src/app/page.tsx` below `<Hero />`. Order for Prompt 5: Thesis → Credentials → Contact. Selected Work will be inserted between Thesis and Credentials in Prompt 6.
-- Use `Section` + `Container` primitives. Default `Section` padding (`py-16 md:py-24`) is correct for all three.
-- All three are Server Components. Only hover state is used, and it's pure CSS.
-- No icons in these three sections (icon use is reserved for Selected Work arrows in Prompt 6).
-- No scroll animations — Prompt 8 handles entrance motion.
+Uses `Section` + `Container` (default 1280px). Default `Section` padding is correct.
 
-**Thesis section**
-- `Container width="narrow"` (680px reading width), centred
-- Eyebrow: "On designing trust" — `.text-eyebrow`, `text-[var(--color-primary)]` (teal), `mb-4`, as `<p>`
-- Title: "What experience strategy means when the product can think back" — `.text-h1`, `text-[var(--color-foreground)]`, `mb-8 md:mb-10`, as `<h2>`
-- Body: placeholder `<p>` with explicit text "[Thesis body — 150–250 words — Edwin to write]" using `.text-body` with `text-[var(--color-body)]`. Edwin will supply the real copy in a later pass.
+Server Component. Only hover state is used (pure CSS).
 
-**Credentials section**
-- `Container` default (1280px)
-- No eyebrow, no section title — the grid speaks for itself. Sits as a quiet strip.
-- 2×2 grid on desktop (`grid-cols-2`), 1×4 stack on mobile (`grid-cols-1`), `gap-8 md:gap-12`
-- Four cells, in order:
-  1. Label: "Current role" → Value: "Director of UX, Harri"
-  2. Label: "Cross-functional influence" → Value: "50+"
-  3. Label: "Sectors" → Value: "Enterprise HCM & Workforce Platforms"
-  4. Label: "Team" → Value: "Globally distributed team of 6"
-- Each cell: label as `.text-eyebrow` `text-[var(--color-muted)]` `mb-2`; value as `.text-h2` `text-[var(--color-foreground)]`
-- Top and bottom thin divider: `border-t border-b border-[var(--color-border)]` on the inner grid wrapper with `py-12 md:py-16` so the dividers frame the strip
-- No icons, no chips, no coloured backgrounds
+**Section header**
+- Eyebrow: "Selected work" — `.text-eyebrow`, `text-[var(--color-primary)]`, `mb-4`, as `<p>`
+- Title: "Recent projects" — `.text-h1`, `text-[var(--color-foreground)]`, `mb-16 md:mb-24`, as `<h2>`
+- Header sits left-aligned at the top of the Container (not centred — matches editorial register)
 
-**Contact section**
-- `Container width="narrow"` (680px), centred, centre-aligned text
-- Eyebrow: "Get in touch" — `.text-eyebrow` `text-[var(--color-primary)]` `mb-4`
-- Title: "Let's talk" — `.text-h1` `text-[var(--color-foreground)]` `mb-8`, as `<h2>`
-- Three rows stacked vertically, each with a small `.text-eyebrow` muted label on one line and the value underneath at `.text-body`:
-  1. Label "Email" → value `ed.collings.wells@gmail.com` as `<a href="mailto:...">`
-  2. Label "LinkedIn" → value `linkedin.com/in/edwincw/` as `<a href="https://linkedin.com/in/edwincw/" target="_blank" rel="noopener noreferrer">`
-  3. Label "Location" → value "Bournemouth & London" as plain text, `text-[var(--color-muted)]`
-- Link styling per §5.4: `text-[var(--color-foreground)]` at rest, `text-[var(--color-primary)]` on hover; underline with `text-underline-offset: 3px` at rest → `1px` on hover; `transition: text-underline-offset 180ms linear, color 180ms linear`. Implement via a small `.link` helper in `globals.css` if utilities alone aren't clean.
+**Three teaser rows**
 
-**Semantics**
-- Only the Hero has `<h1>`. All three new section titles are `<h2>`.
-- Credentials cell values render as `<p>` (not `<h2>`) — they're data, not section headings. The `.text-h2` utility controls size/weight only.
+Each row is a full-width two-column composition inside the Container, with generous vertical separation between rows (`mt-24 md:mt-32` between rows, or use a parent `space-y-24 md:space-y-32`).
 
-**Out of scope for Prompt 5**
-- Real thesis copy (placeholder ships as-is)
-- Entrance motion (Prompt 8)
-- Contact form or any JS interactivity
+Desktop: two columns, roughly 50/50 with a large gap (`grid-cols-2 gap-12 md:gap-16`). Mobile: stacks to single column, image above text.
+
+Row 1 composition: image left, text right
+Row 2 composition: image right, text left
+Row 3 composition: image left, text right
+
+(Use a `reverse` boolean prop or a CSS `md:grid-flow-row-dense` / `md:[&>*:first-child]:col-start-2` approach — whichever reads cleaner in Claude Code's hands. The alternation must be visible on desktop and must collapse to image-above-text on mobile regardless of desktop side.)
+
+**Per-row content**
+
+1. **Salli**
+   - Image: placeholder box, `aspect-[4/3]`, `bg-[var(--color-border)]`, `rounded-[var(--radius-lg)]`, centred label "[ Salli image — TBD ]" in `.text-small` muted
+   - Eyebrow: "Case study 01" — `.text-eyebrow text-[var(--color-muted)] mb-4`
+   - Title: "Reimagining Workforce Management Through Agentic AI" — `.text-h2 text-[var(--color-foreground)] mb-4`
+   - Description: "Designing a proactive intelligence layer to guide frontline decision-making at scale" — `.text-prose text-[var(--color-body)] mb-6`
+   - Link: "Read the case study" with an `ArrowUpRight` icon from lucide-react, as `<a href="https://portfolio.edwincw.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors duration-[180ms]">`. Icon translates 4px right on hover (`group-hover:translate-x-1 transition-transform`).
+
+2. **Rewards & Recognition**
+   - Image placeholder as above, label "[ Rewards & Recognition image — TBD ]"
+   - Eyebrow: "Case study 02"
+   - Title: "Designing Employee Engagement as a Platform Growth Lever"
+   - Description: "How Rewards & Recognition became a platform growth lever – and a commercial differentiator"
+   - Link: same treatment, same href
+
+3. **FluxUX**
+   - Image placeholder as above, label "[ FluxUX image — TBD ]"
+   - Eyebrow: "Case study 03"
+   - Title: "[FluxUX title — TBD]"
+   - Description: "[FluxUX one-liner — TBD]"
+   - Link: "Explore the app", target is TBD URL — use `#` as href placeholder with a `data-todo` attribute flagging TBD
+   - Edwin will supply title, one-liner, and URL in a later pass
+
+**Editorial flourish (§5.4) — hover state on each row**
+
+- Image: translates 8px horizontally (direction matches the row composition — image-left rows translate image 8px right on hover; image-right rows translate image 8px left). Also lifts 4px vertically. Combined transform.
+- Title: colour shifts to `var(--color-primary)` (teal)
+- Link arrow: translates 4px right (already specified above)
+- Duration: 240ms `--duration-hover`, `ease-out`
+- Implementation: wrap the whole row in a `<div class="group">` and let child elements respond via `group-hover:` variants. The image-translate direction alternates per row — choose a clean way to parameterise this (prop, className variant, or two layout components).
+
+**Accessibility**
+- The whole row is not a single link — only the explicit text link is. This keeps screen readers and keyboard users from being overwhelmed by a giant click target and gives the title/description room to breathe semantically.
+- Case study titles are `<h3>` (Selected Work section title is `<h2>`, so titles inside rows nest as `<h3>`).
+
+**Code conventions**
+- Component structure: one `SelectedWork.tsx` parent that renders three `WorkRow` subcomponents (either a nested component in the same file or a separate `WorkRow.tsx` — Claude Code's call). The alternation logic lives in `SelectedWork.tsx`.
+- Server Component
+- CSS custom properties via Tailwind arbitrary values
+- Image placeholders only — actual images arrive in a later pass
+- No scroll animations — Prompt 8 handles that
