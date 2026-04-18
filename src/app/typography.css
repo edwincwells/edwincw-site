@@ -25,7 +25,7 @@
   line-height: 1.4;
 }
 
-.text-body {
+.text-prose {
   font-size: 16px;
   font-weight: 400;
   line-height: 1.65;
@@ -58,7 +58,7 @@
   .text-subtitle {
     font-size: 20px;
   }
-  .text-body {
+  .text-prose {
     font-size: 17px;
   }
 }
