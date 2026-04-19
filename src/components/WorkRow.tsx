@@ -32,7 +32,7 @@ export function WorkRow({
     <div className="group grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
       <div className={reverse ? "md:order-2" : ""}>
         <div
-          className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-border)]"
+          className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-background)]"
           style={{ borderRadius: "var(--radius-lg)" }}
         >
           <Image
