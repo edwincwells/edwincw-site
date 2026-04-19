@@ -355,6 +355,10 @@ edwincw-site/
 │   │   ├── GeneralSans-Medium.woff2
 │   │   ├── GeneralSans-Semibold.woff2
 │   │   └── SourceSerif4-Italic.ttf
+│   ├── work/
+│   │   ├── salli.webp
+│   │   ├── rewards-recognition.webp
+│   │   └── fluxux.webp
 │   └── favicon.ico
 ├── src/
 │   ├── app/
@@ -362,7 +366,7 @@ edwincw-site/
 │   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles + .link helper)
 │   │   ├── typography.css    (type scale utility classes)
 │   │   ├── layout.tsx        (root layout with Nav + Footer)
-│   │   └── page.tsx          (renders Hero, Thesis, Credentials, Contact)
+│   │   └── page.tsx          (renders Hero, Thesis, SelectedWork, Credentials, Contact)
 │   └── components/
 │       ├── Container.tsx     (default 1280px / narrow 680px)
 │       ├── Section.tsx       (py-16 md:py-24 wrapper)
@@ -370,6 +374,8 @@ edwincw-site/
 │       ├── Footer.tsx        (copyright + LinkedIn/Mail icons)
 │       ├── Hero.tsx          (asymmetric 55/45 hero + diagram placeholder)
 │       ├── Thesis.tsx        (narrow, eyebrow + h2 + body placeholder)
+│       ├── SelectedWork.tsx  (section wrapper — header + three WorkRow instances)
+│       ├── WorkRow.tsx       (reusable row with reverse prop, editorial hover flourish)
 │       ├── Credentials.tsx   (2×2 grid, framed by thin top/bottom dividers)
 │       └── Contact.tsx       (narrow centred, eyebrow + h2 + prose block with inline links)
 ├── next.config.ts            (turbopack.root set explicitly)
@@ -389,8 +395,8 @@ edwincw-site/
 | 3 | Layout shell — nav, footer, container, typography primitives | ✅ Complete |
 | 4 | Hero section — asymmetric layout with diagram placeholder | ✅ Complete |
 | 5 | Thesis + Credentials + Contact sections | ✅ Complete |
-| 6 | Selected work — staggered editorial layout with flourish | ⏳ Next |
-| 7 | Hero diagram — kinetic loop (expect iteration) | Pending |
+| 6 | Selected work — staggered editorial layout with flourish | ✅ Complete |
+| 7 | Hero diagram — kinetic loop (expect iteration) | ⏳ Next |
 | 8 | Polish pass — scroll motion, reduced-motion, a11y, Lighthouse | Pending |
 
 **After homepage stable:** Separate About page build.
@@ -413,8 +419,8 @@ edwincw-site/
 - [x] **Prompt 3** — Layout shell complete. `src/components/Container.tsx` (default 1280px / narrow 680px variant), `src/components/Section.tsx` (py-16 md:py-24 vertical rhythm), `src/components/Nav.tsx` (sticky top with backdrop blur, EC-W mark + 4 nav links with teal hover, ArrowUpRight icon on external Case Studies link), `src/components/Footer.tsx` (copyright + LinkedIn/Mail icons). Root layout wraps content with Nav/main/Footer. Lucide-react installed. Local + Netlify verified.
 - [x] **Prompt 4** — Hero section complete. `src/components/Hero.tsx` created and rendered from `src/app/page.tsx`. Asymmetric 55/45 grid on desktop (`grid-cols-[55fr_45fr]`), single-column stack on mobile. Left column: name in Source Serif 4 Italic, 20px, `--color-muted`, as `<p class="font-serif-italic text-[20px] text-[var(--color-muted)] mb-4">` sitting tightly above the display; display tagline as `<h1 class="text-display text-[var(--color-foreground)]">` (semantic H1 confirmed in DevTools); subtitle as `<p class="text-subtitle text-[var(--color-body)] mt-6 md:mt-8 max-w-[540px]">`. Right column: dashed-border square placeholder (`aspect-square`, `border-dashed`, `--color-border`, `--radius-lg`) with "[ Hero diagram — Prompt 7 ]" centred in `.text-small` muted. Section padding overridden with `!pt-24 md:!pt-40 !pb-16 md:!pb-24` on the existing `Section` to give the hero room below the sticky nav. Offset baseline: right column set to `mt-0 md:mt-20` so diagram visual centre sits below the display's baseline — "composed, not aligned." Verified in DevTools: display computes `generalSans` family at 88px weight 500, name computes `sourceSerif` family italic at 20px weight 400, both loading from network (not fallback). Local + Netlify verified.
 - [x] **Prompt 5** — Thesis, Credentials, Contact sections shipped in one pass. `Thesis.tsx` uses narrow Container with teal eyebrow ("On designing trust"), `<h2>` title ("What experience strategy means when the product can think back"), and a `[TBD]` body placeholder at `.text-prose`. `Credentials.tsx` uses default Container with a 2×2 grid on desktop / 1×4 stack on mobile, framed by thin top and bottom borders, cell values rendered as `<p>` (not `<h2>`) at `.text-h2` size for data-not-headings semantics. `Contact.tsx` initially shipped as a label/value row stack but was revised mid-prompt to a prose block — two centred sentences, sentence 1 "Reach me by [email], or connect on [LinkedIn]." (with `email` and `LinkedIn` as inline `.link` class anchors in foreground colour, teal on hover, 3px → 1px underline offset transition, 180ms), sentence 2 "Based in the UK, working globally." in muted grey. No exposed URLs. `.link` helper class added to `globals.css`. During verification, Contact sentence 2 was rendering in body colour instead of muted — DevTools traced this to a name collision: Tailwind v4 auto-generates a `.text-body` utility from the `--color-body` token in `@theme`, which collided with the hand-written `.text-body` type utility in `typography.css`. Resolved by renaming the type utility `.text-body` → `.text-prose` in `typography.css` and updating consumers (`Thesis.tsx`). Documented in §5.2 Notes so the collision doesn't get reintroduced. Also noted: a hydration warning in local dev traced to the ColorZilla browser extension injecting `cz-shortcut-listen` on `<body>`; not a code issue, ignored. Local + Netlify verified.
-- [ ] **Prompt 6** — Selected work (next)
-- [ ] **Prompt 7** — Hero diagram
+- [x] **Prompt 6** — Selected Work section shipped. `SelectedWork.tsx` renders the section wrapper (header: "Selected work" eyebrow + "Recent projects" `<h2>` title, left-aligned) and three `WorkRow` instances with `space-y-24 md:space-y-32` separation. `WorkRow.tsx` is a reusable component with a `reverse` boolean prop controlling image-left / image-right composition via `md:order-1` / `md:order-2`. Row 1 Salli (image left), Row 2 Rewards & Recognition (image right), Row 3 FluxUX (image left). Real URLs wired: Salli → `portfolio.edwincw.com/slide/12`, R&R → `portfolio.edwincw.com/slide/2`, FluxUX → `fluxux.vercel.app`. FluxUX uses "Project" eyebrow instead of "Case study 03" to frame it as exploration rather than case study. Editorial hover flourish: image lifts 4px up and shifts 8px horizontally (direction parameterised by `reverse`), title colour shifts to teal, arrow translates 4px right, all at 240ms ease-out. Images prepared at 1600×1200 WebP in `public/work/` with `#F7F5F1` panel backgrounds matching the site background colour. Used `next/image` with `fill` and `sizes="(max-width: 768px) 100vw, 50vw"`. Accessibility: titles are `<h3>`, the whole row is NOT a wrapping link (only the explicit text link is interactive). Patched in Prompt 6.1: image container background was initially `--color-border` (`#E5E7EB`), which showed through as a grey sliver during the hover translate — changed to `--color-background` so the revealed area matches the page and the hover reads as pure image movement. Local verified; local commits only, no push yet.
+- [ ] **Prompt 7** — Hero diagram (next)
 - [ ] **Prompt 8** — Polish pass
 - [ ] **About page** — Separate build after homepage
 
@@ -438,72 +444,101 @@ edwincw-site/
 
 ---
 
-## 12. Prompt 6 — Scope
+## 12. Prompt 7 — Scope
 
-The next prompt is **Prompt 6: Selected Work.** This is the editorial showpiece of the homepage — the one place imagery carries weight and where the site most visibly argues for Edwin as a design leader. Three case study teasers rendered as **staggered full-width rows** with alternating image-left / image-right / image-left composition. Explicitly NOT a three-up card grid.
+The next prompt is **Prompt 7: Hero diagram — kinetic loop.** This is the site's signature moment. Replaces the dashed-border placeholder in `src/components/Hero.tsx` with an inline SVG that renders the "Trust UX as a growth loop" diagram specified in §6. Five nodes, five curved paths, one traveling ochre signal. Must respect `prefers-reduced-motion`. Expect iteration — this is the one prompt where tuning against the rendered result is likely.
 
-Build order in `src/app/page.tsx`: Selected Work gets inserted between `<Thesis />` and `<Credentials />` — so the final homepage order becomes Hero → Thesis → Selected Work → Credentials → Contact.
+Creates `src/components/HeroDiagram.tsx`, imported into `Hero.tsx` replacing the placeholder div.
 
-Uses `Section` + `Container` (default 1280px). Default `Section` padding is correct.
+Client Component. The diagram uses CSS animations and a JavaScript-free approach where possible, but interactive state (checking reduced-motion, conditional rendering of the signal's animation) pushes it into `"use client"` territory. Keep the client-side footprint minimal.
 
-Server Component. Only hover state is used (pure CSS).
+**Diagram composition (§6.1)**
 
-**Section header**
-- Eyebrow: "Selected work" — `.text-eyebrow`, `text-[var(--color-primary)]`, `mb-4`, as `<p>`
-- Title: "Recent projects" — `.text-h1`, `text-[var(--color-foreground)]`, `mb-16 md:mb-24`, as `<h2>`
-- Header sits left-aligned at the top of the Container (not centred — matches editorial register)
+- Desktop: ~550px wide × ~500px tall SVG, fitting the 45% column in the 1280px hero
+- Mobile: re-composed vertically at ~320px wide × 440–480px tall — nodes rearranged, not scaled
+- Five nodes arranged as an asymmetric loop (NOT a regular pentagon). Editorial positioning — nodes should feel placed with intent, not equally distributed
+- Five curved paths connecting them in sequence: Intent → Transparency → Trust → Adoption → Growth → (back to Intent)
+- Paths are thin (1px), teal (`#124E66`) at 0.5 opacity, curved (never straight)
+- Central area left empty — composition breathes
 
-**Three teaser rows**
+**Node styling (§6.3)**
 
-Each row is a full-width two-column composition inside the Container, with generous vertical separation between rows (`mt-24 md:mt-32` between rows, or use a parent `space-y-24 md:space-y-32`).
+- Rounded panels (`rx="6"` to `rx="8"`)
+- Fill: `#F7F5F1` (`NODE_FILL`, matches site background)
+- Stroke: `#D1D5DB` (`NODE_STROKE`) at 0.8px
+- Label: `#111214` (`NEAR_BLACK`), 12–13px, weight 500, letter-spacing 0.04em
+- Font inherits General Sans — use CSS custom property reference if possible, or hard-coded family fallback
 
-Desktop: two columns, roughly 50/50 with a large gap (`grid-cols-2 gap-12 md:gap-16`). Mobile: stacks to single column, image above text.
+Labels (in loop order): **Intent**, **Transparency**, **Trust**, **Adoption**, **Growth**.
 
-Row 1 composition: image left, text right
-Row 2 composition: image right, text left
-Row 3 composition: image left, text right
+**Entrance motion (§6.4) — plays once on load**
 
-(Use a `reverse` boolean prop or a CSS `md:grid-flow-row-dense` / `md:[&>*:first-child]:col-start-2` approach — whichever reads cleaner in Claude Code's hands. The alternation must be visible on desktop and must collapse to image-above-text on mobile regardless of desktop side.)
+Total composition time: ~2.4s.
 
-**Per-row content**
+| Time | Action |
+|---|---|
+| 0.0s | SVG canvas visible |
+| 0.1s | Intent node fades in, scales 0.95 → 1 (300ms) |
+| 0.3s | Path Intent → Transparency draws (400ms, stroke-dasharray animation) |
+| 0.6s | Transparency fades in |
+| 0.8s | Path draws |
+| 1.0s | Trust fades in |
+| 1.2s | Path draws |
+| 1.4s | Adoption fades in |
+| 1.6s | Path draws |
+| 1.8s | Growth fades in |
+| 2.0s | Final path (Growth → Intent) draws, closing loop |
+| 2.4s | Ochre signal appears at Intent, begins first traversal |
 
-1. **Salli**
-   - Image: placeholder box, `aspect-[4/3]`, `bg-[var(--color-border)]`, `rounded-[var(--radius-lg)]`, centred label "[ Salli image — TBD ]" in `.text-small` muted
-   - Eyebrow: "Case study 01" — `.text-eyebrow text-[var(--color-muted)] mb-4`
-   - Title: "Reimagining Workforce Management Through Agentic AI" — `.text-h2 text-[var(--color-foreground)] mb-4`
-   - Description: "Designing a proactive intelligence layer to guide frontline decision-making at scale" — `.text-prose text-[var(--color-body)] mb-6`
-   - Link: "Read the case study" with an `ArrowUpRight` icon from lucide-react, as `<a href="https://portfolio.edwincw.com" target="_blank" rel="noopener noreferrer" class="group inline-flex items-center gap-2 text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition-colors duration-[180ms]">`. Icon translates 4px right on hover (`group-hover:translate-x-1 transition-transform`).
+Implement via CSS `animation` with staggered `animation-delay` values on each node and path. Use `stroke-dasharray` and `stroke-dashoffset` animation for the path-drawing effect.
 
-2. **Rewards & Recognition**
-   - Image placeholder as above, label "[ Rewards & Recognition image — TBD ]"
-   - Eyebrow: "Case study 02"
-   - Title: "Designing Employee Engagement as a Platform Growth Lever"
-   - Description: "How Rewards & Recognition became a platform growth lever – and a commercial differentiator"
-   - Link: same treatment, same href
+**Ongoing motion (§6.5)**
 
-3. **FluxUX**
-   - Image placeholder as above, label "[ FluxUX image — TBD ]"
-   - Eyebrow: "Case study 03"
-   - Title: "[FluxUX title — TBD]"
-   - Description: "[FluxUX one-liner — TBD]"
-   - Link: "Explore the app", target is TBD URL — use `#` as href placeholder with a `data-todo` attribute flagging TBD
-   - Edwin will supply title, one-liner, and URL in a later pass
+- Ochre signal: ~6px soft-edge dot (use `<circle>` with `filter: blur(0.5px)` or an SVG `<feGaussianBlur>`, or simply an `<circle>` with low opacity rim)
+- Colour: `#B8804A` (`SIGNAL` — ochre). This is the ONLY place ochre appears on the site.
+- Travels clockwise around the loop
+- **Cycle: 8 seconds per full loop** (constant speed, no acceleration)
+- When signal passes through a node, the node pulses once: scale 1.0 → 1.03 → 1.0 over 300ms
+- Signal never stops
 
-**Editorial flourish (§5.4) — hover state on each row**
+Implement via CSS `animation` with `offset-path` (or `motion-path`) following an SVG path, or via an SVG `<animateMotion>` element. `offset-path` with a matching `<path>` declaration is the more modern approach but worth testing for browser support — `<animateMotion>` is the SVG-native fallback and well-supported.
 
-- Image: translates 8px horizontally (direction matches the row composition — image-left rows translate image 8px right on hover; image-right rows translate image 8px left). Also lifts 4px vertically. Combined transform.
-- Title: colour shifts to `var(--color-primary)` (teal)
-- Link arrow: translates 4px right (already specified above)
-- Duration: 240ms `--duration-hover`, `ease-out`
-- Implementation: wrap the whole row in a `<div class="group">` and let child elements respond via `group-hover:` variants. The image-translate direction alternates per row — choose a clean way to parameterise this (prop, className variant, or two layout components).
+**Reduced motion (§6.6)**
 
-**Accessibility**
-- The whole row is not a single link — only the explicit text link is. This keeps screen readers and keyboard users from being overwhelmed by a giant click target and gives the title/description room to breathe semantically.
-- Case study titles are `<h3>` (Selected Work section title is `<h2>`, so titles inside rows nest as `<h3>`).
+Detect via `window.matchMedia('(prefers-reduced-motion: reduce)')` on mount (this is one reason for the Client Component):
+
+- Entrance: all nodes and paths appear simultaneously at 1.0s via a single fade-in (no sequential composition, no path-drawing animation)
+- Ongoing: signal is static — sits at the Intent node as a small ochre marker, no traversal, no pulse
+- Diagram still reads as a diagram
+
+**Accessibility (§6.7)**
+
+- `<svg role="img">` wrapper
+- Inside the SVG: `<title>Diagram: Trust UX as a growth loop</title>`
+- `<desc>` element describing the nodes and their relationships — one sentence per node transition is plenty
+- Node labels as actual SVG `<text>` elements — screen-readable
+- Respects `prefers-reduced-motion`
+
+**Component structure**
+
+- New file: `src/components/HeroDiagram.tsx`
+- Uses `"use client"` at the top (needed for `prefers-reduced-motion` detection)
+- Exports a default function component with no required props
+- Modify `src/components/Hero.tsx` to import and render `<HeroDiagram />` in place of the current dashed-border placeholder
 
 **Code conventions**
-- Component structure: one `SelectedWork.tsx` parent that renders three `WorkRow` subcomponents (either a nested component in the same file or a separate `WorkRow.tsx` — Claude Code's call). The alternation logic lives in `SelectedWork.tsx`.
-- Server Component
-- CSS custom properties via Tailwind arbitrary values
-- Image placeholders only — actual images arrive in a later pass
-- No scroll animations — Prompt 8 handles that
+
+- Hard-coded hex colours are acceptable inside the SVG (these are the diagram-specific constants from §6.2, not site tokens)
+- No external dependencies — no Framer Motion, GSAP, anime.js, etc. CSS animation and SVG only.
+- Keep the component under ~300 lines if possible — SVG markup is verbose but avoid premature optimisation
+
+**Expect iteration**
+
+This is the one prompt where the first output is unlikely to land perfectly. Node positioning, path curvature, animation timing, and the signal's appearance are all feel-tests. Expect to tune. First pass gets the structural pieces in place; subsequent passes refine the visual rhythm.
+
+Common things likely to need nudging after the first build:
+- Node positions (asymmetric but balanced is harder than it sounds)
+- Path curve control points (organic but precise is a narrow band)
+- Entrance timing (2.4s total may need slight stretching or compression)
+- Signal dot appearance (size, blur, opacity)
+- Whether the pulse-on-pass reads at all, or gets lost
