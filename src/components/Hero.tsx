@@ -1,5 +1,6 @@
 import { Container } from "./Container";
 import { Section } from "./Section";
+import { HeroDiagram } from "./HeroDiagram";
 
 export function Hero() {
   return (
@@ -19,14 +20,7 @@ export function Hero() {
             </p>
           </div>
           <div className="mt-0 md:mt-20">
-            <div
-              className="aspect-square w-full flex items-center justify-center border border-dashed border-[var(--color-border)]"
-              style={{ borderRadius: "var(--radius-lg)" }}
-            >
-              <span className="text-small text-[var(--color-muted)]">
-                [ Hero diagram — Prompt 7 ]
-              </span>
-            </div>
+            <HeroDiagram />
           </div>
         </div>
       </Container>
