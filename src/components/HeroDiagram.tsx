@@ -258,12 +258,15 @@ function Diagram({
 }
 
 export function HeroDiagram() {
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  );
 
   useEffect(() => {
     const mql = window.matchMedia("(prefers-reduced-motion: reduce)");
     const update = () => setReducedMotion(mql.matches);
-    update();
     mql.addEventListener("change", update);
     return () => mql.removeEventListener("change", update);
   }, []);
