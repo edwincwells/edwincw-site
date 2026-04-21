@@ -23,7 +23,7 @@ export function Nav() {
               </Link>
             </li>
             <li>
-              <Link href="/about" className={linkClass}>
+              <Link href="/about" prefetch={false} className={linkClass}>
                 About
               </Link>
             </li>
