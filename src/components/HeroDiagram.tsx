@@ -130,7 +130,7 @@ const ANIMATION_CSS = `
   animation: hero-diagram-path-draw 400ms ease-out both;
 }
 .hero-diagram-signal {
-  animation: hero-diagram-signal-appear 300ms ease-out both 2.4s;
+  animation: hero-diagram-signal-appear 300ms ease-out both 2.8s;
 }
 `;
 
@@ -245,9 +245,9 @@ function Diagram({
           />
         </g>
       ) : (
-        <g className="hero-diagram-signal">
-          <circle r="8" fill={SIGNAL} opacity="0.25" />
-          <circle r="4" fill={SIGNAL} />
+        <g className="hero-diagram-signal" opacity="0">
+          <circle cx="0" cy="0" r="8" fill={SIGNAL} opacity="0.25" />
+          <circle cx="0" cy="0" r="4" fill={SIGNAL} />
           <animateMotion dur="8s" repeatCount="indefinite" begin="2.4s">
             <mpath href={`#${loopId}`} />
           </animateMotion>
