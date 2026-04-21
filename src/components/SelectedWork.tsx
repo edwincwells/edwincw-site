@@ -15,34 +15,40 @@ export function SelectedWork() {
         <div className="space-y-24 md:space-y-32">
           <WorkRow
             imageSrc="/work/salli.webp"
-            imageAlt="Salli case study"
+            imageAlt="Salli — agentic AI workforce management interface"
             eyebrow="Case study 01"
             title="Reimagining Workforce Management Through Agentic AI"
             description="Designing a proactive intelligence layer to guide frontline decision-making at scale"
             linkText="Read the case study"
+            linkAriaLabel="Read the Salli case study"
             linkHref="https://portfolio.edwincw.com/slide/12"
             linkExternal
+            revealIndex={0}
           />
           <WorkRow
             imageSrc="/work/rewards-recognition.webp"
-            imageAlt="Rewards & Recognition case study"
+            imageAlt="Rewards & Recognition — employee engagement platform"
             eyebrow="Case study 02"
             title="Designing Employee Engagement as a Platform Growth Lever"
             description="How Rewards & Recognition became a platform growth lever – and a commercial differentiator"
             linkText="Read the case study"
+            linkAriaLabel="Read the Rewards & Recognition case study"
             linkHref="https://portfolio.edwincw.com/slide/2"
             linkExternal
             reverse
+            revealIndex={1}
           />
           <WorkRow
             imageSrc="/work/fluxux.webp"
-            imageAlt="FluxUX project"
+            imageAlt="FluxUX — AI-powered experiment generator"
             eyebrow="Project"
             title="FluxUX: An AI-powered experiment generator for UX practitioners"
             description="An early experiment in prompt-driven development"
             linkText="Explore the app"
+            linkAriaLabel="Explore the FluxUX app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
+            revealIndex={2}
           />
         </div>
       </Container>

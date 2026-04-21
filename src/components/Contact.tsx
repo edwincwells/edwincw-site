@@ -1,11 +1,21 @@
+"use client";
+
 import { Container } from "./Container";
 import { Section } from "./Section";
+import { useScrollReveal } from "./useScrollReveal";
 
 export function Contact() {
+  const { ref, isRevealed } = useScrollReveal<HTMLDivElement>();
+
   return (
     <Section id="contact">
       <Container width="narrow">
-        <div className="text-center">
+        <div
+          ref={ref}
+          data-reveal
+          data-revealed={isRevealed}
+          className="text-center"
+        >
           <p className="text-eyebrow text-[var(--color-primary)] mb-4">
             Get in touch
           </p>

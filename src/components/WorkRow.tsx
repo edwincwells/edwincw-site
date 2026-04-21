@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { useScrollReveal } from "./useScrollReveal";
 
 export type WorkRowProps = {
   imageSrc: string;
@@ -9,8 +12,10 @@ export type WorkRowProps = {
   description: string;
   linkText: string;
   linkHref: string;
+  linkAriaLabel?: string;
   linkExternal?: boolean;
   reverse?: boolean;
+  revealIndex?: number;
 };
 
 export function WorkRow({
@@ -21,15 +26,24 @@ export function WorkRow({
   description,
   linkText,
   linkHref,
+  linkAriaLabel,
   linkExternal = false,
   reverse = false,
+  revealIndex = 0,
 }: WorkRowProps) {
+  const { ref, isRevealed } = useScrollReveal<HTMLDivElement>();
   const imageShift = reverse
     ? "group-hover:-translate-x-2"
     : "group-hover:translate-x-2";
 
   return (
-    <div className="group grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+    <div
+      ref={ref}
+      data-reveal
+      data-revealed={isRevealed}
+      style={{ ["--reveal-index" as string]: revealIndex }}
+      className="group grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center"
+    >
       <div className={reverse ? "md:order-2" : ""}>
         <div
           className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--color-background)]"
@@ -56,6 +70,7 @@ export function WorkRow({
         </p>
         <a
           href={linkHref}
+          aria-label={linkAriaLabel}
           {...(linkExternal
             ? { target: "_blank", rel: "noopener noreferrer" }
             : {})}
