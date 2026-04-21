@@ -396,7 +396,8 @@ edwincw-site/
 | 4 | Hero section — asymmetric layout with diagram placeholder | ✅ Complete |
 | 5 | Thesis + Credentials + Contact sections | ✅ Complete |
 | 6 | Selected work — staggered editorial layout with flourish | ✅ Complete |
-| 7 | Hero diagram — kinetic loop (expect iteration) | ⏳ Next |
+| 7 | Hero diagram — kinetic loop (expect iteration) | 🟡 Structural complete, design notes + polish pending |
+| 7.x | Hero diagram — design-notes iteration (tune positions, curves, resolve flash) | Pending |
 | 8 | Polish pass — scroll motion, reduced-motion, a11y, Lighthouse | Pending |
 
 **After homepage stable:** Separate About page build.
@@ -420,7 +421,25 @@ edwincw-site/
 - [x] **Prompt 4** — Hero section complete. `src/components/Hero.tsx` created and rendered from `src/app/page.tsx`. Asymmetric 55/45 grid on desktop (`grid-cols-[55fr_45fr]`), single-column stack on mobile. Left column: name in Source Serif 4 Italic, 20px, `--color-muted`, as `<p class="font-serif-italic text-[20px] text-[var(--color-muted)] mb-4">` sitting tightly above the display; display tagline as `<h1 class="text-display text-[var(--color-foreground)]">` (semantic H1 confirmed in DevTools); subtitle as `<p class="text-subtitle text-[var(--color-body)] mt-6 md:mt-8 max-w-[540px]">`. Right column: dashed-border square placeholder (`aspect-square`, `border-dashed`, `--color-border`, `--radius-lg`) with "[ Hero diagram — Prompt 7 ]" centred in `.text-small` muted. Section padding overridden with `!pt-24 md:!pt-40 !pb-16 md:!pb-24` on the existing `Section` to give the hero room below the sticky nav. Offset baseline: right column set to `mt-0 md:mt-20` so diagram visual centre sits below the display's baseline — "composed, not aligned." Verified in DevTools: display computes `generalSans` family at 88px weight 500, name computes `sourceSerif` family italic at 20px weight 400, both loading from network (not fallback). Local + Netlify verified.
 - [x] **Prompt 5** — Thesis, Credentials, Contact sections shipped in one pass. `Thesis.tsx` uses narrow Container with teal eyebrow ("On designing trust"), `<h2>` title ("What experience strategy means when the product can think back"), and a `[TBD]` body placeholder at `.text-prose`. `Credentials.tsx` uses default Container with a 2×2 grid on desktop / 1×4 stack on mobile, framed by thin top and bottom borders, cell values rendered as `<p>` (not `<h2>`) at `.text-h2` size for data-not-headings semantics. `Contact.tsx` initially shipped as a label/value row stack but was revised mid-prompt to a prose block — two centred sentences, sentence 1 "Reach me by [email], or connect on [LinkedIn]." (with `email` and `LinkedIn` as inline `.link` class anchors in foreground colour, teal on hover, 3px → 1px underline offset transition, 180ms), sentence 2 "Based in the UK, working globally." in muted grey. No exposed URLs. `.link` helper class added to `globals.css`. During verification, Contact sentence 2 was rendering in body colour instead of muted — DevTools traced this to a name collision: Tailwind v4 auto-generates a `.text-body` utility from the `--color-body` token in `@theme`, which collided with the hand-written `.text-body` type utility in `typography.css`. Resolved by renaming the type utility `.text-body` → `.text-prose` in `typography.css` and updating consumers (`Thesis.tsx`). Documented in §5.2 Notes so the collision doesn't get reintroduced. Also noted: a hydration warning in local dev traced to the ColorZilla browser extension injecting `cz-shortcut-listen` on `<body>`; not a code issue, ignored. Local + Netlify verified.
 - [x] **Prompt 6** — Selected Work section shipped. `SelectedWork.tsx` renders the section wrapper (header: "Selected work" eyebrow + "Recent projects" `<h2>` title, left-aligned) and three `WorkRow` instances with `space-y-24 md:space-y-32` separation. `WorkRow.tsx` is a reusable component with a `reverse` boolean prop controlling image-left / image-right composition via `md:order-1` / `md:order-2`. Row 1 Salli (image left), Row 2 Rewards & Recognition (image right), Row 3 FluxUX (image left). Real URLs wired: Salli → `portfolio.edwincw.com/slide/12`, R&R → `portfolio.edwincw.com/slide/2`, FluxUX → `fluxux.vercel.app`. FluxUX uses "Project" eyebrow instead of "Case study 03" to frame it as exploration rather than case study. Editorial hover flourish: image lifts 4px up and shifts 8px horizontally (direction parameterised by `reverse`), title colour shifts to teal, arrow translates 4px right, all at 240ms ease-out. Images prepared at 1600×1200 WebP in `public/work/` with `#F7F5F1` panel backgrounds matching the site background colour. Used `next/image` with `fill` and `sizes="(max-width: 768px) 100vw, 50vw"`. Accessibility: titles are `<h3>`, the whole row is NOT a wrapping link (only the explicit text link is interactive). Patched in Prompt 6.1: image container background was initially `--color-border` (`#E5E7EB`), which showed through as a grey sliver during the hover translate — changed to `--color-background` so the revealed area matches the page and the hover reads as pure image movement. Local verified; local commits only, no push yet.
-- [ ] **Prompt 7** — Hero diagram (next)
+- [🟡] **Prompt 7** — Hero diagram structural build complete across 10 iterative passes (7.0 initial through 7.9 flash tuning). Design polish deferred to a later 7.x pass.
+  - **7.0** — `src/components/HeroDiagram.tsx` created as a Client Component. Five-node asymmetric loop (Intent → Transparency → Trust → Adoption → Growth → Intent) with five cubic-Bézier paths, rendered as inline SVG. Desktop viewBox `0 0 550 500`, mobile viewBox `0 0 320 460` — separate geometry constants (`DESKTOP`, `MOBILE`) toggled via `hidden md:block` / `md:hidden` wrapper divs; duplicated markup accepted as less fragile than responsive coordinate math. Node positions per §6.1. Paths use `pathLength="1"` for normalised `stroke-dasharray` drawing animation. Entrance sequence (~2.4s total) implemented via CSS keyframes (`hero-diagram-node-enter`, `hero-diagram-path-draw`, `hero-diagram-signal-appear`, `hero-diagram-node-pulse`) with staggered `animation-delay` per element. Pulse-on-pass uses the CSS-only approach from the spec: each node pulses once per 8s cycle with `animation-delay` computed to line up with the signal's expected position, accepting first-pass drift vs actual path-length distribution. Signal is a 4px/8px ochre circle pair with `<animateMotion>` following an invisible sixth path (`#loop-path-desktop` / `#loop-path-mobile`) that concatenates the five visible paths into one continuous track. `<mpath href={...}>` reference (not `xlink:href`) since this is modern React/SVG. Accessibility: `role="img"`, `<title>`, `<desc>`, `aria-label`, node labels as real `<text>` elements. Imported into `Hero.tsx` replacing the dashed-border placeholder. Reduced-motion detection via `useState` initialiser reading `window.matchMedia` synchronously (SSR-safe via `typeof window !== 'undefined'` guard) plus a `useEffect` subscribing to `change` events.
+  - **7.1** — Reduced-motion rendering fixed. Initial build had the `<style>` block rendered unconditionally, relying on the global reduced-motion reset in `globals.css` to neutralise animations. The global reset only zeroed `animation-duration`, not `animation-delay`, so the entrance sequence still played as a staircase of instant snaps across 2.4s. Fix: gate the `<style>` block on `!reducedMotion`; also extend the global reset in `globals.css` to include `animation-delay: 0s !important` and `transition-delay: 0s !important` so future animations (e.g. Prompt 8's scroll-reveal stagger) don't hit the same issue. Verified in DevTools: with reduced-motion emulated, `animation-name` on node wrapper groups computes to `none` rather than being zeroed-out `node-enter`.
+  - **7.2 → 7.9** — Signal entrance flash debugging loop. After entrance completes, the ochre signal was briefly appearing at the SVG origin `(0, 0)` for ~1 frame before `<animateMotion>` positioned it on the loop path. Resolution attempts tried in sequence:
+    - 7.2: Set `cx`/`cy` on the signal `<circle>` elements to path 1's starting coordinate (desktop `(185, 90)`, mobile `(160, 64)`). Killed the origin flash but `<animateMotion>` applied its motion additively on top of `cx`/`cy`, offsetting the whole loop by `signalStart`.
+    - 7.3: Moved initial positioning from `<circle>` attributes to a `transform="translate(...)"` on the wrapping `<g>`, expecting `<animateMotion>` to replace the group's transform during playback. In Chrome the transform attribute is not replaced — SMIL motion is applied via a separate internal transform list, so the static translate still stacks with motion. Offset bug returned.
+    - 7.4: Removed the static transform entirely, relied on the CSS `hero-diagram-signal-appear` keyframe's `animation-fill-mode: both` to hold opacity 0 until 2.4s. Reintroduced the original flash at origin.
+    - 7.5: Added `opacity="0"` as an SVG presentation attribute directly on the signal group, so it takes effect on first paint without CSS dependency. Flash still present.
+    - 7.6: Offset the CSS fade-in delay to `2.45s` (50ms after `<animateMotion>`'s `begin="2.4s"`), hypothesising a one-frame race between motion position being computed and opacity becoming non-zero. Flash reduced but still intermittent.
+    - 7.7: Diagnostic — bumped fade-in delay to 3.4s (full 1-second gap after motion) to disambiguate race-vs-other-cause. Claude Code instrumented the iframe over 253 frames and confirmed clean handoff at 3.4s, consistent with the race hypothesis.
+    - 7.8: Dialled back to `2.55s` (150ms gap). Flash still intermittent after 15 refreshes.
+    - 7.9: Bumped to `2.8s` (400ms gap). Animated-branch flash substantially reduced to an occasional, very brief blip that's borderline imperceptible. Accepted as good-enough for now; commit and move on.
+  - **Final state of the animated signal:** `<g className="hero-diagram-signal" opacity="0">` wraps two `<circle cx="0" cy="0" ...>` elements and `<animateMotion dur="8s" begin="2.4s" repeatCount="indefinite">`. `.hero-diagram-signal` CSS animation is `hero-diagram-signal-appear 300ms ease-out both 2.8s`. The `opacity="0"` attribute and the delayed CSS fade-in are doing complementary work — attribute gives initial frame certainty, delay gives motion a head start.
+  - **Known issues for the 7.x iteration:**
+    - **Reduced-motion flash every refresh** (separate from the animated-branch flash). The static branch renders a `<circle>` at Intent with no animation, yet a brief ochre flash occurs on every page load with reduced-motion emulated. Almost certainly the SSR/client hydration mismatch we knowingly accepted: the server renders with `reducedMotion: false` (no `window`), producing HTML with the animated branch. The client's first render then reads the actual preference and swaps to the static branch — but the animated branch's DOM was already painted. This matters more than the animated flash: reduced-motion is an accessibility affordance for users with vestibular disorders / migraine triggers, and a consistent flash on every refresh there is worse than an intermittent one on the animated path. Fix likely involves either (a) suppressing the initial render until `useEffect` runs (loses SSR content), (b) using a CSS-only approach that renders both states and toggles via media query (no JS state), or (c) accepting the SSR flash and adding a brief opacity-0 gate on the whole SVG until hydration.
+    - **Animated-branch intermittent flash** even at 400ms delay. Good enough for shipping but not clean. Likely a second-order interaction between Chrome's frame scheduling and Next.js dev server load. May behave differently on a production build served from Netlify — worth re-testing post-`npm run build` before treating it as permanent.
+    - **Design feel-tests not yet run.** Node positions, path curvature, entrance timing, signal appearance (size, blur, opacity), and pulse legibility are all at first-pass values from §6/§12. Edwin has separate design notes to apply in the 7.x iteration.
+  - **Commits:** `abf3e9f` (7.0), `8fd6216` (7.1), `ebd560f` (7.2–7.9 bundled, also includes `.gitignore` adding `.claude/`). All local, not pushed.
+- [ ] **Prompt 7.x** — Hero diagram polish: apply Edwin's design notes (node/path tuning), resolve reduced-motion hydration flash, re-test animated flash on production build
 - [ ] **Prompt 8** — Polish pass
 - [ ] **About page** — Separate build after homepage
 
@@ -444,101 +463,37 @@ edwincw-site/
 
 ---
 
-## 12. Prompt 7 — Scope
+## 12. Prompt 7.x — Scope
 
-The next prompt is **Prompt 7: Hero diagram — kinetic loop.** This is the site's signature moment. Replaces the dashed-border placeholder in `src/components/Hero.tsx` with an inline SVG that renders the "Trust UX as a growth loop" diagram specified in §6. Five nodes, five curved paths, one traveling ochre signal. Must respect `prefers-reduced-motion`. Expect iteration — this is the one prompt where tuning against the rendered result is likely.
+Prompt 7 is structurally complete across 10 iterative passes (see §10). The component `src/components/HeroDiagram.tsx` renders the full five-node loop with entrance composition, 8s ongoing signal traversal, pulse-on-pass, and reduced-motion handling. What remains is a design polish pass driven by Edwin's separate notes, plus two known technical issues to resolve.
 
-Creates `src/components/HeroDiagram.tsx`, imported into `Hero.tsx` replacing the placeholder div.
+**Scope of 7.x**
 
-Client Component. The diagram uses CSS animations and a JavaScript-free approach where possible, but interactive state (checking reduced-motion, conditional rendering of the signal's animation) pushes it into `"use client"` territory. Keep the client-side footprint minimal.
+Three threads, sequenced by whichever Edwin prioritises:
 
-**Diagram composition (§6.1)**
+1. **Design tuning (Edwin's notes).** Node positions, path curvature, entrance timing, signal appearance, and pulse legibility are all at first-pass values. Edwin has separate design notes — apply those in dialogue with Claude Code. Expect this to be the bulk of 7.x and to need multiple turns.
 
-- Desktop: ~550px wide × ~500px tall SVG, fitting the 45% column in the 1280px hero
-- Mobile: re-composed vertically at ~320px wide × 440–480px tall — nodes rearranged, not scaled
-- Five nodes arranged as an asymmetric loop (NOT a regular pentagon). Editorial positioning — nodes should feel placed with intent, not equally distributed
-- Five curved paths connecting them in sequence: Intent → Transparency → Trust → Adoption → Growth → (back to Intent)
-- Paths are thin (1px), teal (`#124E66`) at 0.5 opacity, curved (never straight)
-- Central area left empty — composition breathes
+2. **Reduced-motion hydration flash.** The static reduced-motion branch currently flashes ochre at Intent on every page load because the SSR/client state mismatch was knowingly deferred in 7.0. Server renders `reducedMotion: false` (no `window`), producing HTML with the animated branch; client's first render swaps to the static branch but the animated DOM has already painted. This is the more serious of the two flash issues — reduced-motion is an accessibility affordance and a consistent flash undermines its purpose. Likely approaches:
+   - CSS-only state: render both branches with `display` controlled by `@media (prefers-reduced-motion: reduce)` — no JS state, no hydration mismatch. Requires duplicating the SVG markup but sidesteps the React lifecycle entirely.
+   - Suppressed initial render: return `null` or an empty SVG until `useEffect` runs. Loses SSR content for the diagram area (first paint has no diagram), which may cause a visible pop-in — probably worse than the current flash.
+   - Whole-SVG opacity gate: render everything at `opacity: 0` until the client-side state has resolved, then fade in. Adds a mount-time hesitation.
+   - The CSS-only approach is likely cleanest. Worth trying first.
 
-**Node styling (§6.3)**
+3. **Animated-branch flash (lower priority).** After settling on a 400ms fade-in delay (`2.8s`) in Prompt 7.9, an occasional brief blip still occurs on some refreshes. Acceptable for shipping but not clean. Worth re-testing on a production build (`npm run build && npm run start`) before investing more debugging time — dev-server load and HMR may be contributing. If it persists on the production build, deeper diagnosis needed.
 
-- Rounded panels (`rx="6"` to `rx="8"`)
-- Fill: `#F7F5F1` (`NODE_FILL`, matches site background)
-- Stroke: `#D1D5DB` (`NODE_STROKE`) at 0.8px
-- Label: `#111214` (`NEAR_BLACK`), 12–13px, weight 500, letter-spacing 0.04em
-- Font inherits General Sans — use CSS custom property reference if possible, or hard-coded family fallback
+**Constraints carried over from 7.0**
 
-Labels (in loop order): **Intent**, **Transparency**, **Trust**, **Adoption**, **Growth**.
+- No external dependencies (no Framer Motion, GSAP, anime.js, motion.dev). Pure SVG + CSS + minimal React.
+- Component file under ~300 lines where possible; SVG verbosity is accepted.
+- No Tailwind config changes, no `@apply`, no `tailwind.config.ts`.
+- All diagram-specific hex constants (`NODE_FILL`, `NODE_STROKE`, `NEAR_BLACK`, `PATH_STROKE`, `SIGNAL`) stay hard-coded inside the component per §6.2.
+- Reduced-motion behaviour from §6.6 still applies: entrance collapses to a single fade-in, signal is a static ochre marker at Intent, no pulse.
+- Spec references: §6 (signature moment detail), §5.1 (colour), §5.2 (typography for labels), §11 (do-nots).
 
-**Entrance motion (§6.4) — plays once on load**
+**Reference: original 7.0 scope**
 
-Total composition time: ~2.4s.
+The initial Prompt 7 scope (the specification that produced the current structural build) is preserved in git history — see commit `abf3e9f`'s accompanying documentation in the Prompt 7 row of §10 above, and the original brief referenced there. If a fresh Claude Code session needs the full structural spec (node coordinates, entrance timeline, path-drawing implementation details), §6 in this brief still holds as the canonical reference; the 7.0 commit and §10's detailed iteration log show the concrete choices made.
 
-| Time | Action |
-|---|---|
-| 0.0s | SVG canvas visible |
-| 0.1s | Intent node fades in, scales 0.95 → 1 (300ms) |
-| 0.3s | Path Intent → Transparency draws (400ms, stroke-dasharray animation) |
-| 0.6s | Transparency fades in |
-| 0.8s | Path draws |
-| 1.0s | Trust fades in |
-| 1.2s | Path draws |
-| 1.4s | Adoption fades in |
-| 1.6s | Path draws |
-| 1.8s | Growth fades in |
-| 2.0s | Final path (Growth → Intent) draws, closing loop |
-| 2.4s | Ochre signal appears at Intent, begins first traversal |
+**Expect dialogue, not a one-shot**
 
-Implement via CSS `animation` with staggered `animation-delay` values on each node and path. Use `stroke-dasharray` and `stroke-dashoffset` animation for the path-drawing effect.
-
-**Ongoing motion (§6.5)**
-
-- Ochre signal: ~6px soft-edge dot (use `<circle>` with `filter: blur(0.5px)` or an SVG `<feGaussianBlur>`, or simply an `<circle>` with low opacity rim)
-- Colour: `#B8804A` (`SIGNAL` — ochre). This is the ONLY place ochre appears on the site.
-- Travels clockwise around the loop
-- **Cycle: 8 seconds per full loop** (constant speed, no acceleration)
-- When signal passes through a node, the node pulses once: scale 1.0 → 1.03 → 1.0 over 300ms
-- Signal never stops
-
-Implement via CSS `animation` with `offset-path` (or `motion-path`) following an SVG path, or via an SVG `<animateMotion>` element. `offset-path` with a matching `<path>` declaration is the more modern approach but worth testing for browser support — `<animateMotion>` is the SVG-native fallback and well-supported.
-
-**Reduced motion (§6.6)**
-
-Detect via `window.matchMedia('(prefers-reduced-motion: reduce)')` on mount (this is one reason for the Client Component):
-
-- Entrance: all nodes and paths appear simultaneously at 1.0s via a single fade-in (no sequential composition, no path-drawing animation)
-- Ongoing: signal is static — sits at the Intent node as a small ochre marker, no traversal, no pulse
-- Diagram still reads as a diagram
-
-**Accessibility (§6.7)**
-
-- `<svg role="img">` wrapper
-- Inside the SVG: `<title>Diagram: Trust UX as a growth loop</title>`
-- `<desc>` element describing the nodes and their relationships — one sentence per node transition is plenty
-- Node labels as actual SVG `<text>` elements — screen-readable
-- Respects `prefers-reduced-motion`
-
-**Component structure**
-
-- New file: `src/components/HeroDiagram.tsx`
-- Uses `"use client"` at the top (needed for `prefers-reduced-motion` detection)
-- Exports a default function component with no required props
-- Modify `src/components/Hero.tsx` to import and render `<HeroDiagram />` in place of the current dashed-border placeholder
-
-**Code conventions**
-
-- Hard-coded hex colours are acceptable inside the SVG (these are the diagram-specific constants from §6.2, not site tokens)
-- No external dependencies — no Framer Motion, GSAP, anime.js, etc. CSS animation and SVG only.
-- Keep the component under ~300 lines if possible — SVG markup is verbose but avoid premature optimisation
-
-**Expect iteration**
-
-This is the one prompt where the first output is unlikely to land perfectly. Node positioning, path curvature, animation timing, and the signal's appearance are all feel-tests. Expect to tune. First pass gets the structural pieces in place; subsequent passes refine the visual rhythm.
-
-Common things likely to need nudging after the first build:
-- Node positions (asymmetric but balanced is harder than it sounds)
-- Path curve control points (organic but precise is a narrow band)
-- Entrance timing (2.4s total may need slight stretching or compression)
-- Signal dot appearance (size, blur, opacity)
-- Whether the pulse-on-pass reads at all, or gets lost
+Unlike Prompts 1–6, this iteration is explicitly interactive. Paste Edwin's design notes into the Claude Code session as they come, tune against rendered output, commit when visually verified.
