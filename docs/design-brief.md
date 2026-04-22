@@ -86,8 +86,18 @@ Five sections, in order:
 **2. Thesis**
 - Eyebrow: "On designing trust"
 - Title: "What experience strategy means when the product can think back"
-- Body: ~150–300 words (original target 150–250; widened to ~300 after the drafted copy landed at 282 words with the argument structure intact. Angle: trust is the most important thing to design for in the age of AI-powered products, with an enterprise SaaS sharpening.)
 - Single-column, narrow (680px reading width), centred on page
+- **Body copy (LOCKED — ~235 words, finalised 2026-04-22). Five paragraphs. Loop line in the final paragraph (Intent → Transparency → Trust → Adoption → Growth) wrapped in `<span class="font-semibold">` — deliberate one-off exception to §5.2's "500 Medium preferred" rule; it's the typographic bridge from thesis prose to the hero diagram's node labels.**
+
+  > Until recently, trust in enterprise software was someone else's job. Sales vouched for the product. Customer Success absorbed the failures. Data and Security teams handled the technical integrity. The buyer trusted the people; the end user tolerated the software.
+  >
+  > That model breaks when the product itself starts making judgment calls.
+  >
+  > Agentic workflows and chat interfaces have changed the relationship. A frontline manager acting on an AI recommendation isn't trusting a brand or an account team. They're trusting the product, in real time, on a decision that affects their work, their team, their numbers. There's no human between them and the model. Trust has become a UX problem, and an urgent one.
+  >
+  > In practice, this means three moves. Understand user intent more precisely than before, not just what they asked for, but what they'd accept if the product got it wrong. Pattern transparency and feedback into the interface itself, so users can read the product's reasoning without having to ask for it. And surface ROI in-product, so trust compounds into adoption rather than stalling at tolerance.
+  >
+  > **Intent → Transparency → Trust → Adoption → Growth.** This is the loop. It's how software earns its place in workflows that can't afford to be wrong.
 
 **3. Selected work** — 3 teasers, in this order:
 1. **Salli** — "Reimagining Workforce Management Through Agentic AI" — "Designing a proactive intelligence layer to guide frontline decision-making at scale" — links to portfolio.edwincw.com (new tab)
@@ -118,9 +128,53 @@ No tag chips. Clean grid. Each cell: small label + value.
 - No FluxUX link (folded into Selected Work)
 - Mark on the left: "EC-W" text mark, links to `/`
 
-### About page (separate, handled after homepage)
+### About page (separate, deferred build after homepage)
 
-Content TBD. Not part of current build sequence.
+Route: `/about`. File: `src/app/about/page.tsx` (does not yet exist). Reuses `Container`, `Section`, typography classes, and the Tier 2 scroll-reveal mechanism from the homepage — no new design primitives needed.
+
+**Job of the page:** humanise, credential, open a warmer contact moment. Does NOT re-state positioning (homepage hero does that) or re-argue the thesis (homepage thesis section does that). One page, one photo, one piece of writing, one way to get in touch.
+
+**Layout (Option A — single column, centred):**
+- `Container width="narrow"` (680px reading width), matching the thesis section's composition
+- Section vertical padding consistent with the rest of the site (`Section` primitive)
+- Order, top to bottom:
+  1. Eyebrow: "About"
+  2. `<h1>` title: "Edwin Collings-Wells"
+  3. Photo — see spec below
+  4. Prose body (five paragraphs)
+  5. Small eyebrow: "Get in touch"
+  6. Contact block — reuses the homepage `Contact.tsx` prose pattern exactly (two centred sentences with inline `.link` anchors); DO NOT introduce a button, form, or repeated location line
+- No CV link anywhere. No location repetition in the contact block — the location sentence already lives in the final prose paragraph.
+
+**Photo spec:**
+- One photo, Edwin has a suitable image ready
+- Sits above the prose, left-aligned (not centred), ~400px wide on desktop
+- Environmental/editorial register — NOT a corporate headshot, NOT a LinkedIn-style portrait
+- Black and white or muted acceptable; natural light preferred
+- File lives in `public/about/` (create directory when building). Use `next/image` with explicit `width`/`height` and appropriate `alt` text.
+- Rounded corners: `--radius-md` (8px) to match other image treatments
+
+**Body copy (LOCKED — ~240 words). Five paragraphs:**
+
+> I'm Director of UX at Harri, a global enterprise HCM platform used by two million frontline workers each month. I lead a globally distributed design team of six, working across product, engineering, and commercial functions.
+>
+> Before I worked in software, I spent years in hospitality operations, running high-volume bars and restaurants. In my last role before moving into design, I led a team of 80. I was on the other side of the users I now design for, and that perspective still shapes how I think about software built for work that can't afford to be wrong.
+>
+> The problem I find most compelling is multi-product platform coherence: making a complex suite of tools feel like a single, considered experience rather than a collection of features. It's harder than it looks, and it's where I do my best work.
+>
+> Right now I'm especially focused on what AI changes about this. Designing Salli, an agentic AI companion for frontline decision-making at scale, and building FluxUX, a small independent experiment in AI-powered tools for designers, has convinced me that the design teams who learn to build trust into these systems will shape the next era of enterprise software.
+>
+> I'm based between Bournemouth and London. Always happy to talk about work, AI in enterprise, or the smallholding I'm quietly planning on the side.
+
+**Contact block (LOCKED — reuses homepage `Contact.tsx` prose pattern):**
+
+Two centred sentences, same `.link` styling as homepage (teal hover, animated underline-offset). Exact wording to be finalised during build, but pattern:
+- Sentence 1: invites email/LinkedIn with inline `.link` anchors
+- Sentence 2 (optional, quieter): any small closing line in muted grey
+
+Match the homepage Contact block's styling and tone exactly — this is a deliberate consistency move, not an opportunity to invent a new pattern.
+
+**When this page ships, revert `prefetch={false}` on the About link in `Nav.tsx`** (added in Prompt 8 to prevent RSC 404 — see §10).
 
 ---
 
@@ -404,8 +458,7 @@ Note: `src/app/about/page.tsx` does not exist — the About route is a deferred 
 | 7 | Hero diagram — kinetic loop (expect iteration) | 🟡 Structural complete, design notes + polish pending |
 | 7.x | Hero diagram — design-notes iteration (tune positions, curves, resolve flash) | Pending |
 | 8 | Polish pass — scroll motion, reduced-motion, a11y, Lighthouse | ✅ Complete |
-
-**After homepage stable:** Separate About page build.
+| 9 | About page — `/about` route with locked copy (see §4), photo, reused contact block | Pending |
 
 ### Prompting principles
 
@@ -447,7 +500,7 @@ Note: `src/app/about/page.tsx` does not exist — the About route is a deferred 
 - [ ] **Prompt 7.x** — Hero diagram polish: apply Edwin's design notes (node/path tuning), resolve reduced-motion hydration flash, re-test animated flash on production build
 - [x] **Prompt 8** — Polish pass shipped in a fresh Claude Code session (context hygiene; previous session was long from Prompt 7's 10 iterations). Tier 2 scroll-reveal implemented via new `src/components/useScrollReveal.ts` hook (IntersectionObserver, `-10%` bottom `rootMargin`, `observer.unobserve` after first trigger — no re-fire on scroll back up) and `[data-reveal]` / `[data-revealed="true"]` CSS in `globals.css`, with a `prefers-reduced-motion: reduce` override forcing final state (`opacity: 1; transform: none;`). Wired into `Thesis.tsx`, `Contact.tsx`, `Credentials.tsx` (per-cell, indices 0–3) and `SelectedWork.tsx`'s three `WorkRow` instances (per-row, indices 0–2 passed as `revealIndex` prop). Stagger implemented via `transition-delay: calc(var(--reveal-index, 0) * 80ms)` per §5.4 Tier 2 spec. Hero deliberately excluded — has its own Tier 1 entrance via the diagram. A11y fixes: added visually-hidden `<h2>Credentials</h2>` (`sr-only`) so landmark structure is complete without visual change; added `linkAriaLabel` prop on `WorkRow` with destination-aware labels ("Read the Salli case study", "Read the Rewards & Recognition case study", "Explore the FluxUX app"); upgraded work image alt text from filename-derived to descriptive. Page metadata added via `Metadata` export in `layout.tsx` — title ("Edwin Collings-Wells — Experience Strategy & Product Leadership"), description (reuses the exact §2 subtitle + credential), OpenGraph, Twitter summary card. No `og:image` (dedicated OG image deferred as follow-up). `HeroDiagram.tsx` not touched — the reduced-motion hydration flash is explicitly noted in the audit as deferred to Prompt 7.x to avoid double-tracking. Verification: manual tab-through confirmed focus ring visible on all 12 tab stops against paper-warm; scroll-reveal fires cleanly on first viewport entry and is bypassed correctly under emulated reduced-motion. Lighthouse run against local production build (`npm run build && npm run start`) in incognito Chrome with ColorZilla isolated per Prompt 5 notes. Scores recorded 2026-04-21 — Mobile: Performance 94, Accessibility 100, Best Practices 100, SEO 100; Desktop: Performance 100, Accessibility 100, Best Practices 96 (recorded before prefetch fix; expected 100 on re-run, not re-verified), SEO 100. LCP delta (mobile 3.1s vs desktop 0.7s) is throttled-network font download, not architectural — hero display waits on General Sans Medium woff2; fix would be disproportionate for one point of mobile score. Best Practices initially 96 on both profiles due to a "Browser errors were logged to the console" finding — Next.js's default `<Link>` prefetch was firing a `_rsc` request to `/about` which 404'd (About route doesn't exist yet). Fixed with `prefetch={false}` on the About link in `Nav.tsx` only; other nav links retain default prefetch. When the About page lands, revert this. Full audit in `docs/polish-audit.md`. Commits: two local commits — (1) scroll-reveal + a11y fixes; (2) metadata + prefetch fix + audit doc. Not pushed.
 - [ ] **Prompt 8.1** — Not created. Prompt 8 landed clean after the prefetch fix; any future Lighthouse re-runs or deeper perf work would start here if needed.
-- [ ] **About page** — Separate build after homepage. When this lands, remove `prefetch={false}` from the About link in `Nav.tsx`.
+- [ ] **Prompt 9 (About page)** — Separate build. Copy, layout, photo spec, and contact block pattern all locked in §4. When this lands, remove `prefetch={false}` from the About link in `Nav.tsx`.
 
 ---
 
@@ -466,6 +519,8 @@ Note: `src/app/about/page.tsx` does not exist — the About route is a deferred 
 - Do not add a cursor follower, magnetic button, parallax, or page-transition animation
 - Do not create `tailwind.config.ts` — Tailwind v4 is CSS-based
 - Do not add `@apply` directives — use utility classes or plain CSS custom properties
+- Do not add a CTA button, contact form, or new contact pattern on the About page — reuse the homepage `Contact.tsx` prose + inline `.link` pattern exactly (see §4 About spec)
+- Do not re-state the hero positioning or re-argue the thesis on the About page — it's humanising and credentialling, not a positioning page
 
 ---
 
