@@ -8,7 +8,7 @@ export function Contact() {
   const { ref, isRevealed } = useScrollReveal<HTMLDivElement>();
 
   return (
-    <Section id="contact">
+    <Section id="contact" className="scroll-mt-[80px]">
       <Container width="narrow">
         <div
           ref={ref}
