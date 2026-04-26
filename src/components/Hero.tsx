@@ -8,7 +8,7 @@ export function Hero() {
       <Container>
         <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-12 items-start">
           <div>
-            <p className="font-serif-italic text-[20px] text-[var(--color-muted)] mb-4">
+            <p className="font-serif-italic text-[20px] text-[var(--color-primary)] mb-4">
               Edwin Collings-Wells
             </p>
             <h1 className="text-display text-[var(--color-foreground)]">
