@@ -59,8 +59,8 @@ export function AboutContent() {
             </p>
             <p className="text-prose text-[var(--color-body)]">
               I&apos;m based between Bournemouth and London. Always happy to
-              talk about work, AI in enterprise, or the smallholding I&apos;m
-              quietly planning on the side.
+              talk about work and the future of design, or swap gardening and
+              food growing tips.
             </p>
           </div>
         </Container>
