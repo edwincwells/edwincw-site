@@ -21,7 +21,7 @@ export function SelectedWork() {
             description="Designing a proactive intelligence layer to guide frontline decision-making at scale"
             linkText="Read the case study"
             linkAriaLabel="Read the Salli case study"
-            linkHref="https://portfolio.edwincw.com/slide/12"
+            linkHref="https://portfolio.edwincw.com/slide/2"
             linkExternal
             revealIndex={0}
           />
@@ -33,7 +33,7 @@ export function SelectedWork() {
             description="How Rewards & Recognition became a platform growth lever – and a commercial differentiator"
             linkText="Read the case study"
             linkAriaLabel="Read the Rewards & Recognition case study"
-            linkHref="https://portfolio.edwincw.com/slide/2"
+            linkHref="https://portfolio.edwincw.com/slide/14"
             linkExternal
             reverse
             revealIndex={1}
