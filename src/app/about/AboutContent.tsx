@@ -29,8 +29,8 @@ export function AboutContent() {
           <div className="space-y-6">
             <p className="text-prose text-[var(--color-body)]">
               I&apos;m Director of UX at Harri, a global enterprise HCM
-              platform used by two million frontline workers each month. I
-              lead a globally distributed design team of six, working across
+              platform used by two million people each month. I lead a
+              globally distributed design team of six and work across
               product, engineering, and commercial functions.
             </p>
             <p className="text-prose text-[var(--color-body)]">
@@ -42,20 +42,19 @@ export function AboutContent() {
               work that can&apos;t afford to be wrong.
             </p>
             <p className="text-prose text-[var(--color-body)]">
-              The problem I find most compelling is multi-product platform
-              coherence: making a complex suite of tools feel like a single,
-              considered experience rather than a collection of features.
-              It&apos;s harder than it looks, and it&apos;s where I do my
-              best work.
+              The problem I find most compelling is making complex software
+              feel coherent and considered, whether across a multi-product
+              platform or within a single product carrying real operational
+              weight. It&apos;s harder than it looks, and it&apos;s where I
+              do my best work.
             </p>
             <p className="text-prose text-[var(--color-body)]">
               Right now I&apos;m especially focused on what AI changes about
               this. Designing Salli, an agentic AI companion for frontline
               decision-making at scale, and building FluxUX, a small
-              independent experiment in AI-powered tools for designers, has
-              convinced me that the design teams who learn to build trust
-              into these systems will shape the next era of enterprise
-              software.
+              experiment in AI-powered tools for designers, has convinced me
+              the interesting work is in building genuine trust between
+              humans and these systems, not just speed or capability.
             </p>
             <p className="text-prose text-[var(--color-body)]">
               I&apos;m based between Bournemouth and London. Always happy to
