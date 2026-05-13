@@ -7,8 +7,8 @@ import { useScrollReveal } from "./useScrollReveal";
 const cells = [
   { label: "Current role", value: "Director of UX, Harri" },
   { label: "Cross-functional influence", value: "Design · Product · Engineering · Executive" },
-  { label: "Sectors", value: "Enterprise HCM & Workforce Platforms" },
-  { label: "Team", value: "Globally distributed team of 6" },
+  { label: "Sectors", value: "Enterprise SaaS · High-stakes software · AI" },
+  { label: "Team", value: "6 designers, globally distributed · 50+ cross-functional" },
 ];
 
 function Cell({
