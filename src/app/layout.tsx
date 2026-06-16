@@ -9,11 +9,11 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://www.edwincw.com"),
   title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
   description:
-    "Designing intelligent product experiences that drive growth, adoption and trust. Director of UX at Harri, leading design for AI-enabled enterprise products.",
+    "Designing intelligent product experiences that drive growth, adoption and trust. Director of Product Design at Harri, leading design for AI-enabled enterprise products.",
   openGraph: {
     title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
     description:
-      "Director of UX at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
+      "Director of Product Design at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
     url: "https://www.edwincw.com",
     siteName: "Edwin Collings-Wells",
     images: [
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
     description:
-      "Director of UX at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
+      "Director of Product Design at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
     images: ["/og-image.png"],
   },
 };
