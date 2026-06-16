@@ -26,6 +26,19 @@ export function SelectedWork() {
             revealIndex={0}
           />
           <WorkRow
+            imageSrc="/work/seedbank-design.webp"
+            imageAlt="seedbank.design — a cloneable HTML + CSS design system for communities"
+            eyebrow="Design System Project"
+            title="seedbank.design – A Design System for Communities."
+            description="A cloneable HTML + CSS design system for self-organising groups of all kinds. Built to be adapted, not followed."
+            linkText="Visit seedbank.design"
+            linkAriaLabel="Visit seedbank.design"
+            linkHref="https://seedbank.design/"
+            linkExternal
+            reverse
+            revealIndex={1}
+          />
+          <WorkRow
             imageSrc="/work/rewards-recognition.webp"
             imageAlt="Rewards & Recognition — employee engagement platform"
             eyebrow="Case study 02"
@@ -35,20 +48,20 @@ export function SelectedWork() {
             linkAriaLabel="Read the Rewards & Recognition case study"
             linkHref="https://portfolio.edwincw.com/slide/14"
             linkExternal
-            reverse
-            revealIndex={1}
+            revealIndex={2}
           />
           <WorkRow
             imageSrc="/work/fluxux.webp"
             imageAlt="FluxUX — AI-powered experiment generator"
-            eyebrow="Project"
+            eyebrow="Product innovation project"
             title="FluxUX: An AI-powered experiment generator for UX practitioners"
             description="An early experiment in prompt-driven development"
             linkText="Explore the app"
             linkAriaLabel="Explore the FluxUX app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
-            revealIndex={2}
+            reverse
+            revealIndex={3}
           />
         </div>
       </Container>

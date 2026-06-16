@@ -28,7 +28,7 @@ export function AboutContent() {
           />
           <div className="space-y-6">
             <p className="text-prose text-[var(--color-body)]">
-              I&apos;m Director of UX at Harri, a global enterprise HCM
+              I&apos;m Director of Product Design at Harri, a global enterprise HCM
               platform used by two million people each month. I lead a
               globally distributed design team of six and work across
               product, engineering, and commercial functions.

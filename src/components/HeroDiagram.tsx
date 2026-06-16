@@ -180,6 +180,17 @@ function Diagram({
         />
       ))}
 
+      {/* Animated signal — painted before the nodes so it passes UNDER the blocks */}
+      {!reducedMotion && (
+        <g className="hero-diagram-signal" opacity="0">
+          <circle cx="0" cy="0" r="8" fill={SIGNAL} opacity="0.25" />
+          <circle cx="0" cy="0" r="4" fill={SIGNAL} />
+          <animateMotion dur="8s" repeatCount="indefinite" begin="2.4s">
+            <mpath href={`#${loopId}`} />
+          </animateMotion>
+        </g>
+      )}
+
       {/* Nodes — entrance scale/opacity on the outer wrapper, pulse on the inner */}
       {geometry.nodes.map((n) => (
         <g key={n.id} transform={`translate(${n.cx} ${n.cy})`}>
@@ -227,8 +238,8 @@ function Diagram({
         </g>
       ))}
 
-      {/* Signal — animated along the loop, or static at Intent when reduced */}
-      {reducedMotion ? (
+      {/* Static signal at Intent when reduced motion — painted on top so it stays visible */}
+      {reducedMotion && (
         <g>
           <circle
             cx={geometry.intent.cx}
@@ -243,14 +254,6 @@ function Diagram({
             r="4"
             fill={SIGNAL}
           />
-        </g>
-      ) : (
-        <g className="hero-diagram-signal" opacity="0">
-          <circle cx="0" cy="0" r="8" fill={SIGNAL} opacity="0.25" />
-          <circle cx="0" cy="0" r="4" fill={SIGNAL} />
-          <animateMotion dur="8s" repeatCount="indefinite" begin="2.4s">
-            <mpath href={`#${loopId}`} />
-          </animateMotion>
         </g>
       )}
     </svg>
