@@ -4,9 +4,9 @@ import { HeroDiagram } from "./HeroDiagram";
 
 export function Hero() {
   return (
-    <Section className="!pt-24 md:!pt-40 !pb-16 md:!pb-24">
+    <Section className="!pt-12 md:!pt-40 !pb-16 md:!pb-24">
       <Container>
-        <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-12 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-[55fr_45fr] gap-6 md:gap-12 items-start">
           <div>
             <p className="font-serif-italic text-[20px] text-[var(--color-primary)] mb-4">
               Edwin Collings-Wells
