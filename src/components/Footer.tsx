@@ -34,11 +34,14 @@ export function Footer() {
   return (
     <footer className="border-t border-[var(--color-border)]">
       <Container>
-        <div className="flex items-center justify-between py-8">
-          <p className="text-small text-[var(--color-muted)]">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 items-center py-8">
+          <p className="text-small text-[var(--color-muted)] text-center md:text-left">
             © 2026 Edwin Collings-Wells
           </p>
-          <div className="flex items-center gap-4">
+          <p className="text-small text-[var(--color-muted)] text-center">
+            Not a template. Built from scratch with Claude Code.
+          </p>
+          <div className="flex items-center gap-4 justify-center md:justify-self-end">
             <a
               href="https://github.com/edwincwells/"
               target="_blank"
