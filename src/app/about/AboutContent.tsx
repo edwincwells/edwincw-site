@@ -31,7 +31,10 @@ export function AboutContent() {
               I&apos;m Director of Product Design at Harri, a global enterprise HCM
               platform used by two million people each month. I lead a
               globally distributed design team of six and work across
-              product, engineering, and commercial functions.
+              product, engineering, and commercial functions. I built the
+              function from the ground up, from its first researcher to a
+              career framework and designers I&apos;ve since coached into
+              management.
             </p>
             <p className="text-prose text-[var(--color-body)]">
               Before I worked in software, I spent years in hospitality
@@ -51,8 +54,9 @@ export function AboutContent() {
             <p className="text-prose text-[var(--color-body)]">
               Right now I&apos;m especially focused on what AI changes about
               this. Designing Salli, an agentic AI companion for frontline
-              decision-making at scale, and building FluxUX, a small
-              experiment in AI-powered tools for designers, has convinced me
+              decision-making at scale, and, in my own time, building FluxUX,
+              a small experiment in AI-powered tools for designers, has
+              convinced me
               the interesting work is in building genuine trust between
               humans and these systems, not just speed or capability.
             </p>

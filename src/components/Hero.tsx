@@ -12,11 +12,11 @@ export function Hero() {
               Edwin Collings-Wells
             </p>
             <h1 className="text-display text-[var(--color-foreground)]">
-              Experience Strategy &amp; Product Leadership
+              Product design leadership for AI people can trust
             </h1>
             <p className="text-subtitle text-[var(--color-body)] mt-6 md:mt-8 max-w-[540px]">
-              Designing intelligent product experiences that drive growth,
-              adoption and trust.
+              Building design teams that ship intelligent products driving
+              growth, adoption and trust.
             </p>
           </div>
           <div className="mt-0 md:mt-20">
