@@ -7,13 +7,13 @@ import "./typography.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.edwincw.com"),
-  title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
+  title: "Edwin Collings-Wells — Product Design Leadership for AI",
   description:
-    "Designing intelligent product experiences that drive growth, adoption and trust. Director of Product Design at Harri, leading design for AI-enabled enterprise products.",
+    "Building design teams that ship intelligent products driving growth, adoption and trust. Director of Product Design at Harri, leading design for AI-enabled enterprise products.",
   openGraph: {
-    title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
+    title: "Edwin Collings-Wells — Product Design Leadership for AI",
     description:
-      "Director of Product Design at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
+      "Director of Product Design at Harri. Building design teams that ship intelligent products people can trust.",
     url: "https://www.edwincw.com",
     siteName: "Edwin Collings-Wells",
     images: [
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
+        alt: "Edwin Collings-Wells — Product Design Leadership for AI",
       },
     ],
     locale: "en_GB",
@@ -29,9 +29,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Edwin Collings-Wells — Experience Strategy & Product Leadership",
+    title: "Edwin Collings-Wells — Product Design Leadership for AI",
     description:
-      "Director of Product Design at Harri. Designing intelligent product experiences that drive growth, adoption, and trust.",
+      "Director of Product Design at Harri. Building design teams that ship intelligent products people can trust.",
     images: ["/og-image.png"],
   },
 };
