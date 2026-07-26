@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { generalSans, sourceSerif } from "./fonts";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
@@ -34,6 +34,14 @@ export const metadata: Metadata = {
       "Director of Product Design at Harri. Building design teams that ship intelligent products people can trust.",
     images: ["/og-image.png"],
   },
+};
+
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#F7F5F1" },
+    { media: "(prefers-color-scheme: dark)", color: "#1C1B18" },
+  ],
 };
 
 export default function RootLayout({

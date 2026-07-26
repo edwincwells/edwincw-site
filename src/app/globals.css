@@ -2,17 +2,36 @@
 
 @theme {
   --color-background: #F7F5F1;
+  --color-surface: #F7F5F1;
   --color-foreground: #111214;
   --color-body: #2E3338;
   --color-muted: #6B7075;
   --color-primary: #124E66;
   --color-secondary: #B8804A;
   --color-border: #E5E7EB;
+  --color-hairline: #D1D5DB;
 
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Dark theme — OS preference only, no toggle.
+   Unlayered on purpose: @theme compiles into @layer theme, and unlayered
+   declarations win the cascade over layered ones regardless of source order. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: #1C1B18;
+    --color-surface: #262420;
+    --color-foreground: #F4F2ED;
+    --color-body: #C8C4BC;
+    --color-muted: #96928A;
+    --color-primary: #4FA3C0;
+    --color-secondary: #C99861;
+    --color-border: #33322E;
+    --color-hairline: #3F3E38;
+  }
 }
 
 :root {

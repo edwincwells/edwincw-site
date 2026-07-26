@@ -184,20 +184,53 @@ Match the homepage Contact block's styling and tone exactly — this is a delibe
 
 ### 5.1 Colour (implemented as CSS custom properties in globals.css @theme block)
 
-| Token | Hex | Role |
-|---|---|---|
-| `--color-background` | `#F7F5F1` | Paper-warm surface |
-| `--color-foreground` | `#111214` | Headings, emphasis |
-| `--color-body` | `#2E3338` | Body text |
-| `--color-muted` | `#6B7075` | Captions, meta, supporting |
-| `--color-primary` | `#124E66` | Teal — accent, links, focus, diagram structure |
-| `--color-secondary` | `#B8804A` | Ochre — sparingly, diagram signal, specific moments |
-| `--color-border` | `#E5E7EB` | Dividers |
+| Token | Light | Dark | Role |
+|---|---|---|---|
+| `--color-background` | `#F7F5F1` | `#1C1B18` | Paper-warm surface / warm charcoal |
+| `--color-surface` | `#F7F5F1` | `#262420` | Elevated panel — diagram nodes. Identical to background in light. |
+| `--color-foreground` | `#111214` | `#F4F2ED` | Headings, emphasis |
+| `--color-body` | `#2E3338` | `#C8C4BC` | Body text |
+| `--color-muted` | `#6B7075` | `#96928A` | Captions, meta, supporting |
+| `--color-primary` | `#124E66` | `#4FA3C0` | Teal — accent, links, focus, diagram structure |
+| `--color-secondary` | `#B8804A` | `#C99861` | Ochre — sparingly, diagram signal, specific moments |
+| `--color-border` | `#E5E7EB` | `#33322E` | Dividers |
+| `--color-hairline` | `#D1D5DB` | `#3F3E38` | Diagram node stroke |
 
 **Rules:**
 - Three-tier text hierarchy (foreground / body / muted) — inspired by Linear's "multiple whites" trick, adapted for light mode
 - Ochre used only in specific places (~5% of palette). Primarily: the diagram's traveling signal.
 - Teal is the primary editorial accent, not just a link colour
+
+**Dark theme (added after the original build — additive revision, light values unchanged):**
+- Driven by `prefers-color-scheme` only. **No toggle**, no theme state, no hydration script.
+- The dark surface is the *hue-mirror* of paper-warm, not an inversion: `#1C1B18` is hsl(45°, 8%, 10%) against paper's hsl(40°, 27%, 96%). This is what keeps the "Warm > cool" tone axis intact in both themes.
+- Teal lifts to `#4FA3C0` because `#124E66` is 1.9:1 on charcoal — unusable. Hue moves only 197° → 196°, so it stays the same teal rather than drifting to cyan.
+- Overrides are declared **unlayered** in `globals.css`, after the `@theme` block. Tailwind v4 compiles `@theme` into `@layer theme`, and unlayered declarations beat layered ones in the cascade regardless of source order. Do not move them inside `@theme` — theme blocks cannot be conditionally re-declared.
+- All 37 `var(--color-*)` call sites across the components inherit this for free. Only three surfaces needed real work: the hero diagram, the case-study images, and the `viewport` export in `layout.tsx`.
+- `--color-surface` and `--color-hairline` were added for the diagram. Both are safe names — neither collides with the typography utilities (see §5.2). Adding a token named `display`, `h1`, `h2`, `subtitle`, `prose`, `small` or `eyebrow` **would** collide.
+
+**Case-study image export spec (`public/work/`):**
+
+Each project ships two hand-authored plates — `name.webp` and `name-dark.webp` — swapped by a `<picture>` element in `WorkRow.tsx`. Two baked plates rather than one transparent asset, so the light-mode drop shadows survive as authored.
+
+| | |
+|---|---|
+| Size | **1600 × 1200**, exactly 4:3 (matches the Figma frames 1:1) |
+| Light plate | `#F7F5F1` — flat, edge to edge |
+| Dark plate | `#1C1B18` — flat, edge to edge |
+| Colour profile | **sRGB, not Display P3** — a P3 export shifts the plate hex |
+| Corners | Square. The container clips to `--radius-lg` (12px); rounding in the PNG too gives a double-rounded notch |
+| Margins | ~50px floor. Existing margins vary deliberately — optically balanced, not mechanically padded |
+| Encode | Export PNG @2× (3200 × 2400), downscale **2:1** to 1600 × 1200 with Lanczos3, WebP quality **88** |
+| Budget | ~80 KB each; over 110 KB means a setting slipped |
+
+**Why the plate hex has to be right:** the container behind the image is painted `--color-background`, and on hover the image translates up 4px and sideways 8px, revealing up to 8px of container. A mismatched plate shows as a sliver mid-hover — the same bug Prompt 6.1 fixed. Colour-picking the *exported WebP* will read ~4/255 off; that is lossy WebP redistributing flat colour and is imperceptible. Get the PNG exact.
+
+**Two measured findings, so they are not relitigated:**
+- Output size is the sharpness lever, not codec quality. At the real render size (1120 device px) 1280 × 960 scored 5.24 against 1600 × 1200 at 6.04. WebP q82 → q92 moved detail under 1% for 40% more bytes — do not chase quality above 88.
+- Downscale by an integer ratio. 3200 → 1600 averages exactly four pixels per output pixel; the 3200 → 1280 (2.5:1) used briefly had to interpolate and read visibly soft.
+
+Dark plates must be flat *throughout*, including gaps between mockups and the frame corners — not just around the outside of the artwork. An earlier automated attempt recomposited only outside the artwork's bounding box and left 21% residual cream in the Salli frame.
 
 ### 5.2 Typography
 
