@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-const NODE_FILL = "#F7F5F1";
-const NODE_STROKE = "#D1D5DB";
-const NEAR_BLACK = "#111214";
-const PATH_STROKE = "#124E66";
-const SIGNAL = "#B8804A";
+/* SVG presentation attributes (fill="…", stroke="…") do not resolve var() in
+   any current browser — these have to go through `style` to follow the theme. */
+const NODE_STYLE = {
+  fill: "var(--color-surface)",
+  stroke: "var(--color-hairline)",
+};
+const LABEL_STYLE = { fill: "var(--color-foreground)" };
+const PATH_STYLE = { stroke: "var(--color-primary)" };
+const SIGNAL_STYLE = { fill: "var(--color-secondary)" };
 
 const NODE_W = 130;
 const NODE_H = 48;
@@ -169,13 +173,14 @@ function Diagram({
           key={p.id}
           d={p.d}
           fill="none"
-          stroke={PATH_STROKE}
           strokeOpacity="0.5"
           strokeWidth="1"
           pathLength="1"
           className={reducedMotion ? undefined : "hero-diagram-path"}
           style={
-            reducedMotion ? undefined : { animationDelay: `${p.enterDelay}s` }
+            reducedMotion
+              ? PATH_STYLE
+              : { ...PATH_STYLE, animationDelay: `${p.enterDelay}s` }
           }
         />
       ))}
@@ -183,8 +188,8 @@ function Diagram({
       {/* Animated signal — painted before the nodes so it passes UNDER the blocks */}
       {!reducedMotion && (
         <g className="hero-diagram-signal" opacity="0">
-          <circle cx="0" cy="0" r="8" fill={SIGNAL} opacity="0.25" />
-          <circle cx="0" cy="0" r="4" fill={SIGNAL} />
+          <circle cx="0" cy="0" r="8" style={SIGNAL_STYLE} opacity="0.25" />
+          <circle cx="0" cy="0" r="4" style={SIGNAL_STYLE} />
           <animateMotion dur="8s" repeatCount="indefinite" begin="2.4s">
             <mpath href={`#${loopId}`} />
           </animateMotion>
@@ -216,14 +221,13 @@ function Diagram({
                 width={NODE_W}
                 height={NODE_H}
                 rx="6"
-                fill={NODE_FILL}
-                stroke={NODE_STROKE}
+                style={NODE_STYLE}
                 strokeWidth="0.8"
               />
               <text
                 x="0"
                 y="0"
-                fill={NEAR_BLACK}
+                style={LABEL_STYLE}
                 fontFamily="var(--font-sans), system-ui, sans-serif"
                 fontSize="13"
                 fontWeight="500"
@@ -245,14 +249,14 @@ function Diagram({
             cx={geometry.intent.cx}
             cy={geometry.intent.cy}
             r="8"
-            fill={SIGNAL}
+            style={SIGNAL_STYLE}
             opacity="0.25"
           />
           <circle
             cx={geometry.intent.cx}
             cy={geometry.intent.cy}
             r="4"
-            fill={SIGNAL}
+            style={SIGNAL_STYLE}
           />
         </g>
       )}

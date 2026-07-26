@@ -13,6 +13,8 @@ One `<h1>` (hero display), `<h2>` for each section title, `<h3>` for work row ti
 ### Focus-visible — pass
 Baseline rule in `globals.css`: `2px solid var(--color-primary)` with `3px` offset. Teal (#124E66) on paper-warm (#F7F5F1) computes to ~8.8:1 contrast — meets AAA. Rule confirmed present in stylesheet; browsers only apply it on keyboard focus, so direct keyboard tabbing is the acceptance path (visual verification best done manually).
 
+In dark mode the same rule resolves to teal #4FA3C0 on charcoal #1C1B18 — 6.0:1. Passes AA and the 3:1 non-text threshold with headroom, but it is the tightest ratio in the dark palette and the first thing to revisit if the ring reads weak in use. The fix would be a brighter teal, not a wider outline.
+
 ### Link purpose — fixed
 Work row links previously read "Read the case study" / "Explore the app" out of context. Added `linkAriaLabel` prop on `WorkRow` and wired specific labels from `SelectedWork`:
 - "Read the Salli case study"
@@ -34,6 +36,21 @@ Mailto links (Contact, Footer) correctly have no target. Verified via DOM inspec
 `--color-muted` (#6B7075) on `--color-background` (#F7F5F1) computes to ~4.66:1 — passes WCAG AA (4.5:1) for regular body text. Used for eyebrows, captions, footer text, and the second Contact sentence. No change needed.
 
 Teal links on paper-warm (~8.8:1) and foreground body (#2E3338) on paper-warm (~11.8:1) also comfortably exceed AA.
+
+**Dark mode**, measured against `--color-background` #1C1B18:
+
+| Token | Dark | Light | |
+|---|---|---|---|
+| `--color-foreground` #F4F2ED | 15.4:1 | 17.2:1 | AAA |
+| `--color-body` #C8C4BC | 9.9:1 | 11.7:1 | AAA |
+| `--color-muted` #96928A | 5.6:1 | 4.6:1 | AA |
+| `--color-primary` #4FA3C0 | 6.0:1 | 8.4:1 | AA |
+| `--color-secondary` #C99861 | 6.7:1 | — | signal dot only, non-text |
+| `--color-border` #33322E | 1.34:1 | 1.14:1 | hairline, non-text |
+
+`--color-muted` is deliberately given *more* headroom in dark (5.6:1) than in light (4.6:1) — light text on a dark field halates, so the same nominal ratio reads less legibly.
+
+The hero diagram's teal paths carry `stroke-opacity="0.5"`. The resulting blend is ~2.3:1 on dark against ~2.1:1 on light — decorative structure in both, and near-identical, so the opacity was left unchanged.
 
 ### Image alt text — fixed
 Previous alts were filename-derived ("Salli case study"). Updated to describe the visual content:

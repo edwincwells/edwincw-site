@@ -15,6 +15,7 @@ export function SelectedWork() {
         <div className="space-y-24 md:space-y-32">
           <WorkRow
             imageSrc="/work/salli.webp"
+            imageSrcDark="/work/salli-dark.webp"
             imageAlt="Salli — agentic AI workforce management interface"
             eyebrow="Case study 01"
             title="Reimagining Workforce Management Through Agentic AI"
@@ -27,6 +28,7 @@ export function SelectedWork() {
           />
           <WorkRow
             imageSrc="/work/seedbank-design.webp"
+            imageSrcDark="/work/seedbank-design-dark.webp"
             imageAlt="seedbank.design — a cloneable HTML + CSS design system for communities"
             eyebrow="Design System Project"
             title="seedbank.design – A Design System for Communities."
@@ -40,6 +42,7 @@ export function SelectedWork() {
           />
           <WorkRow
             imageSrc="/work/rewards-recognition.webp"
+            imageSrcDark="/work/rewards-recognition-dark.webp"
             imageAlt="Rewards & Recognition — employee engagement platform"
             eyebrow="Case study 02"
             title="Designing Employee Engagement as a Platform Growth Lever"
@@ -52,6 +55,7 @@ export function SelectedWork() {
           />
           <WorkRow
             imageSrc="/work/fluxux.webp"
+            imageSrcDark="/work/fluxux-dark.webp"
             imageAlt="FluxUX — AI-powered experiment generator"
             eyebrow="Product innovation project"
             title="FluxUX: An AI-powered experiment generator for UX practitioners"
