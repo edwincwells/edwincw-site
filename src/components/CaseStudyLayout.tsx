@@ -61,8 +61,11 @@ export function Placeholder({
 type FigureBase = {
   caption: string;
   width?: Measure;
-  /** Tailwind aspect-ratio classes, e.g. "aspect-[4/3] md:aspect-[16/9]". */
-  aspect: string;
+  /** Tailwind aspect-ratio classes for the empty slot, e.g.
+   *  "aspect-[4/3] md:aspect-[16/9]". Only meaningful while the slot is still
+   *  a placeholder — once a real SVG child or image lands, its own intrinsic
+   *  ratio governs and this is ignored. */
+  aspect?: string;
   /** Label for the empty slot, shown until the visual exists. */
   placeholder?: string;
 };
@@ -101,7 +104,12 @@ export function Figure(props: FigureProps) {
       />
     );
   } else {
-    visual = <Placeholder label={placeholder ?? caption} aspect={aspect} />;
+    visual = (
+      <Placeholder
+        label={placeholder ?? caption}
+        aspect={aspect ?? "aspect-[16/9]"}
+      />
+    );
   }
 
   return (
@@ -187,7 +195,7 @@ export function CaseStudyLayout({
             data-reveal
             data-revealed={heroRevealed}
             aria-hidden="true"
-            className="mt-12 md:mt-16"
+            className="mt-8 md:mt-10"
           >
             <Container>{heroVisual}</Container>
           </div>

@@ -2,10 +2,13 @@ import {
   CaseStudyLayout,
   Figure,
   Heading,
-  Placeholder,
   Prose,
 } from "@/components/CaseStudyLayout";
 import { PullQuote } from "@/components/PullQuote";
+import { DeliveryModelAfter } from "@/components/diagrams/DeliveryModelAfter";
+import { DeliveryModelBefore } from "@/components/diagrams/DeliveryModelBefore";
+import { TierDecisionFlow } from "@/components/diagrams/TierDecisionFlow";
+import { ConvergenceHero } from "@/components/diagrams/ConvergenceHero";
 
 /* Prose is a Server Component — the client boundary sits on CaseStudyLayout,
    Figure and PullQuote, so the essay itself never enters the client bundle.
@@ -18,12 +21,7 @@ export function RepositioningProductDesignContent() {
       eyebrow="Leadership Case Study"
       title="The bottleneck was us"
       standfirst="Repositioning Product Design for agentic engineering"
-      heroVisual={
-        <Placeholder
-          label="[ Hero visual — prompt 11 ]"
-          aspect="aspect-[16/9] md:aspect-[21/9]"
-        />
-      }
+      heroVisual={<ConvergenceHero />}
     >
       <Prose>
         <p className="text-prose">
@@ -82,10 +80,10 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/9]"
-        placeholder="[ Diagram 1: before — prompt 11 ]"
         caption="Before. Every request routed through Product Design as the sole downstream step, regardless of complexity."
-      />
+      >
+        <DeliveryModelBefore />
+      </Figure>
 
       <Prose>
         <p className="text-prose">
@@ -146,10 +144,10 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/9]"
-        placeholder="[ Diagram 2: after — prompt 11 ]"
         caption="After. Two paths out of scope review — Tier 1 with Product Design at kickoff, Tier 2 PM-led with design review before build."
-      />
+      >
+        <DeliveryModelAfter />
+      </Figure>
 
       <Heading>How it works</Heading>
 
@@ -186,10 +184,10 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[3/4] md:aspect-[16/10]"
-        placeholder="[ Diagram 3: tier decision flow — prompt 11 ]"
         caption="The tier decision. Any yes routes to Tier 1; all four no routes to Tier 2."
-      />
+      >
+        <TierDecisionFlow />
+      </Figure>
 
       <Prose>
         <p className="text-prose">
@@ -270,9 +268,13 @@ export function RepositioningProductDesignContent() {
 
       <Figure
         variant="raster"
-        aspect="aspect-[16/10]"
-        placeholder="[ Image 1: review agent screenshot — prompt 11 ]"
         caption="The review agent commenting directly on a Figma frame."
+        image={{
+          src: "/work/review-agent-comment.webp",
+          alt: "A review comment pinned to a Figma design, headed “Claude review”, flagging that a tile labelled “Payroll prep” is named differently from the agent screen and the spec, and recommending a single consistent name across all three.",
+          width: 1400,
+          height: 875,
+        }}
       />
 
       <Prose>
