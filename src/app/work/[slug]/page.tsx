@@ -20,10 +20,12 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const url = `/work/${slug}`;
   const images = [
     {
-      url: "/og-image.png",
+      url: "/og-image-v2.png",
       width: 1200,
       height: 630,
-      alt: study.metaTitle,
+      /* The generic site card, so the alt describes the card, not the case study.
+         Goes back to being per-study if a bespoke per-case-study image lands. */
+      alt: "Edwin Collings-Wells — Product Design Leadership for AI",
     },
   ];
 
@@ -44,7 +46,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
       card: "summary_large_image",
       title: study.metaTitle,
       description: study.description,
-      images: ["/og-image.png"],
+      images: ["/og-image-v2.png"],
     },
   };
 }

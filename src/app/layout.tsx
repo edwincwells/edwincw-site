@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     siteName: "Edwin Collings-Wells",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image-v2.png",
         width: 1200,
         height: 630,
         alt: "Edwin Collings-Wells — Product Design Leadership for AI",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Edwin Collings-Wells — Product Design Leadership for AI",
     description:
       "Director of Product Design at Harri. Building design teams that ship intelligent products people can trust.",
-    images: ["/og-image.png"],
+    images: ["/og-image-v2.png"],
   },
 };
 
