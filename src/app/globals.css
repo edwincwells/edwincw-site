@@ -52,11 +52,16 @@
   --duration-entrance: 600ms;
 }
 
+/* No `scroll-behavior: smooth` here, deliberately. It was added in Prompt 9.1
+   for the /#contact anchor, but it applies to every programmatic scroll —
+   including the scrollTo(0, 0) the App Router performs on each navigation. The
+   result was that moving between pages rendered the new page at the old scroll
+   position and then visibly animated to the top. Smooth scrolling now lives on
+   the one link that wants it, in Nav.tsx, where it can be scoped. */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
-  scroll-behavior: smooth;
 }
 
 body {

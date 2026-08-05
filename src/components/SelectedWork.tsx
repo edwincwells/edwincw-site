@@ -1,10 +1,11 @@
 import { Container } from "./Container";
 import { Section } from "./Section";
 import { WorkRow } from "./WorkRow";
+import { DeliveryModelPair } from "./diagrams/DeliveryModelPair";
 
 export function SelectedWork() {
   return (
-    <Section>
+    <Section id="selected-work">
       <Container>
         <p className="text-eyebrow text-[var(--color-primary)] mb-4">
           Selected work
@@ -12,7 +13,21 @@ export function SelectedWork() {
         <h2 className="text-h1 text-[var(--color-foreground)] mb-16 md:mb-24">
           Recent projects
         </h2>
+        {/* Image side alternates down the section. Inserting the leadership
+            study at position one flipped `reverse` on all four below it. */}
         <div className="space-y-24 md:space-y-32">
+          {/* The only internal entry, and the only one whose visual is
+              rendered rather than exported — see ConvergenceMark. */}
+          <WorkRow
+            visual={<DeliveryModelPair />}
+            eyebrow="Leadership case study"
+            title="The bottleneck was us"
+            description="Repositioning Product Design for agentic engineering"
+            linkText="Read the case study"
+            linkAriaLabel="Read the leadership case study"
+            linkHref="/work/repositioning-product-design"
+            revealIndex={0}
+          />
           <WorkRow
             imageSrc="/work/salli.webp"
             imageSrcDark="/work/salli-dark.webp"
@@ -24,7 +39,8 @@ export function SelectedWork() {
             linkAriaLabel="Read the Salli case study"
             linkHref="https://portfolio.edwincw.com/slide/2"
             linkExternal
-            revealIndex={0}
+            reverse
+            revealIndex={1}
           />
           <WorkRow
             imageSrc="/work/seedbank-design.webp"
@@ -37,8 +53,7 @@ export function SelectedWork() {
             linkAriaLabel="Visit seedbank.design"
             linkHref="https://seedbank.design/"
             linkExternal
-            reverse
-            revealIndex={1}
+            revealIndex={2}
           />
           <WorkRow
             imageSrc="/work/rewards-recognition.webp"
@@ -51,7 +66,8 @@ export function SelectedWork() {
             linkAriaLabel="Read the Rewards & Recognition case study"
             linkHref="https://portfolio.edwincw.com/slide/14"
             linkExternal
-            revealIndex={2}
+            reverse
+            revealIndex={3}
           />
           <WorkRow
             imageSrc="/work/fluxux.webp"
@@ -64,8 +80,7 @@ export function SelectedWork() {
             linkAriaLabel="Explore the FluxUX app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
-            reverse
-            revealIndex={3}
+            revealIndex={4}
           />
         </div>
       </Container>

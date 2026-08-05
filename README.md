@@ -10,7 +10,7 @@ Live: [www.edwincw.com](https://www.edwincw.com)
 - TypeScript
 - Tailwind CSS v4 (CSS-based `@theme`, no config file)
 - Self-hosted fonts via `next/font/local`
-- Deployed via Netlify from the `develop` branch
+- Deployed via Netlify from the `main` branch
 
 ## Local development
 
