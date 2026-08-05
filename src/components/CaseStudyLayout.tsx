@@ -119,12 +119,16 @@ export function Figure(props: FigureProps) {
       data-revealed={isRevealed}
       className="my-12 md:my-16"
     >
-      <Measured width={width}>
-        {visual}
+      <Measured width={width}>{visual}</Measured>
+      {/* Captions always sit at the reading measure, never the figure's. A
+          breakout diagram is wider than the text, but its caption is text —
+          hanging it off the diagram's left edge puts it out of step with every
+          other line on the page. */}
+      <Container width="narrow">
         <figcaption className="text-small text-[var(--color-muted)] mt-4">
           {caption}
         </figcaption>
-      </Measured>
+      </Container>
     </figure>
   );
 }

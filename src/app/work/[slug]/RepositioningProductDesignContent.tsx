@@ -80,7 +80,7 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        caption="Before. Every request routed through Product Design as the sole downstream step, regardless of complexity."
+        caption="Before. Every request went through Product Design, whatever its complexity."
       >
         <DeliveryModelBefore />
       </Figure>
@@ -144,7 +144,7 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        caption="After. Two paths out of scope review — Tier 1 with Product Design at kickoff, Tier 2 PM-led with design review before build."
+        caption="After. Tier 1 puts Product Design at kickoff. Tier 2 is PM-led, with design review before build."
       >
         <DeliveryModelAfter />
       </Figure>
@@ -184,7 +184,7 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        caption="The tier decision. Any yes routes to Tier 1; all four no routes to Tier 2."
+        caption="A single yes sends work to Tier 1. Tier 2 has to clear all four."
       >
         <TierDecisionFlow />
       </Figure>
@@ -261,14 +261,14 @@ export function RepositioningProductDesignContent() {
           practice and WCAG 2.2 AA. It runs in Claude Cowork with the Figma MCP
           and integrations into Jira and Confluence, so it reads the designs,
           the tickets and the documented standards together rather than
-          assessing a screen in isolation. It’s in its second week and has
-          reviewed 22 tasks.
+          assessing a screen in isolation. In its first three weeks it reviewed
+          15 tasks.
         </p>
       </Prose>
 
       <Figure
         variant="raster"
-        caption="The review agent commenting directly on a Figma frame."
+        caption="The review agent flagging an inconsistency between a tile label, the screen it opens, and the spec."
         image={{
           src: "/work/review-agent-comment.webp",
           alt: "A review comment pinned to a Figma design, headed “Claude review”, flagging that a tile labelled “Payroll prep” is named differently from the agent screen and the spec, and recommending a single consistent name across all three.",
@@ -293,9 +293,9 @@ export function RepositioningProductDesignContent() {
       <Prose>
         <p className="text-prose">
           PM-led design is running as an open-ended trial on a bounded set of
-          work: new reports and settings changes, around 12 tasks in so far. The
-          bar is no bottleneck in the design phase, and delivery that adheres to
-          the design system. If PMs tell me they’ve absorbed too much work, or
+          work, new reports and settings changes, and the first nine tasks have
+          been through it. The bar is no bottleneck in the design phase, and
+          delivery that adheres to the design system. If PMs tell me they’ve absorbed too much work, or
           if a structurally significant project reaches build without us, that’s
           a failure of the tiering and I’ll pull it back.
         </p>
