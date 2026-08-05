@@ -46,19 +46,46 @@ export function ArrowDefs({ id }: { id: string }) {
   );
 }
 
+/* Type and stroke weights for a figure, so the same drawing can be rendered at
+ * a different display size without redrawing it. Text and strokes need
+ * different multipliers — strokes can grow freely, but node text is capped by
+ * the box it sits in — so this is an explicit set of values rather than a
+ * single scale factor. See DeliveryModelPair for the worked example. */
+export type DiagramMetrics = {
+  fontSize: number;
+  lineHeight: number;
+  chipFontSize: number;
+  nodeStroke: number;
+  connectorStroke: number;
+};
+
+/** What the case study figures were drawn at — the defaults, unchanged. */
+export const CASE_STUDY_METRICS: DiagramMetrics = {
+  fontSize: 13,
+  lineHeight: 16,
+  chipFontSize: 12,
+  nodeStroke: 0.8,
+  connectorStroke: 1,
+};
+
 export function Connector({
   d,
   markerId,
+  strokeWidth = 1,
 }: {
   d: string;
   /** Omit on segments that feed into a rail rather than arriving somewhere. */
   markerId?: string;
+  /** Raise when the figure is displayed well below the size it was drawn for —
+   *  a 1-unit stroke goes sub-pixel and patchy once the viewBox is scaled down
+   *  much past 0.8. See DeliveryModelPair. */
+  strokeWidth?: number;
 }) {
   return (
     <path
       d={d}
       fill="none"
-      strokeWidth="1"
+      strokeWidth={strokeWidth}
       strokeOpacity="0.5"
       style={CONNECTOR_STYLE}
       markerEnd={markerId ? `url(#${markerId})` : undefined}
@@ -79,12 +106,15 @@ export function Node({
   stackOffset = 7,
   fontSize = 13,
   lineHeight = 16,
+  strokeWidth = 0.8,
 }: {
   cx: number;
   cy: number;
   w: number;
   h: number;
   lines: string[];
+  /** Raise for figures displayed below the size they were drawn for. */
+  strokeWidth?: number;
   /** Small teal label above the node text — used to name a lane at its entry. */
   eyebrow?: string;
   /** Layers drawn behind the node, so a queue reads as work piling up rather
@@ -119,7 +149,7 @@ export function Node({
           width={w}
           height={h}
           rx="6"
-          strokeWidth="0.8"
+          strokeWidth={strokeWidth}
           strokeOpacity={0.35 + (stack - layer) * 0.25}
           style={NODE_STYLE}
         />
@@ -130,7 +160,7 @@ export function Node({
         width={w}
         height={h}
         rx="6"
-        strokeWidth="0.8"
+        strokeWidth={strokeWidth}
         style={NODE_STYLE}
       />
       {eyebrow && (
@@ -179,6 +209,7 @@ export function Chip({
   h,
   label,
   fontSize = 12,
+  strokeWidth = 0.8,
 }: {
   cx: number;
   cy: number;
@@ -186,6 +217,8 @@ export function Chip({
   h: number;
   label: string;
   fontSize?: number;
+  /** Raise for figures displayed below the size they were drawn for. */
+  strokeWidth?: number;
 }) {
   return (
     <g transform={`translate(${cx} ${cy})`}>
@@ -195,7 +228,7 @@ export function Chip({
         width={w}
         height={h}
         rx={h / 2}
-        strokeWidth="0.8"
+        strokeWidth={strokeWidth}
         style={NODE_STYLE}
       />
       <text

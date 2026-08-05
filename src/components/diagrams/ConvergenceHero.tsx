@@ -22,7 +22,10 @@ import { CONNECTOR_STYLE } from "./DiagramPrimitives";
  * frame instead of hard-stopping. The black and white in that gradient are
  * mask channels, not colours — nothing here is a hardcoded theme value. */
 
-type Geometry = {
+/* Exported so other convergence figures can supply their own numbers rather
+ * than duplicating the renderer — see ConvergenceMark.tsx, which draws the
+ * same idea into the Selected Work row's 4:3 box. */
+export type Geometry = {
   id: string;
   frameW: number;
   frameH: number;
@@ -60,7 +63,7 @@ const MOBILE: Geometry = {
   strokeWidth: 2,
 };
 
-function Converge({ geometry }: { geometry: Geometry }) {
+export function Converge({ geometry }: { geometry: Geometry }) {
   const { id, frameW, frameH, entries, merge, bendOuter, bendInner, strokeWidth } =
     geometry;
 

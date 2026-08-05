@@ -1,7 +1,9 @@
 import {
   ArrowDefs,
+  CASE_STUDY_METRICS,
   Chip,
   Connector,
+  type DiagramMetrics,
   DiagramSvg,
   Node,
 } from "./DiagramPrimitives";
@@ -41,34 +43,56 @@ const WORK_TYPES = [
 /* Vertical centre line of the flow. Shared with DeliveryModelAfter. */
 const AXIS = 165;
 
-function Desktop() {
-  const arrow = "delivery-before-arrow-desktop";
+/* Exported so DeliveryModelPair can stack this half at row size. `metrics`
+ * defaults to what the case study was drawn at, so its call site passes
+ * nothing and renders exactly as before. */
+export function Desktop({
+  metrics = CASE_STUDY_METRICS,
+  idSuffix = "",
+}: {
+  metrics?: DiagramMetrics;
+  /** Namespaces the arrowhead marker when this is rendered more than once on
+   *  a page — ids must stay unique across every variant in the DOM. */
+  idSuffix?: string;
+} = {}) {
+  const arrow = `delivery-before-arrow-desktop${idSuffix}`;
   /* Chip rows, spanning 62–268 so the stack matches the vertical extent of the
      two lanes in DeliveryModelAfter. */
   const rows = [79, 136, 193, 250];
+
+  const node = {
+    fontSize: metrics.fontSize,
+    lineHeight: metrics.lineHeight,
+    strokeWidth: metrics.nodeStroke,
+  };
+  const line = { strokeWidth: metrics.connectorStroke };
+  const chip = {
+    fontSize: metrics.chipFontSize,
+    strokeWidth: metrics.nodeStroke,
+  };
 
   return (
     <DiagramSvg viewBox="0 0 880 330" title={TITLE} desc={DESC}>
       <ArrowDefs id={arrow} />
 
       {/* Work scoped → each work type */}
-      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 205 ${rows[0]}, 252 ${rows[0]}`} markerId={arrow} />
-      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 210 ${rows[1]}, 252 ${rows[1]}`} markerId={arrow} />
-      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 210 ${rows[2]}, 252 ${rows[2]}`} markerId={arrow} />
-      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 205 ${rows[3]}, 252 ${rows[3]}`} markerId={arrow} />
+      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 205 ${rows[0]}, 252 ${rows[0]}`} markerId={arrow} {...line} />
+      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 210 ${rows[1]}, 252 ${rows[1]}`} markerId={arrow} {...line} />
+      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 210 ${rows[2]}, 252 ${rows[2]}`} markerId={arrow} {...line} />
+      <Connector d={`M 154 ${AXIS} C 195 ${AXIS}, 205 ${rows[3]}, 252 ${rows[3]}`} markerId={arrow} {...line} />
 
       {/* Every work type → the one queue */}
-      <Connector d={`M 428 ${rows[0]} C 465 ${rows[0]}, 462 ${AXIS}, 495 ${AXIS}`} markerId={arrow} />
-      <Connector d={`M 428 ${rows[1]} C 465 ${rows[1]}, 470 ${AXIS}, 495 ${AXIS}`} markerId={arrow} />
-      <Connector d={`M 428 ${rows[2]} C 465 ${rows[2]}, 470 ${AXIS}, 495 ${AXIS}`} markerId={arrow} />
-      <Connector d={`M 428 ${rows[3]} C 465 ${rows[3]}, 462 ${AXIS}, 495 ${AXIS}`} markerId={arrow} />
+      <Connector d={`M 428 ${rows[0]} C 465 ${rows[0]}, 462 ${AXIS}, 495 ${AXIS}`} markerId={arrow} {...line} />
+      <Connector d={`M 428 ${rows[1]} C 465 ${rows[1]}, 470 ${AXIS}, 495 ${AXIS}`} markerId={arrow} {...line} />
+      <Connector d={`M 428 ${rows[2]} C 465 ${rows[2]}, 470 ${AXIS}, 495 ${AXIS}`} markerId={arrow} {...line} />
+      <Connector d={`M 428 ${rows[3]} C 465 ${rows[3]}, 462 ${AXIS}, 495 ${AXIS}`} markerId={arrow} {...line} />
 
       {/* Queue → build */}
-      <Connector d={`M 645 ${AXIS} L 726 ${AXIS}`} markerId={arrow} />
+      <Connector d={`M 645 ${AXIS} L 726 ${AXIS}`} markerId={arrow} {...line} />
 
-      <Node cx={84} cy={AXIS} w={140} h={60} lines={["Work scoped"]} />
+      <Node cx={84} cy={AXIS} w={140} h={60} lines={["Work scoped"]} {...node} />
       {WORK_TYPES.map((label, i) => (
-        <Chip key={label} cx={340} cy={rows[i]} w={176} h={34} label={label} />
+        <Chip key={label} cx={340} cy={rows[i]} w={176} h={34} label={label} {...chip} />
       ))}
       <Node
         cx={570}
@@ -77,8 +101,9 @@ function Desktop() {
         h={60}
         lines={["Product Design", "queue"]}
         stack={2}
+        {...node}
       />
-      <Node cx={796} cy={AXIS} w={140} h={60} lines={["Build"]} />
+      <Node cx={796} cy={AXIS} w={140} h={60} lines={["Build"]} {...node} />
     </DiagramSvg>
   );
 }

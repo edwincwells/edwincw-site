@@ -1,4 +1,11 @@
-import { ArrowDefs, Connector, DiagramSvg, Node } from "./DiagramPrimitives";
+import {
+  ArrowDefs,
+  CASE_STUDY_METRICS,
+  Connector,
+  type DiagramMetrics,
+  DiagramSvg,
+  Node,
+} from "./DiagramPrimitives";
 
 /* DIAGRAM 2 — the delivery model after the change.
  *
@@ -22,32 +29,50 @@ const DESC =
 /* Vertical centre line of the flow. Shared with DeliveryModelBefore. */
 const AXIS = 165;
 
-function Desktop() {
-  const arrow = "delivery-after-arrow-desktop";
+/* Exported so DeliveryModelPair can stack this half at row size. `metrics`
+ * defaults to what the case study was drawn at, so its call site passes
+ * nothing and renders exactly as before. */
+export function Desktop({
+  metrics = CASE_STUDY_METRICS,
+  idSuffix = "",
+}: {
+  metrics?: DiagramMetrics;
+  /** Namespaces the arrowhead marker when this is rendered more than once on
+   *  a page — ids must stay unique across every variant in the DOM. */
+  idSuffix?: string;
+} = {}) {
+  const arrow = `delivery-after-arrow-desktop${idSuffix}`;
   /* Lanes span 62–268, matching the chip stack in DeliveryModelBefore. */
   const tier1 = 100;
   const tier2 = 230;
+
+  const node = {
+    fontSize: metrics.fontSize,
+    lineHeight: metrics.lineHeight,
+    strokeWidth: metrics.nodeStroke,
+  };
+  const line = { strokeWidth: metrics.connectorStroke };
 
   return (
     <DiagramSvg viewBox="0 0 880 330" title={TITLE} desc={DESC}>
       <ArrowDefs id={arrow} />
 
-      <Connector d={`M 154 ${AXIS} L 192 ${AXIS}`} markerId={arrow} />
+      <Connector d={`M 154 ${AXIS} L 192 ${AXIS}`} markerId={arrow} {...line} />
 
       {/* Tier assigned → the two lanes */}
-      <Connector d={`M 332 ${AXIS} C 350 ${AXIS}, 352 ${tier1}, 370 ${tier1}`} markerId={arrow} />
-      <Connector d={`M 332 ${AXIS} C 350 ${AXIS}, 352 ${tier2}, 370 ${tier2}`} markerId={arrow} />
+      <Connector d={`M 332 ${AXIS} C 350 ${AXIS}, 352 ${tier1}, 370 ${tier1}`} markerId={arrow} {...line} />
+      <Connector d={`M 332 ${AXIS} C 350 ${AXIS}, 352 ${tier2}, 370 ${tier2}`} markerId={arrow} {...line} />
 
       {/* Within each lane */}
-      <Connector d={`M 510 ${tier1} L 548 ${tier1}`} markerId={arrow} />
-      <Connector d={`M 510 ${tier2} L 548 ${tier2}`} markerId={arrow} />
+      <Connector d={`M 510 ${tier1} L 548 ${tier1}`} markerId={arrow} {...line} />
+      <Connector d={`M 510 ${tier2} L 548 ${tier2}`} markerId={arrow} {...line} />
 
       {/* Both lanes → the same build node */}
-      <Connector d={`M 688 ${tier1} C 706 ${tier1}, 710 ${AXIS}, 726 ${AXIS}`} markerId={arrow} />
-      <Connector d={`M 688 ${tier2} C 706 ${tier2}, 710 ${AXIS}, 726 ${AXIS}`} markerId={arrow} />
+      <Connector d={`M 688 ${tier1} C 706 ${tier1}, 710 ${AXIS}, 726 ${AXIS}`} markerId={arrow} {...line} />
+      <Connector d={`M 688 ${tier2} C 706 ${tier2}, 710 ${AXIS}, 726 ${AXIS}`} markerId={arrow} {...line} />
 
-      <Node cx={84} cy={AXIS} w={140} h={60} lines={["Work scoped"]} />
-      <Node cx={262} cy={AXIS} w={140} h={60} lines={["Tier assigned"]} />
+      <Node cx={84} cy={AXIS} w={140} h={60} lines={["Work scoped"]} {...node} />
+      <Node cx={262} cy={AXIS} w={140} h={60} lines={["Tier assigned"]} {...node} />
 
       <Node
         cx={440}
@@ -56,10 +81,11 @@ function Desktop() {
         h={76}
         eyebrow="TIER 1"
         lines={["Product Design", "at kickoff"]}
+        {...node}
       />
       {/* Two lines at 13px: "Specs & wireframes" measures ~129px against 134px
           of usable node width, which is too tight to set on one. */}
-      <Node cx={618} cy={tier1} w={140} h={60} lines={["Specs &", "wireframes"]} />
+      <Node cx={618} cy={tier1} w={140} h={60} lines={["Specs &", "wireframes"]} {...node} />
 
       <Node
         cx={440}
@@ -68,10 +94,11 @@ function Desktop() {
         h={76}
         eyebrow="TIER 2"
         lines={["PM designs in", "Claude Design"]}
+        {...node}
       />
-      <Node cx={618} cy={tier2} w={140} h={60} lines={["Design review"]} />
+      <Node cx={618} cy={tier2} w={140} h={60} lines={["Design review"]} {...node} />
 
-      <Node cx={796} cy={AXIS} w={140} h={60} lines={["Build"]} />
+      <Node cx={796} cy={AXIS} w={140} h={60} lines={["Build"]} {...node} />
     </DiagramSvg>
   );
 }
