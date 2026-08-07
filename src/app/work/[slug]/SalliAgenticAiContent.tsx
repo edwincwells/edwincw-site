@@ -6,6 +6,7 @@ import {
   Prose,
 } from "@/components/CaseStudyLayout";
 import { PullQuote } from "@/components/PullQuote";
+import { AgentGrouping } from "@/components/diagrams/AgentGrouping";
 import { InitiationMatrix } from "@/components/diagrams/InitiationMatrix";
 
 /* Prose is a Server Component — the client boundary sits on CaseStudyLayout,
@@ -112,10 +113,10 @@ export function SalliAgenticAiContent() {
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/9]"
-        placeholder="[ Visual 3 — Capability scale vs surface ]"
-        caption="[ Caption TBC — capability scale vs surface ]"
-      />
+        caption="The same capability either way. The argument was about how much of its structure a manager has to hold."
+      >
+        <AgentGrouping />
+      </Figure>
 
       <Heading>Why it wasn’t enough</Heading>
 
