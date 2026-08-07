@@ -6,6 +6,7 @@ import {
   Prose,
 } from "@/components/CaseStudyLayout";
 import { PullQuote } from "@/components/PullQuote";
+import { InitiationMatrix } from "@/components/diagrams/InitiationMatrix";
 
 /* Prose is a Server Component — the client boundary sits on CaseStudyLayout,
    Figure and PullQuote, so the essay itself never enters the client bundle.
@@ -270,10 +271,10 @@ export function SalliAgenticAiContent() {
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/9]"
-        placeholder="[ Visual 6 — Chat and Cowork modes ]"
-        caption="[ Caption TBC — chat and Cowork modes ]"
-      />
+        caption="Cowork isn’t a midpoint between the two failures. It’s the combination neither of them had."
+      >
+        <InitiationMatrix />
+      </Figure>
 
       <Prose>
         <p className="text-prose">
