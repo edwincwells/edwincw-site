@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import type { ReactNode } from "react";
 import { Container } from "./Container";
 import { Section } from "./Section";
@@ -61,13 +61,20 @@ export function Placeholder({
 type FigureBase = {
   caption: string;
   width?: Measure;
-  /** Tailwind aspect-ratio classes for the empty slot, e.g.
-   *  "aspect-[4/3] md:aspect-[16/9]". Only meaningful while the slot is still
-   *  a placeholder — once a real SVG child or image lands, its own intrinsic
-   *  ratio governs and this is ignored. */
+  /** Tailwind aspect-ratio classes, e.g. "aspect-[4/3] md:aspect-[16/9]".
+   *  Governs the empty slot, and an art-directed raster where two sources mean
+   *  no single pair of intrinsic dimensions can describe both boxes. Ignored
+   *  for an SVG child or a single image, both of which carry their own ratio. */
   aspect?: string;
   /** Label for the empty slot, shown until the visual exists. */
   placeholder?: string;
+};
+
+type RasterSource = {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
 };
 
 /* Inline SVG and raster images have different constraints, so they are
@@ -78,8 +85,71 @@ type FigureProps =
   | (FigureBase & { variant: "svg"; children?: ReactNode })
   | (FigureBase & {
       variant: "raster";
-      image?: { src: string; alt: string; width: number; height: number };
+      image?: RasterSource;
+      /** A genuinely different crop to serve below md — art direction, not the
+       *  same picture scaled down. Optional and additive: omit it and the
+       *  figure renders exactly as it did before this existed. No `alt` of its
+       *  own, because <picture> resolves to a single <img> and therefore a
+       *  single accessible name. */
+      mobileImage?: Omit<RasterSource, "alt">;
     });
+
+/* next/image cannot art-direct from one <Image>, so this is the getImageProps
+   + <picture> pattern from Next's own docs — 01-app/03-api-reference/
+   02-components/image.md, "Art direction". The browser fetches only the source
+   that matches, rather than downloading both and hiding one with CSS.
+
+   Reserving the right box is the awkward part. The <img> can only carry one
+   pair of width/height attributes — the mobile file's — so above md the
+   browser would reserve a portrait box and then reflow the moment the
+   landscape file arrived. The <source> carries width/height too, which is what
+   the spec says should govern once that source is selected, but that is not
+   dependable enough to hang layout stability on. So `aspect` does the work: it
+   is the one place where the prop is load-bearing for a real visual rather
+   than only for an empty slot, because two sources cannot both be described by
+   one set of intrinsic dimensions. Ratios are within a tenth of a percent of
+   the files' own, so object-cover crops nothing visible. */
+function ArtDirected({
+  image,
+  mobileImage,
+  sizes,
+  aspect,
+}: {
+  image: RasterSource;
+  mobileImage: Omit<RasterSource, "alt">;
+  sizes: string;
+  aspect?: string;
+}) {
+  const common = { alt: image.alt, sizes };
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({ ...common, ...image });
+  const { props: mobileProps } = getImageProps({ ...common, ...mobileImage });
+
+  return (
+    <picture>
+      <source
+        media="(min-width: 768px)"
+        srcSet={desktopSrcSet}
+        sizes={sizes}
+        width={image.width}
+        height={image.height}
+      />
+      {/* A bare <img> because <picture> is the point: next/image renders its
+          own <img> and cannot host a sibling <source>. Both sources still go
+          through the image optimiser, via getImageProps above. `alt` is
+          repeated rather than left to the spread so it is visible to a reader
+          and to jsx-a11y, which cannot see through {...props}. */}
+      <img
+        {...mobileProps}
+        alt={image.alt}
+        className={`w-full rounded-[var(--radius-md)] ${
+          aspect ? `${aspect} h-full object-cover` : "h-auto"
+        }`}
+      />
+    </picture>
+  );
+}
 
 export function Figure(props: FigureProps) {
   const { caption, width = "column", aspect, placeholder } = props;
@@ -89,17 +159,24 @@ export function Figure(props: FigureProps) {
   if (props.variant === "svg" && props.children) {
     visual = props.children;
   } else if (props.variant === "raster" && props.image) {
-    visual = (
+    const sizes =
+      width === "wide"
+        ? "(max-width: 768px) 100vw, 920px"
+        : "(max-width: 768px) 100vw, 680px";
+    visual = props.mobileImage ? (
+      <ArtDirected
+        image={props.image}
+        mobileImage={props.mobileImage}
+        sizes={sizes}
+        aspect={aspect}
+      />
+    ) : (
       <Image
         src={props.image.src}
         alt={props.image.alt}
         width={props.image.width}
         height={props.image.height}
-        sizes={
-          width === "wide"
-            ? "(max-width: 768px) 100vw, 920px"
-            : "(max-width: 768px) 100vw, 680px"
-        }
+        sizes={sizes}
         className="h-auto w-full rounded-[var(--radius-md)]"
       />
     );

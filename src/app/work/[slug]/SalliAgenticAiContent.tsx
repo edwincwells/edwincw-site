@@ -14,9 +14,15 @@ import { InitiationMatrix } from "@/components/diagrams/InitiationMatrix";
    AboutContent.tsx carries "use client" only because it calls useScrollReveal
    directly; the naming convention is what carries over, not the directive.
 
-   All six visuals are unbuilt, so every slot is an empty labelled placeholder
-   holding its aspect ratio. Captions are unwritten rather than provisional —
-   they are prose in the site voice and get authored once the visuals exist. */
+   Five of the six visuals are built: two diagrams and three screenshot pairs.
+   The hero is still an empty labelled placeholder holding its aspect ratio,
+   and has no caption because CaseStudyLayout renders none for the hero slot.
+
+   The three screenshots are art-directed — a different crop below md, not the
+   same picture scaled — so each passes both an `image` and a `mobileImage`.
+   `aspect` is load-bearing on those three: two sources cannot both be
+   described by one pair of intrinsic dimensions, so the CSS ratio is what
+   reserves the box at each breakpoint. */
 
 export function SalliAgenticAiContent() {
   return (
@@ -84,8 +90,18 @@ export function SalliAgenticAiContent() {
         variant="raster"
         width="wide"
         aspect="aspect-[4/3] md:aspect-[16/9]"
-        placeholder="[ Visual 2 — Focus library and switching ]"
-        caption="[ Caption TBC — focus library and switching ]"
+        caption="The agent library and in-chat focus switching, shown in the current build."
+        image={{
+          src: "/work/salli/salli-agents-web.webp",
+          alt: "Salli’s focus list open over a schedule, listing Guided learning, Sales snapshot, Labor snapshot, Team communication, Schedule warnings, Compliance oversight and Timekeeping intelligence, opened from an Agents button beside the chat composer.",
+          width: 1648,
+          height: 928,
+        }}
+        mobileImage={{
+          src: "/work/salli/salli-agents-mobile.webp",
+          width: 984,
+          height: 738,
+        }}
       />
 
       <Heading>The argument I won</Heading>
@@ -170,9 +186,19 @@ export function SalliAgenticAiContent() {
       <Figure
         variant="raster"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/10]"
-        placeholder="[ Visual 4 — Alerts, web and mobile ]"
-        caption="[ Caption TBC — alerts, web and mobile ]"
+        aspect="aspect-[3/4] md:aspect-[16/10]"
+        caption="Right about the content, wrong about the moment."
+        image={{
+          src: "/work/salli/salli-alerts-web.webp",
+          alt: "Salli’s alerts on both surfaces. On web, an Alert highlights popover in the platform header stacking business performance, team moments and team requests cards over the schedule. On mobile, a push notification reading “Salli alert — It’s Olivia Brown’s birthday today!” above a sales and labour dashboard.",
+          width: 1648,
+          height: 1030,
+        }}
+        mobileImage={{
+          src: "/work/salli/salli-alerts-mobile.webp",
+          width: 984,
+          height: 1312,
+        }}
       />
 
       <Prose>
@@ -252,9 +278,19 @@ export function SalliAgenticAiContent() {
       <Figure
         variant="raster"
         width="wide"
-        aspect="aspect-[4/3] md:aspect-[16/10]"
-        placeholder="[ Visual 5 — Salli Cowork ]"
-        caption="[ Caption TBC — Salli Cowork ]"
+        aspect="aspect-[3/4] md:aspect-[16/10]"
+        caption="Salli Cowork, in design. The manager opens the session, and it opens with an agenda."
+        image={{
+          src: "/work/salli/salli-cowork-web.webp",
+          alt: "Salli Cowork open beside the schedule, headed “Here’s your to-dos — I found 8 tasks. I’ve listed them in priority order”, with the first item flagging three time-off requests that need a decision, one colliding with Saturday cover and $210 at risk.",
+          width: 1648,
+          height: 1030,
+        }}
+        mobileImage={{
+          src: "/work/salli/salli-cowork-mobile.webp",
+          width: 984,
+          height: 1312,
+        }}
       />
 
       <Prose>
