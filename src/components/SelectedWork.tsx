@@ -16,8 +16,8 @@ export function SelectedWork() {
         {/* Image side alternates down the section. Inserting the leadership
             study at position one flipped `reverse` on all four below it. */}
         <div className="space-y-24 md:space-y-32">
-          {/* The only internal entry, and the only one whose visual is
-              rendered rather than exported — see ConvergenceMark. */}
+          {/* Both case study rows link internally now. This one is still the
+              only visual rendered rather than exported — see DeliveryModelPair. */}
           <WorkRow
             visual={<DeliveryModelPair />}
             eyebrow="Leadership case study"
@@ -29,16 +29,15 @@ export function SelectedWork() {
             revealIndex={0}
           />
           <WorkRow
-            imageSrc="/work/salli.webp"
+            imageSrc="/work/salli-light.webp"
             imageSrcDark="/work/salli-dark.webp"
-            imageAlt="Salli — agentic AI workforce management interface"
-            eyebrow="Case study 01"
-            title="Reimagining Workforce Management Through Agentic AI"
-            description="Designing a proactive intelligence layer to guide frontline decision-making at scale"
+            imageAlt="Salli Cowork open on a manager’s ranked to-do list, with the assistant’s reasoning shown."
+            eyebrow="Product case study"
+            title="Capability is not the product"
+            description="Designing agentic AI around the moment a frontline manager decides what to do next"
             linkText="Read the case study"
             linkAriaLabel="Read the Salli case study"
-            linkHref="https://portfolio.edwincw.com/slide/2"
-            linkExternal
+            linkHref="/work/salli-agentic-ai"
             reverse
             revealIndex={1}
           />

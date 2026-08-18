@@ -457,9 +457,16 @@ edwincw-site/
 │   │   ├── GeneralSans-Semibold.woff2
 │   │   └── SourceSerif4-Italic.ttf
 │   ├── work/
-│   │   ├── salli.webp
+│   │   ├── salli-light.webp
+│   │   ├── salli-dark.webp
+│   │   ├── seedbank-design.webp
+│   │   ├── seedbank-design-dark.webp
 │   │   ├── rewards-recognition.webp
-│   │   └── fluxux.webp
+│   │   ├── rewards-recognition-dark.webp
+│   │   ├── fluxux.webp
+│   │   ├── fluxux-dark.webp
+│   │   ├── review-agent-comment.webp
+│   │   └── salli/               (8 art-directed case study images)
 │   └── favicon.ico
 ├── src/
 │   ├── app/
@@ -484,7 +491,7 @@ edwincw-site/
 │       ├── Hero.tsx          (asymmetric 55/45 hero + HeroDiagram)
 │       ├── HeroDiagram.tsx   (kinetic loop — 5 nodes, 5 paths, traveling signal; Client Component)
 │       ├── Thesis.tsx        (narrow, eyebrow + h2 + body placeholder; scroll-reveal)
-│       ├── SelectedWork.tsx  (section wrapper — header + three WorkRow instances; passes revealIndex 0–2)
+│       ├── SelectedWork.tsx  (section wrapper — header + five WorkRow instances; passes revealIndex 0–4)
 │       ├── WorkRow.tsx       (reusable row with reverse prop, editorial hover flourish, scroll-reveal)
 │       ├── Credentials.tsx   (2×2 grid, framed by thin top/bottom dividers; per-cell scroll-reveal indices 0–3)
 │       ├── Contact.tsx       (narrow centred, eyebrow + h2 + prose block with inline links; scroll-reveal)
@@ -538,6 +545,7 @@ Note: the file tree above is current as of Prompt 10. Root-level files not shown
 | 14.2 | Salli visual 3 — the agent grouping (`AgentGrouping.tsx`) | 🚧 Two of six built; four still placeholders |
 | 14.3 | Salli visuals 2, 4, 5 — art-directed screenshots, `Figure` gains `mobileImage` | 🚧 Five of six built; the hero is the last placeholder |
 | 14.4 | Salli hero — the last placeholder replaced | ✅ All six visuals built; page complete pending Edwin's review |
+| 15 | Homepage `SelectedWork` Salli row — internal link, new plates, retitled | ✅ Complete |
 
 ### Prompting principles
 
@@ -691,6 +699,17 @@ Note: the file tree above is current as of Prompt 10. Root-level files not shown
   - **`Labor snapshot` keeps its US spelling** — it is the product's own label, not a lapse in the site's British English.
   - **The panel headers are "every sub-agent exposed" and "ten focuses exposed".** The second gained "exposed" after the first build, which is the better wording: with both headers ending on the same verb, the two panels read as two ways of exposing the same thing rather than as a raw count set against a tidied one. Visual 3 also has real caption copy now — "The same capability either way. The argument was about how much of its structure a manager has to hold." — Edwin's, stating the argument rather than describing the drawing, as visual 6's does.
   - **Verification — the counts were measured, not assumed.** In the rendered DOM, splitting circles by panel: **120 left / 120 right at 1280, and 120 / 120 at 375**, 240 per breakpoint, with the right panel's runs grouping by row into exactly `[10, 12, 8, 14, 10, 16, 12, 8, 12, 18]` summing to 120 at both. Desktop renders 824×464 at scale 1.000, mobile 327×436 at scale 1.000; every `<text>` computes to 14px at both. Zero `<path>` elements, zero hardcoded hex, no background `<rect>`, no font family set. All text bounding boxes sit inside their viewBox with the widest label ending at 723 of 824 on desktop and 259 of 327 on mobile; no label collides with its run. Light and dark both verified: marks and headers on `--color-muted`, rules on `--color-hairline`, row labels on `--color-foreground`, nothing retaining the other theme's colour. Text is live and selectable. **Visual 6 re-measured unchanged at 824×464 with its accent intact**, and the hero plus visuals 2, 4 and 5 still render their dashed placeholder boxes. Build and lint clean.
+- [x] **Prompt 15 (Homepage `SelectedWork` Salli row)** — ✅ The Salli row brought in line with the shipped case study: internal link, new plates, retitled. Two files modified; the plates themselves were replaced outside this prompt.
+  - **The row was pointing at a file that no longer exists.** The light plate was **renamed** `salli.webp` → `salli-light.webp` rather than replaced in place, so `imageSrc` was a dead path and the row rendered a broken image in light theme. The dark plate kept its name and had its contents updated. Both are 1600 × 1200 and both now show the same thing — Salli's Cowork view — where the old plate was a three-device composite.
+  - **Copy comes from the case study, not from a second draft of it.** `title` and `description` are `SalliAgenticAiContent`'s own `title` and `standfirst` verbatim, so there is no duplicated copy to drift — the same reasoning that keeps titles out of `caseStudies.ts`. The eyebrow is `"Product case study"` against the page's `"Product Case Study"`: **row eyebrows are sentence case, page eyebrows title case**, already established by "Leadership case study" vs "Leadership Case Study" and followed rather than invented here.
+  - **`linkExternal` was removed, not set to `false`.** `WorkRow` defaults it (`linkExternal = false`) and branches on it, so deleting the prop moves the row onto the `next/link` branch and takes `target="_blank"`, `rel="noopener noreferrer"` and the `ArrowUpRight` with it — the arrow only exists inside the external branch. Confirmed in the rendered DOM rather than inferred: the anchor is a same-tab `<a href="/work/salli-agentic-ai">` with no `target`, no `rel`, and zero `<svg>` descendants.
+  - **The alt is short on purpose.** `"Salli Cowork open on a manager’s ranked to-do list, with the assistant’s reasoning shown."` The case study's own figures run 30–45 words because there the image *is* the content; a row plate is a thumbnail met in a list of five, so the alt's job is to identify which row this is, not to restate the argument the title and description already make. Edwin's call, correcting a first draft that narrated the argument in 38 words.
+  - **Plate margins measured before wiring, and the hover flourish has room.** Content bbox sits at **T168 / L176 / R174 / B158** source px against §5.1's ~50px floor. The row's hover translate is 4px up and 8px left under `overflow: hidden`, which at the 560px desktop box consumes only **~11 × ~23 source px** — nothing load-bearing is anywhere near an edge, in either direction.
+  - **The plate surround is 1/255 off the token, and that is the site-wide norm rather than a new fault.** Light samples `#F7F6F2` against `--color-background` `#F7F5F1`; dark samples `#1C1A19` against `#1C1B18`. The old Salli plates and the seedbank pair are off by the same single level, so this is WebP q88 quantisation on a flat field, not an export mistake — and the new light plate is **closer** to spec than the one it replaces (`#F6F4F0`). The field itself is perfectly flat: one distinct value across 66 sampled edge points, so §5.1's "flat, edge to edge" holds even though its exact hexes are not reachable through a lossy encoder. **Recorded as a measurement only.** Edwin judges the seam by eye on the built page; raising WebP quality is a separate pass if it reads.
+  - **Two stale claims corrected in the same file.** The comment above the leadership row called it "the only internal entry" — false the moment Salli went internal — and pointed at `ConvergenceMark`, unused since Prompt 13, when the row renders `DeliveryModelPair`. Both fixed; the comment keeps its job of marking what is distinctive about that row. In this document, the §8 tree's `public/work/` listing was three files out of nine and named the renamed plate, and the `SelectedWork.tsx` line still described "three `WorkRow` instances; passes revealIndex 0–2" — five and 0–4 since Prompt 12.
+  - **Left alone deliberately.** §9's rows 14 through 14.3 still read "🚧 … still placeholders"; they are superseded by 14.4's ✅ but record what was true at the time, which is this document's stated convention for historical rows. The numbered eyebrow on Rewards & Recognition was **not** renumbered — that row is being removed in a follow-up prompt and the work would be undone. Outside `public/work/`, the §8 tree still lists a `favicon.ico` deleted in Prompt 9.6 and omits `og-image-v2.png` and `about/edwin-portrait.webp`; flagged, not fixed, as outside the agreed scope.
+  - **No git command was run.** `public/work/salli.webp` is still tracked and already deleted from the working tree, so the only remaining action would have been `git rm` to stage it — which the build prompt's "do not stage" instruction forbids. `git status` already shows the deletion unstaged, which is the end state the prompt asked for.
+  - **Verification.** `currentSrc` resolves to `salli-light.webp` in light and `salli-dark.webp` in dark at 1280 — the resolved source after decode, not the markup, and re-read after a reload since colour-scheme emulation does not re-fire `<picture>` selection. Link navigates same-tab to a 200. Hover transform resolves to `translate(-8px, -4px)` with the revealed strip sampling the page background in both themes and no UI clipped at top or left. Five rows at 375, 767 and 1280 with no horizontal overflow; image side still left/right/left/right/left and `--reveal-index` still 0–4; rows 3–5 keep their arrow and external treatment. `grep -rn "salli\.webp" src public docs` returns nothing. Build and lint clean.
 
 ---
 
