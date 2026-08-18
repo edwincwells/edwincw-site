@@ -109,7 +109,7 @@ type FigureProps =
    than only for an empty slot, because two sources cannot both be described by
    one set of intrinsic dimensions. Ratios are within a tenth of a percent of
    the files' own, so object-cover crops nothing visible. */
-function ArtDirected({
+export function ArtDirected({
   image,
   mobileImage,
   sizes,

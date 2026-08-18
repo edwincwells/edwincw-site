@@ -1,8 +1,8 @@
 import {
+  ArtDirected,
   CaseStudyLayout,
   Figure,
   Heading,
-  Placeholder,
   Prose,
 } from "@/components/CaseStudyLayout";
 import { PullQuote } from "@/components/PullQuote";
@@ -14,15 +14,32 @@ import { InitiationMatrix } from "@/components/diagrams/InitiationMatrix";
    AboutContent.tsx carries "use client" only because it calls useScrollReveal
    directly; the naming convention is what carries over, not the directive.
 
-   Five of the six visuals are built: two diagrams and three screenshot pairs.
-   The hero is still an empty labelled placeholder holding its aspect ratio,
-   and has no caption because CaseStudyLayout renders none for the hero slot.
+   All six visuals are built: two diagrams and four screenshot pairs. The hero
+   carries no caption, because CaseStudyLayout renders none for that slot.
 
-   The three screenshots are art-directed — a different crop below md, not the
-   same picture scaled — so each passes both an `image` and a `mobileImage`.
-   `aspect` is load-bearing on those three: two sources cannot both be
+   Every screenshot is art-directed — a different crop below md, not the same
+   picture scaled — so each passes both an `image` and a `mobileImage`.
+   `aspect` is load-bearing on all of them: two sources cannot both be
    described by one pair of intrinsic dimensions, so the CSS ratio is what
-   reserves the box at each breakpoint. */
+   reserves the box at each breakpoint.
+
+   The hero reaches ArtDirected directly rather than through Figure, which
+   would add a figcaption and constrain it to the reading column. Its wrapper
+   in CaseStudyLayout is aria-hidden, so the alt below is not announced today;
+   it is written properly regardless, so it is correct if that ever changes. */
+
+/* One <picture> resolves to one <img>, so both crops share this. It leads with
+   what they both show and names the desktop-only chrome second, since the
+   mobile crop drops the header and sidebar and keeps the agenda. "Lunch labor"
+   is quoted as the product renders it — US spelling, like Labor snapshot in
+   the grouping diagram, not a lapse into American English. */
+const HERO_ALT =
+  "Salli Cowork open at the start of a session, showing a prioritised agenda " +
+  "headed “Here’s your to-dos, Adam — I found 8 tasks. I’ve listed them in " +
+  "priority order”, led by a card reading “Lunch labor is tracking ~14% over " +
+  "forecast” with a $320 over plan flag and Salli’s reasoning steps beneath " +
+  "it. The wider view also shows the Chat and Cowork mode toggle and a list " +
+  "of recent Cowork sessions.";
 
 export function SalliAgenticAiContent() {
   return (
@@ -31,8 +48,21 @@ export function SalliAgenticAiContent() {
       title="Capability is not the product"
       standfirst="Designing agentic AI around the moment a frontline manager decides what to do next"
       heroVisual={
-        <Placeholder
-          label="[ Hero — Salli in-platform ]"
+        <ArtDirected
+          image={{
+            src: "/work/salli/salli-hero-web.webp",
+            alt: HERO_ALT,
+            width: 2368,
+            height: 1015,
+          }}
+          mobileImage={{
+            src: "/work/salli/salli-hero-mobile.webp",
+            width: 984,
+            height: 554,
+          }}
+          /* Full Container width, wider than the Measured column any body
+             figure uses — so 100vw rather than their 920px. */
+          sizes="100vw"
           aspect="aspect-[16/9] md:aspect-[21/9]"
         />
       }
