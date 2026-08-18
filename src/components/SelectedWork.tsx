@@ -5,7 +5,7 @@ import { DeliveryModelPair } from "./diagrams/DeliveryModelPair";
 
 export function SelectedWork() {
   return (
-    <Section id="selected-work">
+    <Section id="selected-work" className="scroll-mt-[80px]">
       <Container>
         <p className="text-eyebrow text-[var(--color-primary)] mb-4">
           Selected work
@@ -13,8 +13,13 @@ export function SelectedWork() {
         <h2 className="text-h1 text-[var(--color-foreground)] mb-16 md:mb-24">
           Recent projects
         </h2>
-        {/* Image side alternates down the section. Inserting the leadership
-            study at position one flipped `reverse` on all four below it. */}
+        {/* Image side alternates down the section, and `reverse` is written per
+            row rather than derived from position — so every insertion or removal
+            in the middle has to be repaired by hand. Twice now: inserting the
+            leadership study at position one flipped it on all four below, and
+            removing Rewards & Recognition from position three flipped it back on
+            everything after. Renumber `revealIndex` contiguously at the same
+            time; the two always move together. */}
         <div className="space-y-24 md:space-y-32">
           {/* Both case study rows link internally now. This one is still the
               only visual rendered rather than exported — see DeliveryModelPair. */}
@@ -55,20 +60,6 @@ export function SelectedWork() {
             revealIndex={2}
           />
           <WorkRow
-            imageSrc="/work/rewards-recognition.webp"
-            imageSrcDark="/work/rewards-recognition-dark.webp"
-            imageAlt="Rewards & Recognition — employee engagement platform"
-            eyebrow="Case study 02"
-            title="Designing Employee Engagement as a Platform Growth Lever"
-            description="How Rewards & Recognition became a platform growth lever – and a commercial differentiator"
-            linkText="Read the case study"
-            linkAriaLabel="Read the Rewards & Recognition case study"
-            linkHref="https://portfolio.edwincw.com/slide/14"
-            linkExternal
-            reverse
-            revealIndex={3}
-          />
-          <WorkRow
             imageSrc="/work/fluxux.webp"
             imageSrcDark="/work/fluxux-dark.webp"
             imageAlt="FluxUX — AI-powered experiment generator"
@@ -79,7 +70,8 @@ export function SelectedWork() {
             linkAriaLabel="Explore the FluxUX app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
-            revealIndex={4}
+            reverse
+            revealIndex={3}
           />
         </div>
       </Container>

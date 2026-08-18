@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowUpRight } from "lucide-react";
 import { Container } from "./Container";
 
 const baseLinkClass = "text-sm transition-colors duration-[180ms]";
@@ -15,29 +14,31 @@ export function Nav() {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
 
-  /* Contact is the only in-page destination in the nav, and the only place that
-     wants an animated scroll. Handling it here rather than with a global
-     `scroll-behavior: smooth` keeps every cross-page navigation landing at the
-     top instantly — see the note in globals.css.
+  /* Work and Contact are the nav's two in-page destinations, and the only
+     places that want an animated scroll. Handling it here rather than with a
+     global `scroll-behavior: smooth` keeps every cross-page navigation landing
+     at the top instantly — see the note in globals.css.
 
      Only intercepts when already on the homepage. From /about or a case study
-     the Link navigates normally and the router lands on the anchor. */
-  const scrollToContact = (event: React.MouseEvent<HTMLAnchorElement>) => {
-    if (pathname !== "/") return;
-    const target = document.getElementById("contact");
-    if (!target) return;
+     the Link navigates normally and the router lands on the anchor, which is
+     why both hrefs are rooted (`/#id`) rather than bare fragments. */
+  const scrollToAnchor =
+    (id: string) => (event: React.MouseEvent<HTMLAnchorElement>) => {
+      if (pathname !== "/") return;
+      const target = document.getElementById(id);
+      if (!target) return;
 
-    event.preventDefault();
-    /* The old CSS rule was covered by the global reduced-motion reset in
-       globals.css; a scrollIntoView call isn't, so it has to ask. */
-    const reducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
-    /* replaceState rather than push: this is a move within the current page,
-       so it shouldn't cost a back-button press to undo. */
-    window.history.replaceState(null, "", "/#contact");
-  };
+      event.preventDefault();
+      /* The old CSS rule was covered by the global reduced-motion reset in
+         globals.css; a scrollIntoView call isn't, so it has to ask. */
+      const reducedMotion = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+      /* replaceState rather than push: this is a move within the current page,
+         so it shouldn't cost a back-button press to undo. */
+      window.history.replaceState(null, "", `/#${id}`);
+    };
 
   return (
     <header className="sticky top-0 z-50 bg-[var(--color-background)]/80 backdrop-blur-md border-b border-[var(--color-border)]">
@@ -60,20 +61,18 @@ export function Nav() {
               </Link>
             </li>
             <li>
-              <a
-                href="https://portfolio.edwincw.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={`${baseLinkClass} ${inactiveClass} inline-flex items-center`}
+              <Link
+                href="/#selected-work"
+                onClick={scrollToAnchor("selected-work")}
+                className={`${baseLinkClass} ${inactiveClass}`}
               >
-                Case Studies
-                <ArrowUpRight className="w-3.5 h-3.5 ml-1" aria-hidden="true" />
-              </a>
+                Work
+              </Link>
             </li>
             <li>
               <Link
                 href="/#contact"
-                onClick={scrollToContact}
+                onClick={scrollToAnchor("contact")}
                 className={`${baseLinkClass} ${inactiveClass}`}
               >
                 Contact
