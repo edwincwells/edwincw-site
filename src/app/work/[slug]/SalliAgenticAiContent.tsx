@@ -311,13 +311,13 @@ export function SalliAgenticAiContent() {
         aspect="aspect-[3/4] md:aspect-[16/10]"
         caption="Salli Focus, in design. The manager opens the session, and it opens with an agenda."
         image={{
-          src: "/work/salli/salli-cowork-web.webp",
+          src: "/work/salli/salli-focus-web.webp",
           alt: "Salli Focus open beside the schedule, headed “Here’s your to-dos — I found 8 tasks. I’ve listed them in priority order”, with the first item flagging three time-off requests that need a decision, one colliding with Saturday cover and $210 at risk.",
           width: 1648,
           height: 1030,
         }}
         mobileImage={{
-          src: "/work/salli/salli-cowork-mobile.webp",
+          src: "/work/salli/salli-focus-mobile.webp",
           width: 984,
           height: 1312,
         }}
