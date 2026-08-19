@@ -3,7 +3,7 @@ import { DiagramSvg } from "./DiagramPrimitives";
 /* VISUAL 3 — the same capability, presented two ways.
  *
  * Some of the team wanted every sub-agent exposed as its own entry in the
- * library. What shipped groups them into ten named focuses. The diagram has one
+ * library. What shipped groups them into ten named agents. The diagram has one
  * job: show that nothing is hidden between the two. The marks are identical in
  * number — 120 either side — and only the grouping differs, because the argument
  * was never about how much the system could do, it was about how much of its
@@ -36,11 +36,11 @@ import { DiagramSvg } from "./DiagramPrimitives";
 
 const TITLE =
   "Diagram: the same sub-agents, exposed individually or grouped into ten " +
-  "focuses";
+  "agents";
 const DESC =
   "Two alternatives side by side, with the same number of marks in each. On " +
   "the left, every sub-agent exposed: an undifferentiated field of identical " +
-  "unlabelled marks. On the right, ten focuses: the same marks " +
+  "unlabelled marks. On the right, ten agents: the same marks " +
   "gathered into ten named groups of unequal size — Guided learning, Sales " +
   "snapshot, Labor snapshot, Team communication, Schedule warnings, " +
   "Compliance oversight, Timekeeping intelligence, Team requests, Timesheet " +
@@ -61,7 +61,7 @@ const LABEL_STYLE = { fill: "var(--color-foreground)" };
 const CLUSTERS = [10, 12, 8, 14, 10, 16, 12, 8, 12, 18];
 
 /* "Labor snapshot" is the product's own label and keeps its US spelling. */
-const FOCUSES = [
+const AGENTS = [
   "Guided learning",
   "Sales snapshot",
   "Labor snapshot",
@@ -107,7 +107,7 @@ function Field({
   );
 }
 
-/** One focus: its marks as a run, then its name. */
+/** One agent: its marks as a run, then its name. */
 function Row({
   x,
   y,
@@ -199,18 +199,18 @@ function Desktop() {
       <Field x={leftX + 4} y={90} columns={12} step={31} radius={2} />
 
       <Header x={rightX} y={headerY} width={panelW}>
-        ten focuses exposed
+        ten agents exposed
       </Header>
       {/* The longest run is now 18, so the run step comes down from 11 to 8 and
           the labels move right to 604 — at 11 an 18-mark run would have driven
           straight through the label column. */}
       {CLUSTERS.map((count, i) => (
         <Row
-          key={FOCUSES[i]}
+          key={AGENTS[i]}
           x={rightX + 8}
           y={90 + i * rowH}
           count={count}
-          label={FOCUSES[i]}
+          label={AGENTS[i]}
           labelX={rightX + 160}
           step={8}
           radius={2}
@@ -250,7 +250,7 @@ function Mobile() {
       <Field x={x + 6} y={58} columns={20} step={15} radius={1.75} />
 
       <Header x={x} y={176} width={panelW}>
-        ten focuses exposed
+        ten agents exposed
       </Header>
       {/* 18 marks in the width available beside a 14px label is the binding
           constraint on this whole drawing. At a 5.5 step the longest run closes
@@ -258,11 +258,11 @@ function Mobile() {
           them — "Timekeeping intelligence" — ending well inside 327. */}
       {CLUSTERS.map((count, i) => (
         <Row
-          key={FOCUSES[i]}
+          key={AGENTS[i]}
           x={x + 4}
           y={210 + i * rowH}
           count={count}
-          label={FOCUSES[i]}
+          label={AGENTS[i]}
           labelX={x + 106}
           step={5.5}
           radius={1.75}

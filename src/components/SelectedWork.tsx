@@ -36,7 +36,7 @@ export function SelectedWork() {
           <WorkRow
             imageSrc="/work/salli-light.webp"
             imageSrcDark="/work/salli-dark.webp"
-            imageAlt="Salli Cowork open on a manager’s ranked to-do list, with the assistant’s reasoning shown."
+            imageAlt="Salli Focus open on a manager’s ranked to-do list, with the assistant’s reasoning shown."
             eyebrow="Product case study"
             title="Capability is not the product"
             description="Designing agentic AI around the moment a frontline manager decides what to do next"

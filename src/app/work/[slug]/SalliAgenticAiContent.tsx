@@ -34,12 +34,12 @@ import { InitiationMatrix } from "@/components/diagrams/InitiationMatrix";
    is quoted as the product renders it — US spelling, like Labor snapshot in
    the grouping diagram, not a lapse into American English. */
 const HERO_ALT =
-  "Salli Cowork open at the start of a session, showing a prioritised agenda " +
+  "Salli Focus open at the start of a session, showing a prioritised agenda " +
   "headed “Here’s your to-dos, Adam — I found 8 tasks. I’ve listed them in " +
   "priority order”, led by a card reading “Lunch labor is tracking ~14% over " +
   "forecast” with a $320 over plan flag and Salli’s reasoning steps beneath " +
-  "it. The wider view also shows the Chat and Cowork mode toggle and a list " +
-  "of recent Cowork sessions.";
+  "it. The wider view also shows the Chat and Focus mode toggle and a list " +
+  "of recent Focus sessions.";
 
 export function SalliAgenticAiContent() {
   return (
@@ -110,8 +110,8 @@ export function SalliAgenticAiContent() {
           companion we built a library of bounded agents with specific remits:
           sales and labour analysis, compliance oversight, timekeeping
           intelligence, request management, weather impact. Salli was the
-          companion. The agents were focuses it could call on, and a manager
-          could switch focus inside a single conversation without losing the
+          companion. The agents were topics it could call on, and a manager
+          could switch agent inside a single conversation without losing the
           thread.
         </p>
       </Prose>
@@ -120,10 +120,10 @@ export function SalliAgenticAiContent() {
         variant="raster"
         width="wide"
         aspect="aspect-[4/3] md:aspect-[16/9]"
-        caption="The agent library and in-chat focus switching, shown in the current build."
+        caption="The agent library and in-chat agent switching, shown in the current build."
         image={{
           src: "/work/salli/salli-agents-web.webp",
-          alt: "Salli’s focus list open over a schedule, listing Guided learning, Sales snapshot, Labor snapshot, Team communication, Schedule warnings, Compliance oversight and Timekeeping intelligence, opened from an Agents button beside the chat composer.",
+          alt: "Salli’s agent library open over a schedule, listing Guided learning, Sales snapshot, Labor snapshot, Team communication, Schedule warnings, Compliance oversight and Timekeeping intelligence, opened from an Agents button beside the chat composer.",
           width: 1648,
           height: 928,
         }}
@@ -182,7 +182,7 @@ export function SalliAgenticAiContent() {
           To get value from Salli you had to open it, and to open it usefully
           you had to already suspect that something needed your attention. The
           library’s prompts helped a little with what to ask, but the manager
-          was still guessing which focus was holding something timely, and a
+          was still guessing which agent was holding something timely, and a
           manager mid-shift doesn’t have the spare attention to go fishing. Of
           the managers who did open Salli in a given week, about three quarters
           opened it on a single day. Almost none used it on three days or more,
@@ -293,11 +293,11 @@ export function SalliAgenticAiContent() {
         </p>
       </Prose>
 
-      <Heading>Chat and Cowork</Heading>
+      <Heading>Chat and Focus</Heading>
 
       <Prose>
         <p className="text-prose">
-          Salli Cowork is the mode we’re building from that. A manager opens it
+          Salli Focus is the mode we’re building from that. A manager opens it
           when they log in, at the start of the day or the start of a shift, and
           it gives them a prioritised set of things that need their attention
           and what to do about each one, drawn from the same agents that were
@@ -309,10 +309,10 @@ export function SalliAgenticAiContent() {
         variant="raster"
         width="wide"
         aspect="aspect-[3/4] md:aspect-[16/10]"
-        caption="Salli Cowork, in design. The manager opens the session, and it opens with an agenda."
+        caption="Salli Focus, in design. The manager opens the session, and it opens with an agenda."
         image={{
           src: "/work/salli/salli-cowork-web.webp",
-          alt: "Salli Cowork open beside the schedule, headed “Here’s your to-dos — I found 8 tasks. I’ve listed them in priority order”, with the first item flagging three time-off requests that need a decision, one colliding with Saturday cover and $210 at risk.",
+          alt: "Salli Focus open beside the schedule, headed “Here’s your to-dos — I found 8 tasks. I’ve listed them in priority order”, with the first item flagging three time-off requests that need a decision, one colliding with Saturday cover and $210 at risk.",
           width: 1648,
           height: 1030,
         }}
@@ -327,18 +327,19 @@ export function SalliAgenticAiContent() {
         <p className="text-prose">
           The idea came from one of our PMs. We recognised it as the answer to
           the question we’d just gone back to first principles to ask, rather
-          than a third feature to sit alongside chat and alerts. My team shaped
-          it into two modes of the same companion. Chat is exploratory and
-          user-led, for when a manager knows what they want to interrogate.
-          Cowork is guided and system-led, for when they don’t yet know what
-          today holds.
+          than a third feature to sit alongside the library and the alerts. My
+          team shaped it into two modes of the same companion. The agent library
+          became Chat, unchanged but no longer carrying the whole burden of
+          getting a manager started. Chat is exploratory and user-led, for when
+          a manager knows what they want to interrogate. Focus is guided and
+          system-led, for when they don’t yet know what today holds.
         </p>
       </Prose>
 
       <Figure
         variant="svg"
         width="wide"
-        caption="Cowork isn’t a midpoint between the two failures. It’s the combination neither of them had."
+        caption="Focus isn’t a midpoint between the two failures. It’s the combination neither of them had."
       >
         <InitiationMatrix />
       </Figure>
@@ -363,7 +364,7 @@ export function SalliAgenticAiContent() {
           them more to ignore.
         </p>
         <p className="text-prose">
-          Cowork might not work either. But it’s the first version aimed at the
+          Focus might not work either. But it’s the first version aimed at the
           question the manager actually has, rather than at a demonstration of
           what the system knows.
         </p>

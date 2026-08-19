@@ -3,14 +3,14 @@ import { DiagramSvg } from "./DiagramPrimitives";
 /* VISUAL 6 — who starts, and when.
  *
  * The essay's argument diagram. Two independent dimensions, not one spectrum:
- * who initiates the session, and who sets the content. Cowork is not a midpoint
+ * who initiates the session, and who sets the content. Focus is not a midpoint
  * between the agent library and the alerts — it is a different combination, and
  * the composition has to say so. A slider or a single axis would quietly assert
  * the opposite, which is why this is a cross with four plotted corners.
  *
- * The four positions form a rectangle. Library and Cowork share a y, alerts and
+ * The four positions form a rectangle. Library and Focus share a y, alerts and
  * the vacant combination share a y, library and the vacant combination share an
- * x, Cowork and alerts share an x. That is what makes the empty corner read as
+ * x, Focus and alerts share an x. That is what makes the empty corner read as
  * a hole in a grid rather than as something merely absent — and the empty
  * corner is the point, because it shows the two axes are genuinely independent.
  *
@@ -36,10 +36,10 @@ const DESC =
   "person above and system below. The horizontal axis is who sets the " +
   "content, person to the left and system to the right. The agent library " +
   "sits top left: the person initiates the session and sets the content. " +
-  "Alerts sit bottom right: the system does both. Cowork sits top right: the " +
+  "Alerts sit bottom right: the system does both. Focus sits top right: the " +
   "person initiates the session and the system sets the content. The bottom " +
   "left combination, where the system initiates and the person sets the " +
-  "content, has no sensible mode. Cowork is a different combination rather " +
+  "content, has no sensible mode. Focus is a different combination rather " +
   "than a midpoint between the other two.";
 
 /* --color-hairline rather than --color-border: border measures about 1.13:1
@@ -55,7 +55,7 @@ const LABEL_STYLE = { fill: "var(--color-foreground)" };
 /* En dash with spaces, not a hyphen — these match the numbering in the prose. */
 const POINTS = [
   { label: "1 – Agent library", x: 292, y: 154, accent: false, dot: true },
-  { label: "3 – Cowork", x: 532, y: 154, accent: true, dot: true },
+  { label: "3 – Focus", x: 532, y: 154, accent: true, dot: true },
   { label: "2 – Alerts", x: 532, y: 310, accent: false, dot: true },
   { label: "no sensible mode", x: 292, y: 310, accent: false, dot: false },
 ];
@@ -216,7 +216,7 @@ function Mobile() {
         </tr>
         <tr className="border-t border-[var(--color-border)] text-[var(--color-primary)]">
           <th scope="row" className="py-3 pr-4 text-left font-medium whitespace-nowrap">
-            3 – Cowork
+            3 – Focus
           </th>
           <td className="py-3 pr-4">person</td>
           <td className="py-3">system</td>
