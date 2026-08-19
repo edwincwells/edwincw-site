@@ -43,10 +43,12 @@ const WORK_TYPES = [
 /* Vertical centre line of the flow. Shared with DeliveryModelAfter. */
 const AXIS = 165;
 
-/* Exported so DeliveryModelPair can stack this half at row size. `metrics`
+/* Local, like every other Desktop in this directory. It was exported while the
+ * Selected Work row stacked this half above DIAGRAM 2; that row now renders the
+ * after flow alone, so nothing outside this file needs it. `metrics`
  * defaults to what the case study was drawn at, so its call site passes
  * nothing and renders exactly as before. */
-export function Desktop({
+function Desktop({
   metrics = CASE_STUDY_METRICS,
   idSuffix = "",
 }: {

@@ -50,7 +50,7 @@ export function ArrowDefs({ id }: { id: string }) {
  * a different display size without redrawing it. Text and strokes need
  * different multipliers — strokes can grow freely, but node text is capped by
  * the box it sits in — so this is an explicit set of values rather than a
- * single scale factor. See DeliveryModelPair for the worked example. */
+ * single scale factor. See DeliveryModelRow for the worked example. */
 export type DiagramMetrics = {
   fontSize: number;
   lineHeight: number;
@@ -78,7 +78,7 @@ export function Connector({
   markerId?: string;
   /** Raise when the figure is displayed well below the size it was drawn for —
    *  a 1-unit stroke goes sub-pixel and patchy once the viewBox is scaled down
-   *  much past 0.8. See DeliveryModelPair. */
+   *  much past 0.8. See DeliveryModelRow. */
   strokeWidth?: number;
 }) {
   return (

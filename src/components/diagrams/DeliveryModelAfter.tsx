@@ -13,11 +13,15 @@ import {
  * meet at the same build node. Tier 1 keeps Product Design at kickoff; Tier 2
  * is PM-led with a design review before build.
  *
- * Paired with DeliveryModelBefore. Same viewBox, same entry node at cx 84,
- * same exit node at cx 796, same node vocabulary — the only thing that changes
- * is the middle. Where DIAGRAM 1 converges before design, this converges at
- * build, and that difference is the whole argument. Keep the two in step if
- * either is edited. */
+ * Paired with DeliveryModelBefore on the case study. Same default viewBox, same
+ * entry node at cx 84, same exit node at cx 796, same node vocabulary — the only
+ * thing that changes is the middle. Where DIAGRAM 1 converges before design, this
+ * converges at build, and that difference is the whole argument. Keep the two in
+ * step if either is edited.
+ *
+ * DeliveryModelRow renders this half alone for the Selected Work row, with a
+ * cropped viewBox and heavier metrics. Nothing it passes moves a coordinate, so
+ * the pairing above is unaffected by it. */
 
 const TITLE = "Diagram: how design work is routed after the change";
 const DESC =
@@ -29,17 +33,23 @@ const DESC =
 /* Vertical centre line of the flow. Shared with DeliveryModelBefore. */
 const AXIS = 165;
 
-/* Exported so DeliveryModelPair can stack this half at row size. `metrics`
- * defaults to what the case study was drawn at, so its call site passes
- * nothing and renders exactly as before. */
+/* Exported so DeliveryModelRow can render this half on its own at row size.
+ * `metrics` and `viewBox` both default to what the case study was drawn at, so
+ * its call site passes nothing and renders exactly as before. */
 export function Desktop({
   metrics = CASE_STUDY_METRICS,
   idSuffix = "",
+  viewBox = "0 0 880 330",
 }: {
   metrics?: DiagramMetrics;
   /** Namespaces the arrowhead marker when this is rendered more than once on
    *  a page — ids must stay unique across every variant in the DOM. */
   idSuffix?: string;
+  /** Crops the canvas without moving anything on it. A min-y offset is a
+   *  translate by another name, so a caller that wants the drawing tight to its
+   *  content changes what is framed rather than where the nodes sit — which is
+   *  what keeps this half aligned with DeliveryModelBefore on the case study. */
+  viewBox?: string;
 } = {}) {
   const arrow = `delivery-after-arrow-desktop${idSuffix}`;
   /* Lanes span 62–268, matching the chip stack in DeliveryModelBefore. */
@@ -54,7 +64,7 @@ export function Desktop({
   const line = { strokeWidth: metrics.connectorStroke };
 
   return (
-    <DiagramSvg viewBox="0 0 880 330" title={TITLE} desc={DESC}>
+    <DiagramSvg viewBox={viewBox} title={TITLE} desc={DESC}>
       <ArrowDefs id={arrow} />
 
       <Connector d={`M 154 ${AXIS} L 192 ${AXIS}`} markerId={arrow} {...line} />

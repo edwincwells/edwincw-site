@@ -1,7 +1,7 @@
 import { Container } from "./Container";
 import { Section } from "./Section";
 import { WorkRow } from "./WorkRow";
-import { DeliveryModelPair } from "./diagrams/DeliveryModelPair";
+import { DeliveryModelRow } from "./diagrams/DeliveryModelRow";
 
 export function SelectedWork() {
   return (
@@ -22,9 +22,9 @@ export function SelectedWork() {
             time; the two always move together. */}
         <div className="space-y-24 md:space-y-32">
           {/* Both case study rows link internally now. This one is still the
-              only visual rendered rather than exported — see DeliveryModelPair. */}
+              only visual rendered rather than exported — see DeliveryModelRow. */}
           <WorkRow
-            visual={<DeliveryModelPair />}
+            visual={<DeliveryModelRow />}
             eyebrow="Leadership case study"
             title="The bottleneck was us"
             description="Repositioning Product Design for agentic engineering"
