@@ -29,7 +29,6 @@ export function SelectedWork() {
             title="The bottleneck was us"
             description="Repositioning Product Design for agentic engineering"
             linkText="Read the case study"
-            linkAriaLabel="Read the leadership case study"
             linkHref="/work/repositioning-product-design"
             revealIndex={0}
           />
@@ -41,7 +40,6 @@ export function SelectedWork() {
             title="Capability is not the product"
             description="Designing agentic AI around the moment a frontline manager decides what to do next"
             linkText="Read the case study"
-            linkAriaLabel="Read the Salli case study"
             linkHref="/work/salli-agentic-ai"
             reverse
             revealIndex={1}
@@ -54,7 +52,6 @@ export function SelectedWork() {
             title="seedbank.design – A Design System for Communities."
             description="A cloneable HTML + CSS design system for self-organising groups of all kinds. Built to be adapted, not followed."
             linkText="Visit seedbank.design"
-            linkAriaLabel="Visit seedbank.design"
             linkHref="https://seedbank.design/"
             linkExternal
             revealIndex={2}
@@ -67,7 +64,6 @@ export function SelectedWork() {
             title="FluxUX: An AI-powered experiment generator for UX practitioners"
             description="An early experiment in prompt-driven development"
             linkText="Explore the app"
-            linkAriaLabel="Explore the FluxUX app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
             reverse
