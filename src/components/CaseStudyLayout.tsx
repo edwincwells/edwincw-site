@@ -1,9 +1,10 @@
 "use client";
 
 import Image, { getImageProps } from "next/image";
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import { Container } from "./Container";
 import { Section } from "./Section";
+import { usePrefersDarkReselect } from "./usePrefersDarkReselect";
 import { useScrollReveal } from "./useScrollReveal";
 
 /* Long-form case study layout. Built for reuse — Salli migrates into this next,
@@ -77,22 +78,60 @@ type RasterSource = {
   height: number;
 };
 
+/* A variant with no `alt` of its own, because <picture> resolves to a single
+   <img> and therefore a single accessible name. */
+type ArtDirectedSource = Omit<RasterSource, "alt">;
+
+/* Dark variants come as a pair or not at all. Four sources are what a baked
+   ground needs — the page's paper-warm or charcoal painted into the file — so
+   a dark web crop without a dark mobile crop would leave one breakpoint
+   showing a cream card on a charcoal page. The `never` guards make that half
+   pair a type error, the same way WorkRow's props refuse an image and a visual
+   together. Omit both and nothing changes. */
+type DarkSources =
+  | { imageDark?: never; mobileImageDark?: never }
+  | {
+      /** The web crop on the dark ground, #1C1B18. */
+      imageDark: ArtDirectedSource;
+      /** The mobile crop on the dark ground. */
+      mobileImageDark: ArtDirectedSource;
+    };
+
+type RasterImages =
+  | {
+      image?: RasterSource;
+      mobileImage?: never;
+      imageDark?: never;
+      mobileImageDark?: never;
+    }
+  | ({
+      image: RasterSource;
+      /** A genuinely different crop to serve below md — art direction, not the
+       *  same picture scaled down. Optional and additive: omit it and the
+       *  figure renders exactly as it did before this existed. */
+      mobileImage: ArtDirectedSource;
+    } & DarkSources);
+
 /* Inline SVG and raster images have different constraints, so they are
    different shapes of the same component: an SVG is rendered as-is and left to
    scale, a raster goes through next/image with explicit intrinsic dimensions
-   and --radius-md corners to match the other image treatments on the site. */
+   and --radius-md corners to match the other image treatments on the site.
+   Dark variants need the art-directed path, so they sit behind mobileImage. */
 type FigureProps =
   | (FigureBase & { variant: "svg"; children?: ReactNode })
-  | (FigureBase & {
-      variant: "raster";
-      image?: RasterSource;
-      /** A genuinely different crop to serve below md — art direction, not the
-       *  same picture scaled down. Optional and additive: omit it and the
-       *  figure renders exactly as it did before this existed. No `alt` of its
-       *  own, because <picture> resolves to a single <img> and therefore a
-       *  single accessible name. */
-      mobileImage?: Omit<RasterSource, "alt">;
-    });
+  | (FigureBase & { variant: "raster" } & RasterImages);
+
+type ArtDirectedProps = {
+  image: RasterSource;
+  mobileImage: ArtDirectedSource;
+  sizes: string;
+  aspect?: string;
+} & DarkSources;
+
+const artDirectedClass = (aspect?: string) =>
+  `w-full rounded-[var(--radius-md)] ${
+    aspect ? `${aspect} h-full object-cover` : "h-auto"
+  }`;
 
 /* next/image cannot art-direct from one <Image>, so this is the getImageProps
    + <picture> pattern from Next's own docs — 01-app/03-api-reference/
@@ -108,18 +147,25 @@ type FigureProps =
    is the one place where the prop is load-bearing for a real visual rather
    than only for an empty slot, because two sources cannot both be described by
    one set of intrinsic dimensions. Ratios are within a tenth of a percent of
-   the files' own, so object-cover crops nothing visible. */
-export function ArtDirected({
-  image,
-  mobileImage,
-  sizes,
-  aspect,
-}: {
-  image: RasterSource;
-  mobileImage: Omit<RasterSource, "alt">;
-  sizes: string;
-  aspect?: string;
-}) {
+   the files' own, so object-cover crops nothing visible.
+
+   With a dark pair the figure hands off to ThemedArtDirected below. Without
+   one, the markup is exactly what it was before dark variants existed. */
+export function ArtDirected(props: ArtDirectedProps) {
+  if (props.imageDark !== undefined) {
+    return (
+      <ThemedArtDirected
+        image={props.image}
+        mobileImage={props.mobileImage}
+        imageDark={props.imageDark}
+        mobileImageDark={props.mobileImageDark}
+        sizes={props.sizes}
+        aspect={props.aspect}
+      />
+    );
+  }
+
+  const { image, mobileImage, sizes, aspect } = props;
   const common = { alt: image.alt, sizes };
   const {
     props: { srcSet: desktopSrcSet },
@@ -143,9 +189,81 @@ export function ArtDirected({
       <img
         {...mobileProps}
         alt={image.alt}
-        className={`w-full rounded-[var(--radius-md)] ${
-          aspect ? `${aspect} h-full object-cover` : "h-auto"
-        }`}
+        className={artDirectedClass(aspect)}
+      />
+    </picture>
+  );
+}
+
+/* The same <picture>, crossed with prefers-color-scheme. The first matching
+   <source> wins, so the most specific query leads: wide and dark, then wide,
+   then dark, with the light mobile crop as the <img> fallback — the same shape
+   as the light-only path, with a dark source ahead of each light one. The
+   breakpoint is the one ArtDirected already uses, not a new one.
+
+   Split out so the listener only mounts for figures that have two themes to
+   swap between, which is WorkRowImage's reasoning too. Re-assigning the <img>
+   src here is a trigger rather than a choice: whichever <source> matches still
+   wins, so assigning the mobile URL above md re-runs selection and lands on the
+   web file. */
+function ThemedArtDirected({
+  image,
+  mobileImage,
+  imageDark,
+  mobileImageDark,
+  sizes,
+  aspect,
+}: {
+  image: RasterSource;
+  mobileImage: ArtDirectedSource;
+  imageDark: ArtDirectedSource;
+  mobileImageDark: ArtDirectedSource;
+  sizes: string;
+  aspect?: string;
+}) {
+  const imgRef = useRef<HTMLImageElement>(null);
+  const common = { alt: image.alt, sizes };
+  const {
+    props: { srcSet: desktopDarkSrcSet },
+  } = getImageProps({ ...common, ...imageDark });
+  const {
+    props: { srcSet: desktopSrcSet },
+  } = getImageProps({ ...common, ...image });
+  const {
+    props: { srcSet: mobileDarkSrcSet, src: mobileDarkSrc },
+  } = getImageProps({ ...common, ...mobileImageDark });
+  const { props: mobileProps } = getImageProps({ ...common, ...mobileImage });
+
+  usePrefersDarkReselect(imgRef, mobileProps.src, mobileDarkSrc);
+
+  return (
+    <picture>
+      <source
+        media="(min-width: 768px) and (prefers-color-scheme: dark)"
+        srcSet={desktopDarkSrcSet}
+        sizes={sizes}
+        width={imageDark.width}
+        height={imageDark.height}
+      />
+      <source
+        media="(min-width: 768px)"
+        srcSet={desktopSrcSet}
+        sizes={sizes}
+        width={image.width}
+        height={image.height}
+      />
+      <source
+        media="(prefers-color-scheme: dark)"
+        srcSet={mobileDarkSrcSet}
+        sizes={sizes}
+        width={mobileImageDark.width}
+        height={mobileImageDark.height}
+      />
+      <img
+        {...mobileProps}
+        ref={imgRef}
+        alt={image.alt}
+        className={artDirectedClass(aspect)}
       />
     </picture>
   );
@@ -163,13 +281,24 @@ export function Figure(props: FigureProps) {
       width === "wide"
         ? "(max-width: 768px) 100vw, 920px"
         : "(max-width: 768px) 100vw, 680px";
-    visual = props.mobileImage ? (
-      <ArtDirected
-        image={props.image}
-        mobileImage={props.mobileImage}
-        sizes={sizes}
-        aspect={aspect}
-      />
+    /* Built as one typed value rather than as conditional JSX props: spreading
+       `cond ? { imageDark, mobileImageDark } : {}` widens both keys to
+       optional-and-independent, which is exactly the half pair the types
+       exist to refuse. Narrowing on props.imageDark keeps them correlated. */
+    const artDirected: ArtDirectedProps | undefined = !props.mobileImage
+      ? undefined
+      : props.imageDark
+        ? {
+            image: props.image,
+            mobileImage: props.mobileImage,
+            imageDark: props.imageDark,
+            mobileImageDark: props.mobileImageDark,
+            sizes,
+            aspect,
+          }
+        : { image: props.image, mobileImage: props.mobileImage, sizes, aspect };
+    visual = artDirected ? (
+      <ArtDirected {...artDirected} />
     ) : (
       <Image
         src={props.image.src}
