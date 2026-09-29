@@ -365,8 +365,12 @@ type CaseStudyLayoutProps = {
   eyebrow: string;
   title: string;
   standfirst: string;
-  /** Decorative, wider than the reading column, no caption. */
+  /** Wider than the reading column, no caption. Decorative by default. */
   heroVisual?: ReactNode;
+  /** Exposes the hero to assistive tech instead of hiding it. For product
+   *  shots, whose alt carries real content; leave it off for a decorative
+   *  diagram like the leadership study's ConvergenceHero. */
+  heroInformative?: boolean;
   children: ReactNode;
 };
 
@@ -375,6 +379,7 @@ export function CaseStudyLayout({
   title,
   standfirst,
   heroVisual,
+  heroInformative = false,
   children,
 }: CaseStudyLayoutProps) {
   const { ref: headerRef, isRevealed: headerRevealed } =
@@ -399,12 +404,14 @@ export function CaseStudyLayout({
           </Container>
         </div>
 
+        {/* Undefined rather than "false" when informative, so React omits the
+            attribute and the default markup is unchanged. */}
         {heroVisual ? (
           <div
             ref={heroRef}
             data-reveal
             data-revealed={heroRevealed}
-            aria-hidden="true"
+            aria-hidden={heroInformative ? undefined : "true"}
             className="mt-8 md:mt-10"
           >
             <Container>{heroVisual}</Container>

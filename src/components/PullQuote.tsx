@@ -6,9 +6,13 @@ import { useScrollReveal } from "./useScrollReveal";
 
 type PullQuoteProps = {
   children: ReactNode;
+  /** Leaves the quote in the accessibility tree. Only for a quote that
+   *  paraphrases the body rather than repeating a sentence from it, since
+   *  hiding one of those would lose words no screen reader hears elsewhere. */
+  announced?: boolean;
 };
 
-export function PullQuote({ children }: PullQuoteProps) {
+export function PullQuote({ children, announced = false }: PullQuoteProps) {
   const { ref, isRevealed } = useScrollReveal<HTMLDivElement>();
 
   return (
@@ -18,8 +22,10 @@ export function PullQuote({ children }: PullQuoteProps) {
       data-revealed={isRevealed}
       /* Every pull quote repeats a sentence from the paragraph below it, so it
          is hidden from assistive tech — otherwise each one is announced twice.
-         The emphasis is a visual device; the sentence is still read in place. */
-      aria-hidden="true"
+         The emphasis is a visual device; the sentence is still read in place.
+         `announced` is the exception, and undefined keeps the default markup
+         unchanged. */
+      aria-hidden={announced ? undefined : "true"}
       className="my-14 md:my-20"
     >
       <Container width="narrow">
