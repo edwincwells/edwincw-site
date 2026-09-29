@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { usePrefersDarkReselect } from "./usePrefersDarkReselect";
 import { useScrollReveal } from "./useScrollReveal";
 
 type WorkRowBase = {
@@ -101,24 +102,7 @@ function WorkRowImage({
 }) {
   const imgRef = useRef<HTMLImageElement>(null);
 
-  /* Safety net for an OS theme switch with the tab already open. Browsers are
-     specced to re-run <picture> source selection when a media query changes,
-     but that is the one path we could not verify locally — DevTools colour
-     scheme emulation flips matchMedia().matches without dispatching a change
-     event, so neither the native behaviour nor this handler is observable
-     under it. Re-assigning src forces reselection; if the browser already did
-     it, this resolves to the same URL and is a cached no-op. The markup still
-     carries the correct source on first paint, so nothing here runs on load. */
-  useEffect(() => {
-    const mql = window.matchMedia("(prefers-color-scheme: dark)");
-    const update = () => {
-      if (imgRef.current) {
-        imgRef.current.src = mql.matches ? imageSrcDark : imageSrc;
-      }
-    };
-    mql.addEventListener("change", update);
-    return () => mql.removeEventListener("change", update);
-  }, [imageSrc, imageSrcDark]);
+  usePrefersDarkReselect(imgRef, imageSrc, imageSrcDark);
 
   return (
     /* next/image has no prefers-color-scheme art-direction API, so the theme
