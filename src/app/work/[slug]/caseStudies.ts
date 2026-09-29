@@ -1,4 +1,5 @@
 import type { ComponentType } from "react";
+import { EmployeeAppAdoptionContent } from "./EmployeeAppAdoptionContent";
 import { RepositioningProductDesignContent } from "./RepositioningProductDesignContent";
 import { SalliAgenticAiContent } from "./SalliAgenticAiContent";
 
@@ -26,5 +27,11 @@ export const caseStudies: Record<string, CaseStudy> = {
     description:
       "How Salli's agentic AI companion at Harri failed twice on adoption, and why the design problem turned out to be who starts the conversation, and when.",
     Content: SalliAgenticAiContent,
+  },
+  "employee-app-adoption": {
+    metaTitle: "Nobody opens an app because they’re told to — Edwin Collings-Wells",
+    description:
+      "How a rewards module became the case for redesigning Harri’s app for 350,000 shift workers, and for turning adoption into a lever for employers.",
+    Content: EmployeeAppAdoptionContent,
   },
 };

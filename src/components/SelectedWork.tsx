@@ -15,13 +15,15 @@ export function SelectedWork() {
         </h2>
         {/* Image side alternates down the section, and `reverse` is written per
             row rather than derived from position — so every insertion or removal
-            in the middle has to be repaired by hand. Twice now: inserting the
-            leadership study at position one flipped it on all four below, and
-            removing Rewards & Recognition from position three flipped it back on
-            everything after. Renumber `revealIndex` contiguously at the same
-            time; the two always move together. */}
+            in the middle has to be repaired by hand. Three times now: inserting
+            the leadership study at position one flipped it on all four below,
+            removing Rewards & Recognition from position three flipped it back
+            on everything after, and inserting the employee app study at
+            position three flipped seedbank and FluxUX again. Renumber
+            `revealIndex` contiguously at the same time; the two always move
+            together. */}
         <div className="space-y-24 md:space-y-32">
-          {/* Both case study rows link internally now. This one is still the
+          {/* All three case study rows link internally. This one is still the
               only visual rendered rather than exported — see DeliveryModelRow. */}
           <WorkRow
             visual={<DeliveryModelRow />}
@@ -45,6 +47,17 @@ export function SelectedWork() {
             revealIndex={1}
           />
           <WorkRow
+            imageSrc="/work/employee-app-adoption.webp"
+            imageSrcDark="/work/employee-app-adoption-dark.webp"
+            imageAlt="Three phone screens from Harri’s employee app, showing Rewards, Home and Schedule, each opening with a blue header and a summary card."
+            eyebrow="Product case study"
+            title="Nobody opens an app because they’re told to"
+            description="Making a frontline workforce app worth opening, and turning that into an operating lever for the businesses running on it"
+            linkText="Read the case study"
+            linkHref="/work/employee-app-adoption"
+            revealIndex={2}
+          />
+          <WorkRow
             imageSrc="/work/seedbank-design.webp"
             imageSrcDark="/work/seedbank-design-dark.webp"
             imageAlt="seedbank.design — a cloneable HTML + CSS design system for communities"
@@ -54,7 +67,8 @@ export function SelectedWork() {
             linkText="Visit seedbank.design"
             linkHref="https://seedbank.design/"
             linkExternal
-            revealIndex={2}
+            reverse
+            revealIndex={3}
           />
           <WorkRow
             imageSrc="/work/fluxux.webp"
@@ -66,8 +80,7 @@ export function SelectedWork() {
             linkText="Explore the app"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
-            reverse
-            revealIndex={3}
+            revealIndex={4}
           />
         </div>
       </Container>

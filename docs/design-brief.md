@@ -12,7 +12,7 @@
 
 **Existing assets:**
 - Current site: edwincw.com (built in Framer — being replaced)
-- Portfolio: portfolio.edwincw.com (slide-based case study site) — **superseded by Prompt 10, and no longer linked from this site as of Prompt 16.** Case studies are migrating onto this site at `/work/[slug]`: "The bottleneck was us" and Salli have landed. The nav's "Case Studies" link became an internal "Work" anchor and the Rewards & Recognition homepage row was removed, so nothing in `src/` points at the subdomain any more. Rewards & Recognition is the one case study still unmigrated; its row returns when it lands. The portfolio itself is unchanged and still reachable directly.
+- Portfolio: portfolio.edwincw.com (slide-based case study site) — **superseded by Prompt 10, and no longer linked from this site as of Prompt 16.** Case studies are migrating onto this site at `/work/[slug]`: "The bottleneck was us", Salli and the employee app adoption study (Prompt 21) have landed. The nav's "Case Studies" link became an internal "Work" anchor and the Rewards & Recognition homepage row was removed, so nothing in `src/` points at the subdomain any more. Rewards & Recognition is the one case study still unmigrated; its row returns when it lands. The portfolio itself is unchanged and still reachable directly.
 - FluxUX: AI app built in v0, currently hosted separately
 - Case studies: Rewards & Recognition, Salli (agentic AI companion)
 
@@ -105,6 +105,8 @@ Five sections, in order:
 3. **FluxUX** — title and one-liner TBD (Edwin to provide) — links to FluxUX (new tab)
 
 Layout: **staggered editorial rows**, alternating image-left / image-right / image-left. Full-width rows with generous vertical separation. NOT a three-up card grid.
+
+**Current order (Prompt 21), superseding the list above:** five rows. 1. Leadership ("The bottleneck was us"), image left. 2. Salli, image right. 3. Employee app adoption, image left. 4. seedbank.design, image right. 5. FluxUX, image left. `reverse` and `revealIndex` (0–4) are hand-written per row, so any insertion re-flips everything below it.
 
 **4. Credentials strip** — 2×2 grid on desktop, 1×4 stack on mobile:
 - Current role: Director of UX, Harri
@@ -264,6 +266,8 @@ Source Serif 4 Italic, `--color-foreground`, line-height 1.3, tracking -0.01em. 
 Decided against, so it isn't re-argued: whitespace-only with no rule (too close to the Craig Mod register §3 rules out), a hanging outdent into the left margin (reads as broken layout against a centred column), and a large decorative opening quote mark set as a display glyph (drifts to conventional blockquote and competes with the teal/ochre discipline in §5.1) — note this is distinct from the inline quotation marks the component now uses.
 
 Pull quotes carry `aria-hidden="true"`. Every one repeats a sentence verbatim from the paragraph below it, so without this a screen reader announces each twice; the emphasis is a visual device and the sentence is still read in place. Rendered as `<p>`, not `<blockquote>` — the piece is quoting itself, not an external source.
+
+**One exception, via `announced` (Prompt 21).** Pull quote 2 in the employee app adoption study ("The features nobody opens an app for are the ones their employer needs used the most.") paraphrases the paragraph below it rather than repeating a sentence from it. Hiding it would remove its wording from the page for screen reader users entirely, so it is announced. `announced` defaults to false and exists only for quotes like this; a quote that repeats a body sentence stays hidden.
 
 **Notes:**
 - Body at 17px (not 16px) — slightly more considered, magazine-like
@@ -468,6 +472,8 @@ edwincw-site/
 │   │   ├── fluxux.webp
 │   │   ├── fluxux-dark.webp
 │   │   ├── review-agent-comment.webp
+│   │   ├── employee-app-adoption.webp / -dark.webp (Selected Work plates)
+│   │   ├── employee-app-adoption/ (28 case study images: 7 figures × web/mobile × light/dark)
 │   │   └── salli/               (8 art-directed case study images)
 │   └── favicon.ico
 ├── src/
@@ -479,7 +485,8 @@ edwincw-site/
 │   │   │   └── [slug]/
 │   │   │       ├── page.tsx  (generateStaticParams + generateMetadata, dynamicParams=false)
 │   │   │       ├── caseStudies.ts (slug → metaTitle / description / Content)
-│   │   │       └── RepositioningProductDesignContent.tsx (essay prose, Server Component)
+│   │   │       ├── RepositioningProductDesignContent.tsx (essay prose, Server Component)
+│   │   │       └── EmployeeAppAdoptionContent.tsx (essay prose, Server Component)
 │   │   ├── fonts.ts          (next/font/local setup)
 │   │   ├── globals.css       (Tailwind v4 @theme + tokens + base styles + .link helper + scroll-reveal CSS)
 │   │   ├── typography.css    (type scale utility classes)
@@ -780,6 +787,14 @@ Note: the file tree above is current as of Prompt 10. Root-level files not shown
   - **Strictly additive.** Without a dark pair `ArtDirected` renders exactly the markup it did before, so Salli and the leadership study are byte-identical with no change to their content files.
   - **The OS-switch safety net is shared, not duplicated.** WorkRow's matchMedia `change` listener is extracted into `usePrefersDarkReselect` and used by both. In the case study it mounts only in the dark-pair child (`ThemedArtDirected`), on WorkRowImage's reasoning. There the `src` assignment is only a trigger: whichever `<source>` matches still wins. The DevTools caveat carries over unchanged: colour-scheme emulation flips `matches` without dispatching `change`, and in this browser it also did not re-run native `<picture>` selection. So a real OS switch with the tab open remains the one path not observed end to end. Calling the handler directly does correct a stale selection.
   - **WorkRow's behaviour is untouched and out of scope.** Only the effect moved into the hook, with the same arguments and the same URLs. The rows still use a bare `<picture>` and skip the optimiser. That is now a choice rather than a necessity, since the plates are pre-sized for a fixed 560px box. Moving them onto `getImageProps` would be a separate change. `WorkRow.tsx`'s inline comment that next/image "has no prefers-color-scheme art-direction API" is now narrower than the truth and was left for that change.
+- [ ] **Prompt 21 (Employee app adoption case study)** — 🚧 **Built, apart from visual 4.** The third case study, at `/work/employee-app-adoption` ("Nobody opens an app because they’re told to"), plus its homepage row. One content file created. Four files modified: `caseStudies.ts`, `CaseStudyLayout.tsx`, `PullQuote.tsx` and `SelectedWork.tsx`.
+  - **The route absorbed it as before.** One registry entry and one content file, and `generateStaticParams` picks the slug up on its own. The eyebrow is "Product Case Study", matching Salli. The standfirst is the essay's subtitle without its trailing full stop, matching the other two. The meta description is Edwin's.
+  - **Heroes can now be informative: `heroInformative` on `CaseStudyLayout`.** It defaults to false, which keeps the `aria-hidden` wrapper, so the leadership study's decorative `ConvergenceHero` is unchanged. This study sets it, so the hero's alt is announced. **Decision: product-shot heroes carry alt text and are exposed, not treated as decorative.** Salli's hero is a product shot too and should follow as a separate task. It already has a written `HERO_ALT`, so the change there is the prop alone. Salli was left untouched here, so its markup stays byte-identical.
+  - **`PullQuote` gains `announced`**, for pull quote 2 (see §5.2 for why). The other three stay `aria-hidden`.
+  - **Figures.** Seven rasters, all art-directed with four sources: the hero plus visuals 2, 3, 5, 6, 7 and 8. Body figures sit at the `wide` measure with `aspect-[3/4] md:aspect-[4/3]`. The hero uses Salli's `sizes="100vw"` and `aspect-[16/9] md:aspect-[21/9]`. Intrinsic dimensions were read from the files: web 3296×2472, mobile 1968×2624, and for the hero 4736×2030 and 1968×1108. **That is twice the spec's frame sizes**, per the spec's own "export at twice these numbers", and ratios are exact. Captions and alts come from the visual specs. One exception: visual 8's alt says **$810** where the spec said $770, because all four exports show $810.
+  - **Visual 4 is pending.** It is an empty `svg` Figure carrying its final caption and a `[ Visual 4 — app usage chart, two panels ]` label, at `aspect-[3/5] md:aspect-[5/2]` (two ~4:3 panels stacked, then side by side). The chart itself, inline SVG themed from tokens, is a separate prompt.
+  - **Copy.** Verbatim from the essay as attached, with curly apostrophes per the standing rule. There is one edit, at Edwin's direction: "two comments mattered more than the fifty compliments" became "…more than the rest". The essay in Downloads changed mid-build (a section removed); Edwin's call was to keep the attached version. Pull quotes sit as hooks one or two blocks before their sentence. Checked mechanically: PQ3 and PQ4 are exact, PQ1 matches minus its final full stop (the body sentence continues), and PQ2 is a paraphrase (hence `announced`).
+  - **Selected Work.** The new row sits third of five. seedbank gains `reverse`, FluxUX loses it, and `revealIndex` is renumbered 0–4 (see §4). The eyebrow is sentence case, "Product case study", per WorkRow's convention. **The plates were re-encoded to the §5.1 spec** from Edwin's 3200×2400 PNGs, which replaced the first 3200×2400 WebPs at about 222 KB. Output is 1600×1200, lanczos3, q88, sRGB with no embedded profile. **Both come to 97 KB (light 96.9, dark 97.6):** over the ~80 KB guide, under the 110 KB limit. Quality was deliberately left alone; the extra size comes from three detailed phone screens. All ten PNG samples (four corners plus the gap between phones, per theme) are exact. Every WebP sample is within 2/255 except the dark top-left corner at 5/255, which is lossy smoothing at the edge.
 
 ---
 
