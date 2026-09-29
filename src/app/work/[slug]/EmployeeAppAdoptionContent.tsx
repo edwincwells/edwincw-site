@@ -6,14 +6,15 @@ import {
   Prose,
 } from "@/components/CaseStudyLayout";
 import { PullQuote } from "@/components/PullQuote";
+import { AppUsageChart } from "@/components/diagrams/AppUsageChart";
 
 /* Prose is a Server Component — the client boundary sits on CaseStudyLayout,
    Figure and PullQuote, so the essay itself never enters the client bundle.
    AboutContent.tsx carries "use client" only because it calls useScrollReveal
    directly; the naming convention is what carries over, not the directive.
 
-   Seven of eight visuals are built. Visual 4, the app usage chart, is an
-   empty svg slot carrying its final caption until the chart lands.
+   All eight visuals are built. Visual 4, the app usage chart, is inline SVG
+   themed from tokens; the other seven are screenshots.
 
    Every screenshot comes in four variants, web and mobile crossed with light
    and dark, each on a baked ground. The mobile crops are a different
@@ -254,16 +255,13 @@ export function EmployeeAppAdoptionContent() {
         </p>
       </Prose>
 
-      {/* Visual 4 is a responsive inline-SVG chart, built separately. Until
-          then the slot holds the ratio of two ~4:3 panels: stacked below md,
-          side by side across the 824px breakout above it. */}
       <Figure
         variant="svg"
         width="wide"
-        aspect="aspect-[3/5] md:aspect-[5/2]"
-        placeholder="[ Visual 4 — app usage chart, two panels ]"
         caption="App usage at participating beta locations. Left, sessions per user at the US operator as a ratio of the rest of the same estate, where 1.0 is parity. Right, monthly active users at the UK operator, indexed to January. I compared each group with colleagues in the same business over the same months, rather than with the previous year, which would have left too much unaccounted for. The US series starts in March because the account was restructured before then."
-      />
+      >
+        <AppUsageChart />
+      </Figure>
 
       <Prose>
         <p className="text-prose">

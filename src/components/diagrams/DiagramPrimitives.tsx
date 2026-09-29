@@ -281,7 +281,13 @@ export function EdgeLabel({
   );
 }
 
-/** Shared <svg> shell: role, accessible name, and responsive sizing. */
+/** Shared <svg> shell: role, accessible name, and responsive sizing.
+ *
+ * Without a `desc`, the name rides on aria-label alone and no <title> is
+ * rendered. Under SVG-AAM a <title> that is not used for the name becomes the
+ * description, so keeping it would announce the same string twice — which is
+ * what a figure whose whole alt is its name (AppUsageChart) would otherwise
+ * get. Every figure that passes `desc` renders exactly as before. */
 export function DiagramSvg({
   viewBox,
   title,
@@ -290,7 +296,7 @@ export function DiagramSvg({
 }: {
   viewBox: string;
   title: string;
-  desc: string;
+  desc?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -303,8 +309,12 @@ export function DiagramSvg({
       preserveAspectRatio="xMidYMid meet"
       className="block h-auto"
     >
-      <title>{title}</title>
-      <desc>{desc}</desc>
+      {desc !== undefined && (
+        <>
+          <title>{title}</title>
+          <desc>{desc}</desc>
+        </>
+      )}
       {children}
     </svg>
   );
