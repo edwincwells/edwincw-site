@@ -280,6 +280,7 @@ Pull quotes carry `aria-hidden="true"`. Every one repeats a sentence verbatim fr
 - **Max content width:** 1280px (`Container` default)
 - **Narrow reading width:** 680px (`Container width="narrow"` — thesis body, About page, case study prose)
 - **Case study diagram measure:** 920px (Prompt 10, local to `CaseStudyLayout`, not a `Container` variant) — body diagrams step out wider than the reading column, collapsing to it below `md`. Rationale in §10, Prompt 10.
+- **Case study metadata line:** an optional `meta` on `CaseStudyLayout` (Prompt 22) — "Harri · Director of Product Design · 2026" under the standfirst, above the hero. Figcaption treatment (`.text-small`, `--color-muted`) at the figcaption's distance (`mt-4`), so it reads as supporting information rather than a second standfirst. Hero margin unchanged. Rationale in §10, Prompt 22.
 - **Page gutter:** 24px mobile → 48px desktop (`px-6 md:px-12`)
 - **Vertical rhythm:** 96px unit between major sections on desktop, 64px mobile (`Section` component: `py-16 md:py-24`)
 
@@ -819,6 +820,14 @@ Note: the file tree above is current as of Prompt 10. Root-level files not shown
   - **Why two panels and two measures.** The US effect shows up in sessions per user, the UK effect in the number of people using the app. One chart of sessions per user would show the UK drifting below parity and contradict the prose. Leaving the UK out would look like picking the operator that suits the argument. Each panel's title names its operator and its measure, because the measures differ.
   - **Accessibility.** `role="img"` with the spec's alt text as the `aria-label`, typeset with a curly apostrophe per the standing rule. `DiagramSvg` now renders `<title>` and `<desc>` only when a `desc` is passed. Under SVG-AAM, a `<title>` that isn't used for the name becomes the description, which would have announced the alt twice. Every existing diagram passes `desc` and is unchanged. The hidden variant is `display:none`, so the name is announced once.
   - **Placeholder removed.** `aspect` and `placeholder` came off the `Figure`, as on Salli visuals 3 and 6: both are dead once a child is present. The caption is unchanged.
+
+- [x] **Prompt 22 (Case study metadata line)** — ✅ A line reading "Harri · Director of Product Design · 2026" now sits under the standfirst on all three case studies. It answers scope and recency before a reader commits to the piece.
+  - **Scope.** `CaseStudyLayout` gains an optional `meta?: string[]`. Each of the three content files passes `meta={["Harri", "Director of Product Design", "2026"]}` and changes nothing else. Without the prop, the layout renders `null` in that slot, so the markup is unchanged.
+  - **Placement.** The line sits inside the existing header reveal wrapper, directly after the standfirst, so it arrives with the header rather than as a separate reveal.
+  - **Type and colour.** It uses `.text-small` in `--color-muted`, exactly the figcaption treatment. No new type styles or tokens. It is quiet supporting information, not a second standfirst.
+  - **Spacing: `mt-4` (16px) at every breakpoint.** This is the gap a figcaption keeps below its visual, which is already the site's distance for small muted text attached to what it describes. It is tighter than h1 → standfirst (`mb-6 md:mb-8`), so the line groups with the standfirst instead of forming a third header tier. There is no `md` step because the line is 14px at both breakpoints.
+  - **Hero margin kept at `mt-8 md:mt-10`.** The gap is now measured from a 14px muted line rather than the subtitle. That line carries far less weight, so 32/40px still reads as the header ending and the hero beginning. Prompt 11's tightening stands.
+  - **Markup and accessibility.** The line is a `<p>`, not a list. Parts are joined by a middle dot, and each dot sits in its own `aria-hidden="true"` span. The spaces around each dot sit outside the hidden span, so the parts stay separate words for assistive tech ("Harri Director of Product Design 2026") rather than running together.
 
 ---
 

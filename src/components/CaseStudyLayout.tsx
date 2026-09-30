@@ -1,7 +1,7 @@
 "use client";
 
 import Image, { getImageProps } from "next/image";
-import { useRef, type ReactNode } from "react";
+import { Fragment, useRef, type ReactNode } from "react";
 import { Container } from "./Container";
 import { Section } from "./Section";
 import { usePrefersDarkReselect } from "./usePrefersDarkReselect";
@@ -365,6 +365,9 @@ type CaseStudyLayoutProps = {
   eyebrow: string;
   title: string;
   standfirst: string;
+  /** Scope and recency, e.g. employer, role, year. Rendered as one muted line
+   *  under the standfirst, parts joined by middle dots. */
+  meta?: string[];
   /** Wider than the reading column, no caption. Decorative by default. */
   heroVisual?: ReactNode;
   /** Exposes the hero to assistive tech instead of hiding it. For product
@@ -378,6 +381,7 @@ export function CaseStudyLayout({
   eyebrow,
   title,
   standfirst,
+  meta,
   heroVisual,
   heroInformative = false,
   children,
@@ -401,6 +405,26 @@ export function CaseStudyLayout({
             <p className="text-subtitle text-[var(--color-body)]">
               {standfirst}
             </p>
+            {/* Quiet supporting line, set like a figcaption and at a
+                figcaption's distance, so it attaches to the standfirst without
+                becoming a second one. The dots are hidden from assistive tech;
+                the spaces around them stay outside the hidden span so the
+                parts are still read as separate words. */}
+            {meta ? (
+              <p className="text-small text-[var(--color-muted)] mt-4">
+                {meta.map((part, i) => (
+                  <Fragment key={part}>
+                    {i > 0 ? (
+                      <>
+                        {" "}
+                        <span aria-hidden="true">·</span>{" "}
+                      </>
+                    ) : null}
+                    {part}
+                  </Fragment>
+                ))}
+              </p>
+            ) : null}
           </Container>
         </div>
 
