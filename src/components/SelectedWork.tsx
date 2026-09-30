@@ -60,9 +60,9 @@ export function SelectedWork() {
           <WorkRow
             imageSrc="/work/seedbank-design.webp"
             imageSrcDark="/work/seedbank-design-dark.webp"
-            imageAlt="seedbank.design — a cloneable HTML + CSS design system for communities"
+            imageAlt="seedbank.design – a cloneable HTML + CSS design system for communities"
             eyebrow="Design System Project"
-            title="seedbank.design – A Design System for Communities."
+            title="seedbank.design – a design system for communities"
             description="A cloneable HTML + CSS design system for self-organising groups of all kinds. Built to be adapted, not followed."
             linkText="Visit seedbank.design"
             linkHref="https://seedbank.design/"
@@ -73,11 +73,11 @@ export function SelectedWork() {
           <WorkRow
             imageSrc="/work/fluxux.webp"
             imageSrcDark="/work/fluxux-dark.webp"
-            imageAlt="FluxUX — AI-powered experiment generator"
+            imageAlt="FluxUX – an AI-powered experiment generator"
             eyebrow="Product innovation project"
-            title="FluxUX: An AI-powered experiment generator for UX practitioners"
-            description="An early experiment in prompt-driven development"
-            linkText="Explore the app"
+            title="FluxUX – an AI-powered experiment generator for UX practitioners"
+            description="An early exploration of prompt-driven development and agentic chat UX (April 2025)"
+            linkText="Try FluxUX"
             linkHref="https://fluxux.vercel.app/"
             linkExternal
             revealIndex={4}
