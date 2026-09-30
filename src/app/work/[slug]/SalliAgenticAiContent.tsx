@@ -47,6 +47,7 @@ export function SalliAgenticAiContent() {
       eyebrow="Product Case Study"
       title="Capability is not the product"
       standfirst="Designing agentic AI around the moment a frontline manager decides what to do next"
+      meta={["Harri", "Director of Product Design", "2026"]}
       heroVisual={
         <ArtDirected
           image={{

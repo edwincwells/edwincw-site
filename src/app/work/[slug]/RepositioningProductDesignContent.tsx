@@ -21,6 +21,7 @@ export function RepositioningProductDesignContent() {
       eyebrow="Leadership Case Study"
       title="The bottleneck was us"
       standfirst="Repositioning Product Design for agentic engineering"
+      meta={["Harri", "Director of Product Design", "2026"]}
       heroVisual={<ConvergenceHero />}
     >
       <Prose>

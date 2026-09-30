@@ -64,6 +64,7 @@ export function EmployeeAppAdoptionContent() {
       eyebrow="Product Case Study"
       title="Nobody opens an app because they’re told to"
       standfirst="Making a frontline workforce app worth opening, and turning that into an operating lever for the businesses running on it"
+      meta={["Harri", "Director of Product Design", "2026"]}
       heroInformative
       heroVisual={
         <ArtDirected
