@@ -145,7 +145,7 @@ export function RepositioningProductDesignContent() {
       <Figure
         variant="svg"
         width="wide"
-        caption="After. Tier 1 puts Product Design at kickoff. Tier 2 is PM-led, with design review before build."
+        caption="After. Tier 1 puts Product Design at kickoff. Tier 2 is PM-led. Both go through design review before build."
       >
         <DeliveryModelAfter />
       </Figure>
@@ -256,14 +256,18 @@ export function RepositioningProductDesignContent() {
 
       <Prose>
         <p className="text-prose">
-          The trade only works if quality survives, so I built an AI design
-          review agent that runs across all design output, ours as well as
-          PM-led, checking against the design system, content guidelines, UX
-          practice and WCAG 2.2 AA. It runs in Claude Cowork with the Figma MCP
-          and integrations into Jira and Confluence, so it reads the designs,
-          the tickets and the documented standards together rather than
-          assessing a screen in isolation. In its first three weeks it reviewed
-          15 tasks.
+          The trade only works if quality survives it. Every piece of PM-led
+          work comes back to us for design review before it goes to build, and
+          that review is the gate.
+        </p>
+        <p className="text-prose">
+          Alongside it I’ve built an AI design review agent. It runs in Claude
+          Cowork with the Figma MCP and integrations into Jira and Confluence,
+          so it reads the designs, the PRDs and the documented standards
+          together rather than assessing a screen in isolation. It’s trialling
+          on content checks, and because it reads Figma it’s currently
+          reviewing our own output rather than the PM-led work in Claude
+          Design. In its first three weeks it reviewed 15 tasks.
         </p>
       </Prose>
 
@@ -280,12 +284,13 @@ export function RepositioningProductDesignContent() {
 
       <Prose>
         <p className="text-prose">
-          It’s surfaced content and pattern inconsistencies we’d previously have
-          missed, but there’s been a more useful behaviour: it cross-references,
-          so content gets reviewed in the context of the wider platform rather
-          than one ticket at a time, which a human reviewer looking at a single
-          ticket can’t easily do. For now it produces a report for a person to
-          act on, and I’m not in a hurry to make it a gate.
+          It’s surfaced content inconsistencies we’d previously have missed,
+          but the more useful behaviour has been the cross-referencing: content
+          gets reviewed in the context of the wider platform rather than one
+          ticket at a time, which a human reviewer looking at a single ticket
+          can’t easily do. It produces a report for a person to act on.
+          Extending it to the PM-led output in Claude Design is the next piece,
+          and I’m not in a hurry to make it a gate.
         </p>
       </Prose>
 
